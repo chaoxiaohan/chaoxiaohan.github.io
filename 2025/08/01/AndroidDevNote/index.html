@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+
+
+<html theme="light" showBanner="true" hasBanner="desktop" > 
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet">
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+<!-- Gaug.es Analytics -->
+<script>
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', 'true');
+    t.setAttribute('data-track-path', 'https://track.gaug.es/track.gif');
+    t.src = 'https://d36ee2fcip1434.cloudfront.net/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+<!-- End Gaug.es Analytics -->
+
+
+  
+  <title>安卓学习笔记 | 超小韓の个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="Kotlin创建和使用变量数据类型   val 关键字 - 预计变量值不会变化时使用。  var 关键字 - 预计变量值会发生变化时使用。   Kotlin创建和使用函数 传入形参 12345fun birthdayGreeting(name: String): String &#123;    val nameGreeting &#x3D; &quot;Happy Birthday, Rover!&amp;quo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安卓学习笔记">
+<meta property="og:url" content="http://example.com/2025/08/01/AndroidDevNote/index.html">
+<meta property="og:site_name" content="超小韓の个人博客">
+<meta property="og:description" content="Kotlin创建和使用变量数据类型   val 关键字 - 预计变量值不会变化时使用。  var 关键字 - 预计变量值会发生变化时使用。   Kotlin创建和使用函数 传入形参 12345fun birthdayGreeting(name: String): String &#123;    val nameGreeting &#x3D; &quot;Happy Birthday, Rover!&amp;quo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/AndroidDevNote.assets/android.svg">
+<meta property="article:published_time" content="2025-07-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-16T09:10:45.041Z">
+<meta property="article:author" content="超小韓">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="Kotlin">
+<meta property="article:tag" content="learn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/AndroidDevNote.assets/android.svg">
+  
+    <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="/blogBasic/background.png" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>超小韓の个人博客 </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">主页</a>
+    
+      <a class="main-nav-link" href="/archives">文章</a>
+    
+      <a class="main-nav-link" href="/about">关于我的</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">主页</a>
+    
+      <a class="nav-dropdown-link" href="/archives">文章</a>
+    
+      <a class="nav-dropdown-link" href="/about">关于我的</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=/blogBasic/head.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">超小韓 </div>
+      <div class="dot"></div>
+      <div class="subtitle">無限進步 </div>
+      <div class="link-list">
+        
+          <a class="link-btn" href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2537037482&website=www.oicqzone.com" title="QQ"><i class="fa-brands fa-qq"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/353687950" title="哔哩哔哩"><i class="fa-brands fa-bilibili"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/chaoxiaohan/" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        
+          <a class="link-btn" href="mailto:chaoxiaohanhan@outlook.com" title="Email"><i class="fa-solid fa-envelope"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+    
+
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">标签</h3>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">归档</h3>
+      
+      
+        <a class="archive-link" href="/archives/2025/08 ">
+          八月 2025 
+          <div class="archive-count">2 </div>
+        </a>
+      
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">最新文章</h3>
+      <ul>
+        
+          <a class="recent-link" href="/2025/08/15/hello-world/" title="Hello World" >
+            <div class="recent-link-text">
+              Hello World
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/08/01/AndroidDevNote/" title="安卓学习笔记" >
+            <div class="recent-link-text">
+              安卓学习笔记
+            </div>
+          </a>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+  <div class="sticky">
+    
+      
+        
+          <div class="toc-widget">
+  <h3 class="toc-title">目录</h3>
+  <div class="toc-content">
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#Kotlin%E5%88%9B%E5%BB%BA%E5%92%8C%E4%BD%BF%E7%94%A8%E5%8F%98%E9%87%8F"><span class="toc-list-text">Kotlin创建和使用变量</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-list-text">数据类型</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#Kotlin%E5%88%9B%E5%BB%BA%E5%92%8C%E4%BD%BF%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-list-text">Kotlin创建和使用函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%BC%A0%E5%85%A5%E5%BD%A2%E5%8F%82"><span class="toc-list-text">传入形参</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%87%BD%E6%95%B0%E8%AF%AD%E6%B3%95"><span class="toc-list-text">函数语法</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%85%B7%E5%90%8D%E5%AE%9E%E5%8F%82"><span class="toc-list-text">具名实参</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E9%BB%98%E8%AE%A4%E5%AE%9E%E5%8F%82"><span class="toc-list-text">默认实参</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%96%87%E6%9C%AC%E5%85%83%E7%B4%A0"><span class="toc-list-text">文本元素</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E6%96%87%E6%9C%AC%E5%B8%83%E5%B1%80"><span class="toc-list-text">文本布局</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%BE%E7%89%87%E5%85%83%E7%B4%A0"><span class="toc-list-text">图片元素</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E6%B7%BB%E5%8A%A0%E5%9B%BE%E7%89%87"><span class="toc-list-text">添加图片</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E8%AE%BF%E9%97%AE%E8%B5%84%E6%BA%90"><span class="toc-list-text">访问资源</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="toc-list-text">示例代码</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E7%BC%A9%E6%94%BE%E5%9B%BE%E7%89%87%E5%86%85%E5%AE%B9"><span class="toc-list-text">缩放图片内容</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%AF%B9%E9%BD%90%E5%92%8C%E6%8E%92%E5%88%97%E6%96%87%E6%9C%AC"><span class="toc-list-text">对齐和排列文本</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%86%85%E8%BE%B9%E8%B7%9D"><span class="toc-list-text">内边距</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8F%90%E5%8F%96%E5%88%B0%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6"><span class="toc-list-text">字符串提取到资源文件</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#Kotlin%E6%9D%A1%E4%BB%B6"><span class="toc-list-text">Kotlin条件</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#if%E8%AF%AD%E5%8F%A5"><span class="toc-list-text">if语句</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#when%E8%AF%AD%E5%8F%A5"><span class="toc-list-text">when语句</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%BD%BF%E7%94%A8if-else%E6%88%96when%E4%BD%9C%E4%B8%BA%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-list-text">使用if&#x2F;else或when作为表达式</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#Kotlin-null%E5%8F%98%E9%87%8F"><span class="toc-list-text">Kotlin null变量</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-list-text">使用方法</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%BD%BF%E7%94%A8-%E5%AE%89%E5%85%A8%E8%B0%83%E7%94%A8%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-list-text">使用?.安全调用运算符</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%BD%BF%E7%94%A8-%E9%9D%9Enull%E6%96%AD%E8%A8%80%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-list-text">使用!!非null断言运算符</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%BD%BF%E7%94%A8-Elvis%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-list-text">使用?:Elvis运算符</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#Kotlin%E7%B1%BB%E4%B8%8E%E5%AF%B9%E8%B1%A1"><span class="toc-list-text">Kotlin类与对象</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%AE%9A%E4%B9%89%E7%B1%BB"><span class="toc-list-text">定义类</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%88%9B%E5%BB%BA%E7%B1%BB%E7%9A%84%E7%A4%BA%E4%BE%8B"><span class="toc-list-text">创建类的示例</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%AE%9A%E4%B9%89%E7%B1%BB%E6%96%B9%E6%B3%95"><span class="toc-list-text">定义类方法</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%B1%9E%E6%80%A7"><span class="toc-list-text">定义类属性</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%B1%9E%E6%80%A7%E4%B8%AD%E7%9A%84getter%E5%92%8Csetter%E5%87%BD%E6%95%B0"><span class="toc-list-text">属性中的getter和setter函数</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%AE%9A%E4%B9%89%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-list-text">定义构造函数</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%AE%9A%E4%B9%89%E5%BD%A2%E5%8F%82%E5%8C%96%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-list-text">定义形参化构造函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E4%B8%BB%E8%A6%81%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-list-text">主要构造函数</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E8%BE%85%E5%8A%A9%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-list-text">辅助构造函数</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%AE%9E%E7%8E%B0%E7%B1%BB%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-list-text">实现类之间的关系</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#IS-A%E5%85%B3%E7%B3%BB%EF%BC%88%E7%BB%A7%E6%89%BF%EF%BC%89"><span class="toc-list-text">IS-A关系（继承）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#HAS-A%E5%85%B3%E7%B3%BB%EF%BC%88%E7%BB%84%E5%90%88%EF%BC%89"><span class="toc-list-text">HAS-A关系（组合）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E6%9B%BF%E6%8D%A2%E5%AD%90%E7%B1%BB%E4%B8%AD%E7%9A%84%E7%88%B6%E7%B1%BB%E6%96%B9%E6%B3%95"><span class="toc-list-text">替换子类中的父类方法</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%BD%BF%E7%94%A8-super-%E5%85%B3%E9%94%AE%E5%AD%97%E5%9C%A8%E5%AD%90%E7%B1%BB%E4%B8%AD%E9%87%8D%E5%A4%8D%E4%BD%BF%E7%94%A8%E7%88%B6%E7%B1%BB%E4%BB%A3%E7%A0%81"><span class="toc-list-text">使用 super 关键字在子类中重复使用父类代码</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E6%9B%BF%E6%8D%A2%E5%AD%90%E7%B1%BB%E4%B8%AD%E7%9A%84%E7%88%B6%E7%B1%BB%E5%B1%9E%E6%80%A7"><span class="toc-list-text">替换子类中的父类属性</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%8F%AF%E8%A7%81%E6%80%A7%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-list-text">可见性修饰符</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E4%B8%BA%E5%B1%9E%E6%80%A7%E6%8C%87%E5%AE%9A%E5%8F%AF%E8%A7%81%E6%80%A7%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-list-text">为属性指定可见性修饰符</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E4%B8%BA%E6%96%B9%E6%B3%95%E6%8C%87%E5%AE%9A%E5%8F%AF%E8%A7%81%E6%80%A7%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-list-text">为方法指定可见性修饰符</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E4%B8%BA%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E6%8C%87%E5%AE%9A%E5%8F%AF%E8%A7%81%E6%80%A7%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-list-text">为构造函数指定可见性修饰符</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E4%B8%BA%E7%B1%BB%E6%8C%87%E5%AE%9A%E5%8F%AF%E8%A7%81%E6%80%A7%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-list-text">为类指定可见性修饰符</span></a></li></ol></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%AE%9A%E4%B9%89%E5%B1%9E%E6%80%A7%E5%A7%94%E6%89%98"><span class="toc-list-text">定义属性委托</span></a></li></ol>
+  </div>
+</div>
+
+        
+      
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-AndroidDevNote" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img" rel="gallery_cmee2ukw30005mkxehetz053n">
+        <img src="/AndroidDevNote.assets/android.svg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        安卓学习笔记
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2025-07-31T16:00:00.000Z" itemprop="datePublished">2025-08-01</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+    未分类 
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            15k 词 
+          </div>
+        </div>
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li></ul>
+
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <h2 id="Kotlin创建和使用变量"><a href="#Kotlin创建和使用变量" class="headerlink" title="Kotlin创建和使用变量"></a>Kotlin创建和使用变量</h2><h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><p><img src="/AndroidDevNote.assets/image-20250718104812545.png" alt="image-20250718104812545"></p>
+<p><img src="/AndroidDevNote.assets/image-20250718104842561.png" alt="image-20250718104842561"></p>
+<ul>
+<li><p><code>val</code> 关键字 - 预计变量值不会变化时使用。</p>
+</li>
+<li><p><code>var</code> 关键字 - 预计变量值会发生变化时使用。</p>
+</li>
+</ul>
+<h2 id="Kotlin创建和使用函数"><a href="#Kotlin创建和使用函数" class="headerlink" title="Kotlin创建和使用函数"></a>Kotlin创建和使用函数</h2><p><img src="/AndroidDevNote.assets/image-20250718110638822.png" alt="image-20250718110638822"></p>
+<h3 id="传入形参"><a href="#传入形参" class="headerlink" title="传入形参"></a>传入形参</h3><p><img src="/AndroidDevNote.assets/image-20250718111529864.png" alt="image-20250718111529864"></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">birthdayGreeting</span><span class="hljs-params">(name: <span class="hljs-type">String</span>)</span></span>: String &#123;<br>    <span class="hljs-keyword">val</span> nameGreeting = <span class="hljs-string">&quot;Happy Birthday, Rover!&quot;</span><br>    <span class="hljs-keyword">val</span> ageGreeting = <span class="hljs-string">&quot;You are now 5 years old!&quot;</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;<span class="hljs-variable">$nameGreeting</span>\n<span class="hljs-variable">$ageGreeting</span>&quot;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="函数语法"><a href="#函数语法" class="headerlink" title="函数语法"></a>函数语法</h3><p><img src="/AndroidDevNote.assets/image-20250718183828848.png" alt="image-20250718183828848"></p>
+<h3 id="具名实参"><a href="#具名实参" class="headerlink" title="具名实参"></a>具名实参</h3><p><img src="/AndroidDevNote.assets/image-20250718184140936.png" alt="image-20250718184140936"></p>
+<h3 id="默认实参"><a href="#默认实参" class="headerlink" title="默认实参"></a>默认实参</h3><p><img src="/AndroidDevNote.assets/image-20250718184318075.png" alt="image-20250718184318075"></p>
+<h2 id="文本元素"><a href="#文本元素" class="headerlink" title="文本元素"></a>文本元素</h2><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">GreetingText</span><span class="hljs-params">(message: <span class="hljs-type">String</span>, from: <span class="hljs-type">String</span>, modifier: <span class="hljs-type">Modifier</span> = Modifier)</span></span> &#123;<br>    Column(<span class="hljs-comment">//纵向布局</span><br>        verticalArrangement = Arrangement.Center,<span class="hljs-comment">//中心布局</span><br>        modifier = modifier<br>    ) &#123;<br>        Text(<span class="hljs-comment">//显示文本</span><br>            text = message,<br>            fontSize = <span class="hljs-number">100.</span>sp,<span class="hljs-comment">//字号大小（sp为可缩放像素）</span><br>            lineHeight = <span class="hljs-number">116.</span>sp,<span class="hljs-comment">//行高</span><br>            textAlign = TextAlign.Center<span class="hljs-comment">//文本居中对齐</span><br>        )<br>        Text(<br>            text = from,<br>            fontSize = <span class="hljs-number">36.</span>sp,<br>            modifier = Modifier<br>                .padding(<span class="hljs-number">16.</span>dp)<br>                .align(alignment = Alignment.End)<span class="hljs-comment">//右对齐</span><br>        )<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="文本布局"><a href="#文本布局" class="headerlink" title="文本布局"></a>文本布局</h3><p>选择方式：选择两个 <code>Text</code> 可组合项，然后点击灯泡。依次选择 <strong>Surround with widget</strong> &gt; <strong>Surround with Row</strong></p>
+<p><img src="/AndroidDevNote.assets/image-20250719181143222.png" alt="image-20250719181143222"></p>
+<h2 id="图片元素"><a href="#图片元素" class="headerlink" title="图片元素"></a>图片元素</h2><h3 id="添加图片"><a href="#添加图片" class="headerlink" title="添加图片"></a>添加图片</h3><ol>
+<li>在 Android Studio 中，依次点击 <strong>View &gt; Tool Windows &gt; Resource Manager</strong>，或点击 <strong>Project</strong> 窗口旁边的 <strong>Resource Manager</strong> 标签页。</li>
+</ol>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-add-images/img/318ae32952de3b49.png?hl=zh-cn" alt="318ae32952de3b49.png"></p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-add-images/img/2703cd334049774f.png?hl=zh-cn" alt="2703cd334049774f.png"></p>
+<p><strong>注意</strong>：Resource Manager 是一个工具窗口，可供您在应用中导入、创建、管理和使用资源。</p>
+<ol>
+<li>依次点击 <strong>+ (Add resources to the module) &gt; Import Drawables</strong>。</li>
+</ol>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-add-images/img/41054199d5299d08.png?hl=zh-cn" alt="41054199d5299d08.png"></p>
+<ol>
+<li>在文件浏览器中，选择已下载的图片文件，然后点击 <strong>Open</strong>。</li>
+</ol>
+<p>此操作会打开 <strong>Import drawables</strong> 对话框。</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-add-images/img/727d06e96adc8b19.png?hl=zh-cn" alt="727d06e96adc8b19.png"></p>
+<ol>
+<li>Android Studio 会向您显示该图片的预览。从 <strong>QUALIFIER TYPE</strong> 下拉列表中选择 <strong>Density</strong>。后面会介绍为何要执行此操作。</li>
+</ol>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-add-images/img/c8e37d10f3afb21d.png?hl=zh-cn" alt="c8e37d10f3afb21d.png"></p>
+<ol>
+<li>从 <strong>VALUE</strong> 列表中选择 <strong>No Density</strong>。</li>
+</ol>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-add-images/img/a8d0554a56c5a6e7.png?hl=zh-cn" alt="a8d0554a56c5a6e7.png"></p>
+<p>Android 设备具有不同的屏幕尺寸（手机、平板电脑和电视等），而且这些屏幕也具有不同的像素尺寸。也就是说，有可能一部设备的屏幕为每平方英寸 160 个像素，而另一部设备的屏幕在相同的空间内可以容纳 480 个像素。如果不考虑像素密度的这些变化，系统可能会按比例缩放图片，这可能会导致图片模糊或占用大量内存空间，或者图片大小不当。</p>
+<p>如果所调整的图片超出了 Android 系统可处理的图片大小，系统会抛出内存不足错误。对于照片和背景图片（如当前图片 <code>androidparty.png</code>），应将其放在 <code>drawable-nodpi</code> 文件夹中，这样会停止调整大小行为。</p>
+<p>如需详细了解像素密度，请参阅<a target="_blank" rel="noopener" href="https://developer.android.google.cn/training/multiscreen/screendensities?hl=zh-cn">支持不同的像素密度</a>。</p>
+<ol>
+<li>点击<strong>下一步</strong>。</li>
+<li>Android Studio 会显示将在其中放置图片的文件夹结构。请注意 <code>drawable-nodpi</code> 文件夹。</li>
+<li>点击 **Import(C)**。</li>
+</ol>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-add-images/img/6fbeec4f4d4fa984.png?hl=zh-cn" alt="6fbeec4f4d4fa984.png"></p>
+<h3 id="访问资源"><a href="#访问资源" class="headerlink" title="访问资源"></a>访问资源</h3><p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-add-images/img/7f95dd836a249cdc.png?hl=zh-cn" alt="R 是自动生成的类；drawable 是 res 文件夹中的子目录；graphic 是资源 ID"></p>
+<ol>
+<li>在 <code>GreetingImage()</code> 函数中，声明 <code>val</code> 属性并将其命名为 <code>image</code>。</li>
+<li>通过传入 <code>androidparty</code> 资源来调用 <a target="_blank" rel="noopener" href="https://developer.android.google.cn/reference/kotlin/androidx/compose/ui/res/package-summary?hl=zh-cn#painterResource(kotlin.Int)"><code>painterResource()</code></a> 函数。将返回值分配给 <code>image</code> 变量。</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">val</span> image = painterResource(R.drawable.androidparty)<br></code></pre></td></tr></table></figure>
+
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">GreetingImage</span><span class="hljs-params">(message : <span class="hljs-type">String</span>, from : <span class="hljs-type">String</span>,modifier: <span class="hljs-type">Modifier</span> = Modifier)</span></span> &#123;<br>    <span class="hljs-keyword">val</span> image = painterResource(R.drawable.androidparty)<span class="hljs-comment">//传入图片</span><br>    Box (modifier) &#123; <span class="hljs-comment">//使用 Box 布局可将元素堆叠在一起</span><br>        Image(<br>            painter = image,<br>            contentDescription = <span class="hljs-literal">null</span>,<span class="hljs-comment">//不设置面向用户的内容说明</span><br>            contentScale = ContentScale.Crop,<span class="hljs-comment">//缩放内容，使内容填充</span><br>            alpha = <span class="hljs-number">0.5F</span> <span class="hljs-comment">//不透明度</span><br>        )<br>        GreetingText(<br>            message = message,<br>            from = from,<br>            modifier = Modifier<br>                .fillMaxSize()<br>                .padding(<span class="hljs-number">8.</span>dp)<br>        )<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="缩放图片内容"><a href="#缩放图片内容" class="headerlink" title="缩放图片内容"></a>缩放图片内容</h3><p>多种 <a target="_blank" rel="noopener" href="https://developer.android.google.cn/reference/kotlin/androidx/compose/ui/layout/ContentScale?hl=zh-cn"><code>ContentScale</code></a> <a target="_blank" rel="noopener" href="https://developer.android.google.cn/jetpack/compose/graphics/images/customize?hl=zh-cn#content-scale">类型</a></p>
+<h3 id="对齐和排列文本"><a href="#对齐和排列文本" class="headerlink" title="对齐和排列文本"></a>对齐和排列文本</h3><p>在 <code>MainActivity.kt</code> 文件中，滚动到 <code>GreetingText()</code> 函数。此列中的 <code>verticalArrangement</code> 属性设置为 <code>Arrangement.Center</code>。因此，文本内容将在屏幕上居中。</p>
+<h3 id="内边距"><a href="#内边距" class="headerlink" title="内边距"></a>内边距</h3><p>界面元素会用自身包裹住其内容。为避免包裹地过紧，您可以在每一侧指定内边距大小。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-add-images/img/f5ec4094db454c65.png?hl=zh-cn" alt="不带内边距的 Text 可组合项"></th>
+<th><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-add-images/img/95e98cb1a1f6d3b3.png?hl=zh-cn" alt="带内边距的 Text 可组合项"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>内边距将作为修饰符使用，这意味着您可以将其应用于任何可组合项。对于可组合项的每一侧，<code>padding</code> 修饰符都接受一个可选实参，该实参定义了内边距的大小。</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-add-images/img/2e96e127f9f8c7.png?hl=zh-cn" alt="该示意图显示了 top、start、bottom 和 end 四个方向的内边距"></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-comment">// This is an example.</span><br>Modifier.padding(<br>    start = <span class="hljs-number">16.</span>dp,<br>    top = <span class="hljs-number">16.</span>dp,<br>    end = <span class="hljs-number">16.</span>dp,<br>    bottom = <span class="hljs-number">16.</span>dp<br>)<br></code></pre></td></tr></table></figure>
+
+<h3 id="字符串提取到资源文件"><a href="#字符串提取到资源文件" class="headerlink" title="字符串提取到资源文件"></a>字符串提取到资源文件</h3><ol>
+<li>点击屏幕左侧的灯泡。</li>
+<li>选择 <strong>Extract string resource</strong>。</li>
+</ol>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-add-images/img/bd8451ea9a2aee25.png?hl=zh-cn" alt="bd8451ea9a2aee25.png"></p>
+<p>Android Studio 将打开 <strong>Extract Resource</strong> 对话框。在此对话框中，您可以自定义字符串资源的名称以及有关如何存储该资源的一些详细信息。<strong>Resource name</strong> 字段用于输入字符串的名称。<strong>Resource value</strong> 字段用于输入字符串的实际内容。</p>
+<ol>
+<li>在 <strong>Extract Resource</strong> 对话框中，将 <strong>Resource name</strong> 更改为 <code>happy_birthday_text</code>。</li>
+</ol>
+<p>字符串资源应使用小写名称，并且多个单词之间应使用下划线分隔。将其他设置保留为默认值。</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-add-images/img/c110d39102e88e4.png?hl=zh-cn" alt="c110d39102e88e4.png"></p>
+<ol>
+<li>点击<strong>确定</strong>。</li>
+<li>请注意代码的变化。</li>
+</ol>
+<p>硬编码字符串现已替换为对 <code>getString()</code> 函数的调用。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs kotlin">GreetingImage(<br>    message = getString(R.string.happy_birthday_text),<br>    from = <span class="hljs-string">&quot;From Emma&quot;</span>,<br>    modifier = Modifier.padding(<span class="hljs-number">8.</span>dp)<br>)<br></code></pre></td></tr></table></figure>
+
+<h2 id="Kotlin条件"><a href="#Kotlin条件" class="headerlink" title="Kotlin条件"></a>Kotlin条件</h2><h3 id="if语句"><a href="#if语句" class="headerlink" title="if语句"></a>if语句</h3><p>if结构</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-conditionals/img/f19b3393376d45e9.png?hl=zh-cn" alt="一个示意图，描述了一个 if 语句，其 if 关键字后跟一对圆括号，圆括号内包含一个条件。后面是一对大括号，大括号内包含正文。正文代码块已突出显示。"></p>
+<p>if分支</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-conditionals/img/5443fb986621fe14.png?hl=zh-cn" alt="一个示意图，描述了一个 if/else 语句，其 if 关键字后跟圆括号，圆括号内包含条件 1 代码块。后面是一对大括号，大括号内包含正文 1。大括号后面是 else if 关键字，以及包含条件 2 代码块的圆括号。圆括号后面是一对大括号，其中包含正文 2 代码块。再后面是 else 关键字，以及另一对大括号，其中包含正文 3 代码块。"></p>
+<h3 id="when语句"><a href="#when语句" class="headerlink" title="when语句"></a>when语句</h3><p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-conditionals/img/2f7c0a1e312a2581.png?hl=zh-cn" alt="展示 when 语句详解的示意图。其开头是一个 when 关键字，后跟一对圆括号，圆括号中包含一个形参代码块。接下来是一对大括号，其中包含三行情形代码。每行代码中都包含一个条件代码块，后跟一个箭头符号和一个正文代码块。图中备注称，系统会依序评估每行情形代码。"></p>
+<p>使用英文逗号来处理多个条件</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-conditionals/img/4e778c4c4c044e51.png?hl=zh-cn" alt="展示 when 语句详解的示意图。其开头是一个 when 关键字，后跟一对圆括号，圆括号中包含一个形参代码块。接下来是一对大括号，其中包含两行情形代码。第一个代码行包含条件 1 代码块，后跟一个英文逗号，接下来是条件 2 正文，再后面是一个箭头符号和一个正文代码块。第二个代码行包含一个条件代码块，后跟一个箭头符号和一个正文代码块。"></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">val</span> x = <span class="hljs-number">3</span><br><br>    <span class="hljs-keyword">when</span> (x) &#123;<br>        <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">7</span> -&gt; println(<span class="hljs-string">&quot;x is a prime number between 1 and 10.&quot;</span>)<br>        <span class="hljs-keyword">else</span> -&gt; println(<span class="hljs-string">&quot;x isn&#x27;t a prime number between 1 and 10.&quot;</span>)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>使用in处理一系列条件</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-conditionals/img/400f940f363bd3c4.png?hl=zh-cn" alt="展示 when 语句详解的示意图。其开头是一个 when 关键字，后跟一对圆括号，圆括号中包含一个形参代码块。接下来是一对大括号，其中包含两行情形代码。第一个代码行包含 in 关键字，后跟一个范围起点代码块、两个点、一个范围终点代码块、一个箭头符号以及一个正文代码块。第二个代码行包含一个条件代码块，后跟一个箭头符号和一个正文代码块。"></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">val</span> x = <span class="hljs-number">4</span><br><br>    <span class="hljs-keyword">when</span> (x) &#123;<br>        <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">7</span> -&gt; println(<span class="hljs-string">&quot;x is a prime number between 1 and 10.&quot;</span>)<br>        <span class="hljs-keyword">in</span> <span class="hljs-number">1.</span><span class="hljs-number">.10</span> -&gt; println(<span class="hljs-string">&quot;x is a number between 1 and 10, but not a prime number.&quot;</span>)<br>        <span class="hljs-keyword">else</span> -&gt; println(<span class="hljs-string">&quot;x isn&#x27;t a prime number between 1 and 10.&quot;</span>)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>使用is检查数据类型</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-conditionals/img/66841365125b37aa.png?hl=zh-cn" alt="展示 when 语句详解的示意图。其开头是一个 when 关键字，后跟一对圆括号，圆括号中包含一个形参代码块。接下来是一对大括号，其中包含两行情形代码。第一个代码行包含一个 in 关键字，后跟一个类型代码块、一个箭头符号以及一个正文代码块。第二个代码行包含一个条件代码块，后跟一个箭头符号和一个正文代码块。"></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">val</span> x: Any = <span class="hljs-number">4</span><br><br>    <span class="hljs-keyword">when</span> (x) &#123;<br>        <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">7</span> -&gt; println(<span class="hljs-string">&quot;x is a prime number between 1 and 10.&quot;</span>)<br>        <span class="hljs-keyword">in</span> <span class="hljs-number">1.</span><span class="hljs-number">.10</span> -&gt; println(<span class="hljs-string">&quot;x is a number between 1 and 10, but not a prime number.&quot;</span>)<br>        <span class="hljs-keyword">is</span> <span class="hljs-built_in">Int</span> -&gt; println(<span class="hljs-string">&quot;x is an integer number, but not between 1 and 10.&quot;</span>)<br>        <span class="hljs-keyword">else</span> -&gt; println(<span class="hljs-string">&quot;x isn&#x27;t a prime number between 1 and 10.&quot;</span>)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="使用if-else或when作为表达式"><a href="#使用if-else或when作为表达式" class="headerlink" title="使用if&#x2F;else或when作为表达式"></a>使用if&#x2F;else或when作为表达式</h3><p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-conditionals/img/a6ff7ba09d3cdea3.png?hl=zh-cn" alt="一个示意图，描述了一个 if/else 表达式，其 val 关键字后跟一个名称代码块、一个等号、一个 if 关键字、圆括号（其中包含一个条件）、一对大括号（其中包含正文 1 代码块）、一个 else 关键字以及另一对大括号（其中包含一个正文代码块）。"></p>
+<p>如果正文仅包含一个返回值或表达式，您可以移除大括号，使代码更简洁。</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-conditionals/img/411c2aff894a72e2.png?hl=zh-cn" alt="一个示意图，描述了一个 if/else 表达式，其 val 关键字后跟一个名称代码块、一个等号、一个 if 关键字、圆括号（其中包含一个条件）、一个表达式 1 代码块、一个 else 关键字以及一个表达式 2 代码块。"></p>
+<p>示例代码</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">val</span> trafficLightColor = <span class="hljs-string">&quot;Black&quot;</span><br><br>    <span class="hljs-keyword">val</span> message = <br>      <span class="hljs-keyword">if</span> (trafficLightColor == <span class="hljs-string">&quot;Red&quot;</span>) <span class="hljs-string">&quot;Stop&quot;</span><br>      <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (trafficLightColor == <span class="hljs-string">&quot;Yellow&quot;</span>) <span class="hljs-string">&quot;Slow&quot;</span><br>      <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (trafficLightColor == <span class="hljs-string">&quot;Green&quot;</span>) <span class="hljs-string">&quot;Go&quot;</span><br>      <span class="hljs-keyword">else</span> <span class="hljs-string">&quot;Invalid traffic-light color&quot;</span><br><br>    println(message)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="Kotlin-null变量"><a href="#Kotlin-null变量" class="headerlink" title="Kotlin null变量"></a>Kotlin null变量</h2><h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">val</span> favoriteActor = <span class="hljs-literal">null</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>如需在 Kotlin 中声明可为 null 的变量，您需要在相应类型的末尾添加 <code>?</code> 运算符。例如，<code>String?</code> 类型可以存储字符串或 <code>null</code>，而 <code>String</code> 类型只能存储字符串。如需声明某个可为 null 的变量，您需要明确添加可为 null 类型。如果没有可为 null 类型，Kotlin 编译器会推断该变量属于不可为 null 类型。</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-nullability/img/c3bbad8de6afdbe9.png?hl=zh-cn" alt="此图展示了如何声明可为 null 类型的变量。这种变量以 var 关键字开头，后面依次是变量块的名称、分号、变量的类型、问号、等号和值块。类型块和问号使用“Nullable type”文字标示，表示该类型后接问号即变成可为 null 类型。"></p>
+<h3 id="使用-安全调用运算符"><a href="#使用-安全调用运算符" class="headerlink" title="使用?.安全调用运算符"></a>使用?.安全调用运算符</h3><p>如需使用 <code>?.</code> 安全调用运算符访问方法或属性，请在变量名称后面添加 <code>?</code> 符号，并使用 <code>.</code> 表示法访问方法或属性。</p>
+<p><code>?.</code> 安全调用运算符可让您更安全地访问可为 null 的变量，因为 Kotlin 编译器会阻止变量成员为访问 <code>null</code> 引用而进行的任何尝试，并针对访问的成员返回 <code>null</code>。</p>
+<p>如需安全地访问可为 null 的 <code>favoriteActor</code> 变量的属性，请按以下步骤操作：</p>
+<ol>
+<li>在 <code>println()</code> 语句中，将 <code>.</code> 运算符替换为 <code>?.</code> 安全调用运算符：</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">var</span> favoriteActor: String? = <span class="hljs-string">&quot;Sandra Oh&quot;</span><br>    println(favoriteActor?.length)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="使用-非null断言运算符"><a href="#使用-非null断言运算符" class="headerlink" title="使用!!非null断言运算符"></a>使用!!非null断言运算符</h3><p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-nullability/img/1a6f269bfd700839.png?hl=zh-cn" alt="此图展示了可为 null 的变量块，后面依次跟两个感叹号、一个点以及方法或属性块，各项之间没有空格。"></p>
+<p>您需要在可为 null 的变量后面添加 <code>!!</code> 非 null 断言运算符，之后再跟 <code>.</code> 运算符，最后添加不含任何空格的方法或属性。</p>
+<p>顾名思义，如果您使用 <code>!!</code> 非 null 断言运算符，即表示您断言变量的值不是 <code>null</code>，无论变量是否为该值都是如此。</p>
+<p>与 <code>?.</code> 安全调用运算符不同，当可为 null 的变量确实为 <code>null</code> 时，使用 <code>!!</code> 非 null 断言运算符可能会导致系统抛出 <code>NullPointerException</code> 错误。因此，只有在变量始终为不可为 null 或设置了适当的异常处理时，才应使用该断言运算符。如果异常未得到处理，便会导致运行时错误。您将在本课程后面的单元中了解异常处理。</p>
+<p>如需使用 <code>!!</code> 非 null 断言运算符访问 <code>favoriteActor</code> 变量的属性，请按以下步骤操作：</p>
+<ol>
+<li>为 <code>favoriteActor</code> 变量重新赋予喜爱演员的名称，然后在 <code>println()</code> 语句中将 <code>?.</code> 安全调用运算符替换为 <code>!!</code> 非 null 断言运算符：</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">var</span> favoriteActor: String? = <span class="hljs-string">&quot;Sandra Oh&quot;</span><br>    println(favoriteActor!!.length)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="使用-Elvis运算符"><a href="#使用-Elvis运算符" class="headerlink" title="使用?:Elvis运算符"></a>使用?:Elvis运算符</h3><p><code>?:</code> Elvis 运算符可以与 <code>?.</code> 安全调用运算符搭配使用。如果搭配使用 <code>?:</code> Elvis 运算符，您便可以在 <code>?.</code> 安全调用运算符返回 <code>null</code> 时添加默认值。这与 <code>if/else</code> 表达式类似，但更为常用。</p>
+<p>如果该变量不为 <code>null</code>，则执行 <code>?:</code> Elvis 运算符之前的表达式；如果变量为 <code>null</code>，则执行 <code>?:</code> Elvis 运算符之后的表达式。</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-nullability/img/85be2b9161680ecf.png?hl=zh-cn" alt="此图展示了 val 关键字，后面依次跟名称块、等号、可为 null 的变量块、问号、点、方法或属性块、问号、冒号以及默认值块。"></p>
+<h2 id="Kotlin类与对象"><a href="#Kotlin类与对象" class="headerlink" title="Kotlin类与对象"></a>Kotlin类与对象</h2><h3 id="定义类"><a href="#定义类" class="headerlink" title="定义类"></a>定义类</h3><p>类定义以 <code>class</code> 关键字开头，后面依次跟名称和一对大括号。左大括号之前的语法部分也称为类标头。在大括号之间，您可以指定类的属性和函数。您很快就会学到属性和函数。类定义的语法如以下示意图所示：</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-classes-and-objects/img/9a07f83c06449f38.png?hl=zh-cn" alt="该语法是以类关键字开头，后跟名称和一对左/右大括号。大括号之间包含用于描述蓝图的类主体。"></p>
+<p>以下是建议遵循的类命名惯例：</p>
+<ul>
+<li>可以选择任何想要的类名称，但不要将 Kotlin <a target="_blank" rel="noopener" href="https://kotlinlang.org/docs/keyword-reference.html">关键字</a>用作类名称，例如 <code>fun</code> 关键字。</li>
+<li>类名称采用 PascalCase 大小写形式编写，因此每个单词都以大写字母开头，且各个单词之间没有空格。以“SmartDevice”为例，每个单词的第一个字母都大写，且单词之间没有空格。</li>
+</ul>
+<p>类由以下三大部分组成：</p>
+<ul>
+<li><strong>属性</strong>：用于指定类对象属性的变量。</li>
+<li><strong>方法</strong>：包含类的行为和操作的函数。</li>
+<li><strong>构造函数</strong>：一种特殊的成员函数，用于在定义类的整个程序中创建类的实例。</li>
+</ul>
+<h3 id="创建类的示例"><a href="#创建类的示例" class="headerlink" title="创建类的示例"></a>创建类的示例</h3><p>若要使用某个对象，您需要创建该对象，并将其赋给变量，方法与定义变量的方式类似。您可以使用 <code>val</code> 关键字来创建不可变变量，使用 <code>var</code> 关键字来创建可变变量。<code>val</code> 或 <code>var</code> 关键字后依次跟变量名称、<code>=</code> 赋值运算符和类对象的实例化。语法如下图所示：</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-classes-and-objects/img/f58430542f2081a9.png?hl=zh-cn" alt="f58430542f2081a9.png"></p>
+<h3 id="定义类方法"><a href="#定义类方法" class="headerlink" title="定义类方法"></a>定义类方法</h3><p>在类中定义函数的语法与您之前学习的语法相同。唯一的区别在于，该函数是放在类主体中。在类主体中定义函数时，该函数称为成员函数或方法，用于表示类的行为。在本 Codelab 的剩余部分中，出现在类主体内的函数一律称为方法。</p>
+<p>在 <code>SmartDevice</code> 类中定义 <code>turnOn()</code> 和 <code>turnOff()</code> 方法：</p>
+<ol>
+<li>在 <code>SmartDevice</code> 类的主体中，定义主体为空的 <code>turnOn()</code> 方法：</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SmartDevice</span> &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">turnOn</span><span class="hljs-params">()</span></span> &#123;<br><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>在 <code>turnOn()</code> 方法的主体中，添加 <code>println()</code> 语句，然后向其传递 <code>&quot;Smart</code> <code>device</code> <code>is</code> <code>turned</code> <code>on.&quot;</code> 字符串：</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SmartDevice</span> &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">turnOn</span><span class="hljs-params">()</span></span> &#123;<br>        println(<span class="hljs-string">&quot;Smart device is turned on.&quot;</span>)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>若要在类的外部调用类方法，请以类对象开头，后面依次跟 <code>.</code> 运算符、函数名称和一对圆括号。可视情况在圆括号中包含方法所需的实参。语法如下图所示：</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-classes-and-objects/img/fc609c15952551ce.png?hl=zh-cn" alt="fc609c15952551ce.png"></p>
+<p>对该对象调用 <code>turnOn()</code> 和 <code>turnOff()</code> 方法：</p>
+<ol>
+<li>在 <code>main()</code> 函数中 <code>smartTvDevice</code> 变量后面的代码行上，调用 <code>turnOn()</code> 方法：</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">val</span> smartTvDevice = SmartDevice()<br>    smartTvDevice.turnOn()<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="定义类属性"><a href="#定义类属性" class="headerlink" title="定义类属性"></a>定义类属性</h3><ol>
+<li>在 <code>name</code> 属性后面的代码行上，定义 <code>category</code> 属性并为其赋予 <code>&quot;Entertainment&quot;</code> 字符串，然后定义 <code>deviceStatus</code> 属性并为其赋予 <code>&quot;online&quot;</code> 字符串：</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SmartDevice</span> &#123;<br><br>    <span class="hljs-keyword">val</span> name = <span class="hljs-string">&quot;Android TV&quot;</span><br>    <span class="hljs-keyword">val</span> category = <span class="hljs-string">&quot;Entertainment&quot;</span><br>    <span class="hljs-keyword">var</span> deviceStatus = <span class="hljs-string">&quot;online&quot;</span><br><br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">turnOn</span><span class="hljs-params">()</span></span> &#123;<br>        println(<span class="hljs-string">&quot;Smart device is turned on.&quot;</span>)<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">turnOff</span><span class="hljs-params">()</span></span> &#123;<br>        println(<span class="hljs-string">&quot;Smart device is turned off.&quot;</span>)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>在 <code>smartTvDevice</code> 变量后面的代码行上，调用 <code>println()</code> 函数，然后向其传递 <code>&quot;Device</code> <code>name</code> <code>is:</code> <code>$&#123;smartTvDevice.name&#125;&quot;</code> 字符串：</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">val</span> smartTvDevice = SmartDevice()<br>    println(<span class="hljs-string">&quot;Device name is: <span class="hljs-subst">$&#123;smartTvDevice.name&#125;</span>&quot;</span>)<br>    smartTvDevice.turnOn()<br>    smartTvDevice.turnOff()<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>运行代码。</li>
+</ol>
+<p>输出如下所示：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs kotlin">Device name <span class="hljs-keyword">is</span>: Android TV<br>Smart device <span class="hljs-keyword">is</span> turned on.<br>Smart device <span class="hljs-keyword">is</span> turned off.<br></code></pre></td></tr></table></figure>
+
+<h3 id="属性中的getter和setter函数"><a href="#属性中的getter和setter函数" class="headerlink" title="属性中的getter和setter函数"></a>属性中的getter和setter函数</h3><p>属性的用途比变量更广泛。例如，假设您创建了一个类结构来表示智能电视。您会执行的常见操作之一是调高和调低音量。如需在编程中表示此操作，您可以创建一个名为 <code>speakerVolume</code> 的属性，其中包含电视音箱当前设置的音量，但音量值有范围限制。可设置的音量下限为 0，上限为 100。若要确保 <code>speakerVolume</code> 属性始终不超过 100 或低于 0，您可以编写 setter 函数。在更新属性值时，您需要检查该值是否处于 0 到 100 的范围内。再举一例，假设您必须确保名称始终大写。您可以实现 getter 函数，将 <code>name</code> 属性转换为大写。</p>
+<p>在深入了解如何实现这些属性之前，您需要了解用于声明这些属性的完整语法。定义可变属性的完整语法是以变量定义开头，后跟可选的 <code>get()</code> 和 <code>set()</code> 函数。语法如下图所示：</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-classes-and-objects/img/f2cf50a63485599f.png?hl=zh-cn" alt="f2cf50a63485599f.png"></p>
+<p>例如，若要确保赋给 <code>speakerVolume</code> 属性的值介于 0 到 100 之间，您可以实现 setter 函数，如以下代码段所示：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">var</span> speakerVolume = <span class="hljs-number">2</span><br>    <span class="hljs-keyword">set</span>(value) &#123;<br>        <span class="hljs-keyword">if</span> (value <span class="hljs-keyword">in</span> <span class="hljs-number">0.</span><span class="hljs-number">.100</span>) &#123;<br>            field = value<br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="定义构造函数"><a href="#定义构造函数" class="headerlink" title="定义构造函数"></a>定义构造函数</h3><h3 id="定义形参化构造函数"><a href="#定义形参化构造函数" class="headerlink" title="定义形参化构造函数"></a>定义形参化构造函数</h3><p>在 <code>SmartDevice</code> 类中，<code>name</code> 和 <code>category</code> 属性不可变。您需要确保 <code>SmartDevice</code> 类的所有实例都会初始化 <code>name</code> 和 <code>category</code> 属性。在当前实现中，<code>name</code> 和 <code>category</code> 属性的值都采用硬编码。也就是说，所有智能设备都是以 <code>&quot;Android</code> <code>TV&quot;</code> 字符串命名，并使用 <code>&quot;Entertainment&quot;</code> 字符串进行分类。</p>
+<p>若要保持不变性，同时避免使用硬编码值，请使用形参化构造函数进行初始化：</p>
+<ul>
+<li>在 <code>SmartDevice</code> 类中，将 <code>name</code> 和 <code>category</code> 属性移至构造函数中，且不赋予默认值：</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SmartDevice</span>(<span class="hljs-keyword">val</span> name: String, <span class="hljs-keyword">val</span> category: String) &#123;<br><br>    <span class="hljs-keyword">var</span> deviceStatus = <span class="hljs-string">&quot;online&quot;</span><br><br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">turnOn</span><span class="hljs-params">()</span></span> &#123;<br>        println(<span class="hljs-string">&quot;Smart device is turned on.&quot;</span>)<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">turnOff</span><span class="hljs-params">()</span></span> &#123;<br>        println(<span class="hljs-string">&quot;Smart device is turned off.&quot;</span>)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>现在，该构造函数可接受形参来设置其属性，因此，为此类实例化对象的方式也会随之更改。实例化对象的完整语法如下图所示：</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-classes-and-objects/img/bbe674861ec370b6.png?hl=zh-cn" alt="bbe674861ec370b6.png"></p>
+<h4 id="主要构造函数"><a href="#主要构造函数" class="headerlink" title="主要构造函数"></a>主要构造函数</h4><p>您可以使用主要构造函数来初始化类标头中的属性。传递给构造函数的实参会赋给属性。定义主要构造函数的语法是以类名称开头，后面依次跟 <code>constructor</code> 关键字和一对圆括号。圆括号中包含主要构造函数的形参。如果有多个形参，请用英文逗号分隔形参定义。定义主要构造函数的完整语法如下图所示：</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-classes-and-objects/img/aa05214860533041.png?hl=zh-cn" alt="aa05214860533041.png"></p>
+<h4 id="辅助构造函数"><a href="#辅助构造函数" class="headerlink" title="辅助构造函数"></a>辅助构造函数</h4><p>辅助构造函数包含在类的主体中，其语法包括以下三个部分：</p>
+<ul>
+<li><strong>辅助构造函数声明</strong>：辅助构造函数定义以 <code>constructor</code> 关键字开头，后跟圆括号。可视情况在圆括号中包含辅助构造函数所需的形参。</li>
+<li><strong>主要构造函数初始化</strong>：初始化以冒号开头，后面依次跟 <code>this</code> 关键字和一对圆括号。可视情况在圆括号中包含主要构造函数所需的形参。</li>
+<li><strong>辅助构造函数主体</strong>：在主要构造函数的初始化后跟一对大括号，其中包含辅助构造函数的主体。</li>
+</ul>
+<p>语法如下图所示：</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-classes-and-objects/img/2dc13ef136009e98.png?hl=zh-cn" alt="2dc13ef136009e98.png"></p>
+<h3 id="实现类之间的关系"><a href="#实现类之间的关系" class="headerlink" title="实现类之间的关系"></a>实现类之间的关系</h3><p>在 Kotlin 中，所有类默认都是最终类，也就是说您无法扩展这些类，因此必须定义类之间的关系。</p>
+<p>定义 <code>SmartDevice</code> 父类及其子类之间的关系：</p>
+<ol>
+<li>在 <code>SmartDevice</code> 父类中的 <code>class</code> 关键字前面添加 <code>open</code> 关键字，使其具有扩展性：</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">open</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SmartDevice</span>(<span class="hljs-keyword">val</span> name: String, <span class="hljs-keyword">val</span> category: String) &#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>open</code> 关键字会告知编译器此类可供扩展，因此其他类现在可对其进行扩展。</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-classes-and-objects/img/1ac63b66e6b5c224.png?hl=zh-cn" alt="1ac63b66e6b5c224.png"></p>
+<ol>
+<li>创建会扩展 <code>SmartDevice</code> 父类的 <code>SmartTvDevice</code> 子类：</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SmartTvDevice</span>(deviceName: String, deviceCategory: String) :<br>    SmartDevice(name = deviceName, category = deviceCategory) &#123;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="IS-A关系（继承）"><a href="#IS-A关系（继承）" class="headerlink" title="IS-A关系（继承）"></a>IS-A关系（继承）</h3><p>如果在 <code>SmartDevice</code> 父类和 <code>SmartTvDevice</code> 子类之间指定 IS-A 关系，即表示 <code>SmartDevice</code> 父类可以执行的操作，<code>SmartTvDevice</code> 子类也可执行。这种关系是单向的，因此可以说每个智能电视“都是”智能设备，但不能说每个智能设备“都是”智能电视。IS-A 关系的代码表示形式如以下代码段所示：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-comment">// Smart TV IS-A smart device.</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">SmartTvDevice</span> : <span class="hljs-type">SmartDevice</span>() &#123;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="HAS-A关系（组合）"><a href="#HAS-A关系（组合）" class="headerlink" title="HAS-A关系（组合）"></a>HAS-A关系（组合）</h3><p>HAS-A 关系是指定两个类之间的关系的另一种方式。例如，您可能要使用住宅中的智能电视。在这种情况下，智能电视和住宅之间存在某种关系。住宅中包含智能设备，即住宅“拥有”智能设备。两个类之间的 HAS-A 关系也称为“组合”。</p>
+<p>使用 HAS-A 关系定义 <code>SmartHome</code> 类：</p>
+<ol>
+<li>在 <code>SmartLightDevice</code> 类和 <code>main()</code> 函数之间，定义 <code>SmartHome</code> 类：</li>
+</ol>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">class</span> <span class="hljs-symbol">SmartLightDevice</span>(<span class="hljs-symbol">deviceName: <span class="hljs-symbol">String</span>, <span class="hljs-symbol">deviceCategory</span>: <span class="hljs-symbol">String</span></span>) :<br>    <span class="hljs-symbol">SmartDevice</span>(<span class="hljs-symbol">name</span> = <span class="hljs-symbol">deviceName, <span class="hljs-symbol">category</span></span> = <span class="hljs-symbol">deviceCategory</span>) &#123;<br><br>    ...<br><br>&#125;<br><br><span class="hljs-keyword">class</span> <span class="hljs-symbol">SmartHome</span> &#123;<br>&#125;<br><br>fun main() &#123; <br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>在 <code>SmartHome</code> 类构造函数中，使用 <code>val</code> 关键字创建 <code>SmartTvDevice</code> 类型的 <code>smartTvDevice</code> 属性：</li>
+</ol>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-comment">// The SmartHome class HAS-A smart TV device.</span><br><span class="hljs-keyword">class</span> <span class="hljs-symbol">SmartHome</span>(<span class="hljs-symbol">val</span> <span class="hljs-symbol">smartTvDevice: <span class="hljs-symbol">SmartTvDevice</span></span>) &#123;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>在 <code>SmartHome</code> 类的主体中，定义会对 <code>smartTvDevice</code> 属性调用 <code>turnOn()</code> 方法的 <code>turnOnTv()</code> 方法：</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SmartHome</span>(<span class="hljs-keyword">val</span> smartTvDevice: SmartTvDevice) &#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">turnOnTv</span><span class="hljs-params">()</span></span> &#123;<br>        smartTvDevice.turnOn()<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>在 <code>turnOnTv()</code> 方法之后的代码行上，定义会对 <code>smartTvDevice</code> 属性调用 <code>turnOff()</code> 方法的 <code>turnOffTv()</code> 方法：</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SmartHome</span>(<span class="hljs-keyword">val</span> smartTvDevice: SmartTvDevice) &#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">turnOnTv</span><span class="hljs-params">()</span></span> &#123;<br>        smartTvDevice.turnOn()<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">turnOffTv</span><span class="hljs-params">()</span></span> &#123;<br>        smartTvDevice.turnOff()<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="替换子类中的父类方法"><a href="#替换子类中的父类方法" class="headerlink" title="替换子类中的父类方法"></a>替换子类中的父类方法</h3><p>替换 <code>SmartDevice</code> 类中的 <code>turnOn()</code> 和 <code>turnOff()</code> 方法：</p>
+<p>在 <code>SmartDevice</code> 父类主体中，找到每个方法的 <code>fun</code> 关键字，并在前面添加 <code>open</code> 关键字：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">open</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SmartDevice</span>(<span class="hljs-keyword">val</span> name: String, <span class="hljs-keyword">val</span> category: String) &#123;<br><br>    <span class="hljs-keyword">var</span> deviceStatus = <span class="hljs-string">&quot;online&quot;</span><br><br>    <span class="hljs-keyword">open</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">turnOn</span><span class="hljs-params">()</span></span> &#123;<br>        <span class="hljs-comment">// function body</span><br>    &#125;<br><br>    <span class="hljs-keyword">open</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">turnOff</span><span class="hljs-params">()</span></span> &#123;<br>        <span class="hljs-comment">// function body</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在 <code>SmartLightDevice</code> 类的主体中，定义主体为空的 <code>turnOn()</code> 方法：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SmartLightDevice</span>(deviceName: String, deviceCategory: String) :<br>    SmartDevice(name = deviceName, category = deviceCategory) &#123;<br><br>    <span class="hljs-keyword">var</span> brightnessLevel = <span class="hljs-number">0</span><br>        <span class="hljs-keyword">set</span>(value) &#123;<br>            <span class="hljs-keyword">if</span> (value <span class="hljs-keyword">in</span> <span class="hljs-number">0.</span><span class="hljs-number">.100</span>) &#123;<br>                field = value<br>            &#125;<br>        &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">increaseBrightness</span><span class="hljs-params">()</span></span> &#123;<br>        brightnessLevel++<br>        println(<span class="hljs-string">&quot;Brightness increased to <span class="hljs-variable">$brightnessLevel</span>.&quot;</span>)<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">turnOn</span><span class="hljs-params">()</span></span> &#123;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在 <code>turnOn()</code> 方法的主体中，将 <code>deviceStatus</code> 属性设为字符串“<code>on</code>”，将 <code>brightnessLevel</code> 属性设为值“<code>2</code>”并添加 <code>println()</code> 语句，然后向它传递一个 <code>&quot;$name</code> <code>turned</code> <code>on.</code> <code>The</code> <code>brightness</code> <code>level</code> <code>is</code> <code>$brightnessLevel.&quot;</code> 字符串：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">turnOn</span><span class="hljs-params">()</span></span> &#123;<br>    deviceStatus = <span class="hljs-string">&quot;on&quot;</span><br>    brightnessLevel = <span class="hljs-number">2</span><br>    println(<span class="hljs-string">&quot;<span class="hljs-variable">$name</span> turned on. The brightness level is <span class="hljs-variable">$brightnessLevel</span>.&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在 <code>SmartLightDevice</code> 子类中，找到 <code>turnOn()</code>  方法的 <code>fun</code> 关键字，并在前面添加 <code>override</code> 关键字</p>
+<p><strong><code>override</code> 关键字会告知 Kotlin 运行时去执行子类所定义方法中包含的代码</strong></p>
+<ol>
+<li><p>在 <code>main()</code> 函数中，使用 <code>var</code> 关键字定义 <code>SmartDevice</code> 类型的 <code>smartDevice</code> 变量，该变量会实例化接受 <code>&quot;Android</code> <code>TV&quot;</code> 实参和 <code>&quot;Entertainment&quot;</code> 实参的 <code>SmartTvDevice</code> 对象</p>
+</li>
+<li><p>在 <code>smartDevice</code> 变量后面的代码行上，对 <code>smartDevice</code> 对象调用 <code>turnOn()</code> 方法</p>
+</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">var</span> smartDevice: SmartDevice = SmartTvDevice(<span class="hljs-string">&quot;Android TV&quot;</span>, <span class="hljs-string">&quot;Entertainment&quot;</span>)<br>    smartDevice.turnOn()<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="使用-super-关键字在子类中重复使用父类代码"><a href="#使用-super-关键字在子类中重复使用父类代码" class="headerlink" title="使用 super 关键字在子类中重复使用父类代码"></a>使用 <code>super</code> 关键字在子类中重复使用父类代码</h3><p>若要从子类调用父类中被替换的方法，需要使用super关键字<img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-classes-and-objects/img/18cc94fefe9851e0.png?hl=zh-cn" alt="18cc94fefe9851e0.png"></p>
+<ol>
+<li>在 <code>SmartTvDevice</code> 和 <code>SmartLightDevice</code> 子类中，使用 <code>super</code> 关键字从 <code>SmartDevice</code> 类中调用方法：</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SmartTvDevice</span>(deviceName: String, deviceCategory: String) :<br>    SmartDevice(name = deviceName, category = deviceCategory) &#123;<br><br>    <span class="hljs-keyword">var</span> speakerVolume = <span class="hljs-number">2</span><br>        <span class="hljs-keyword">set</span>(value) &#123;<br>            <span class="hljs-keyword">if</span> (value <span class="hljs-keyword">in</span> <span class="hljs-number">0.</span><span class="hljs-number">.100</span>) &#123;<br>                field = value<br>            &#125;<br>        &#125;<br><br>     <span class="hljs-keyword">var</span> channelNumber = <span class="hljs-number">1</span><br>        <span class="hljs-keyword">set</span>(value) &#123;<br>            <span class="hljs-keyword">if</span> (value <span class="hljs-keyword">in</span> <span class="hljs-number">0.</span><span class="hljs-number">.200</span>) &#123;<br>                field = value<br>            &#125;<br>        &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">increaseSpeakerVolume</span><span class="hljs-params">()</span></span> &#123;<br>        speakerVolume++<br>        println(<span class="hljs-string">&quot;Speaker volume increased to <span class="hljs-variable">$speakerVolume</span>.&quot;</span>)<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">nextChannel</span><span class="hljs-params">()</span></span> &#123;<br>        channelNumber++<br>        println(<span class="hljs-string">&quot;Channel number increased to <span class="hljs-variable">$channelNumber</span>.&quot;</span>)<br>    &#125;<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">turnOn</span><span class="hljs-params">()</span></span> &#123;<br>        <span class="hljs-keyword">super</span>.turnOn()<br>        println(<br>            <span class="hljs-string">&quot;<span class="hljs-variable">$name</span> is turned on. Speaker volume is set to <span class="hljs-variable">$speakerVolume</span> and channel number is &quot;</span> +<br>                <span class="hljs-string">&quot;set to <span class="hljs-variable">$channelNumber</span>.&quot;</span><br>        )<br>    &#125;<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">turnOff</span><span class="hljs-params">()</span></span> &#123;<br>        <span class="hljs-keyword">super</span>.turnOff()<br>        println(<span class="hljs-string">&quot;<span class="hljs-variable">$name</span> turned off&quot;</span>)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="替换子类中的父类属性"><a href="#替换子类中的父类属性" class="headerlink" title="替换子类中的父类属性"></a>替换子类中的父类属性</h3><p>在 <code>SmartDevice</code> 父类中 <code>deviceStatus</code> 属性后面的代码行上，使用 <code>open</code> 和 <code>val</code> 关键字定义 <code>deviceType</code> 属性，并将其设置为 <code>&quot;unknown&quot;</code> 字符串：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">open</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SmartDevice</span>(<span class="hljs-keyword">val</span> name: String, <span class="hljs-keyword">val</span> category: String) &#123;<br><br>    <span class="hljs-keyword">var</span> deviceStatus = <span class="hljs-string">&quot;online&quot;</span><br><br>    <span class="hljs-keyword">open</span> <span class="hljs-keyword">val</span> deviceType = <span class="hljs-string">&quot;unknown&quot;</span><br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在 <code>SmartTvDevice</code> 类中，使用 <code>override</code> 和 <code>val</code> 关键字定义 <code>deviceType</code> 属性，并将其设置为 <code>&quot;Smart</code> <code>TV&quot;</code> 字符串：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SmartTvDevice</span>(deviceName: String, deviceCategory: String) :<br>    SmartDevice(name = deviceName, category = deviceCategory) &#123;<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-keyword">val</span> deviceType = <span class="hljs-string">&quot;Smart TV&quot;</span><br><br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="可见性修饰符"><a href="#可见性修饰符" class="headerlink" title="可见性修饰符"></a>可见性修饰符</h2><p>Kotlin 提供了以下四种可见性修饰符：</p>
+<ul>
+<li><code>public</code>：默认的可见性修饰符。可让系统在任何位置访问声明。对于您想在类外部使用的属性和方法，请标记为 public。</li>
+<li><code>private</code>：可让系统在相同类或源文件中访问声明。</li>
+</ul>
+<p>某些属性和方法可能仅在类的内部使用，而且您不一定想让其他类使用。您可以使用 <code>private</code> 可见性修饰符标记这些属性和方法，以确保其他类不会意外访问它们。</p>
+<ul>
+<li><code>protected</code>：可让系统在子类中访问声明。对于您想在定义它们的类及其子类中使用的属性和方法，请使用 <code>protected</code> 可见性修饰符进行标记。</li>
+<li><code>internal</code>：可让系统在相同模块中访问声明。internal 修饰符与 private 类似，但您可以从类的外部访问内部属性和方法，只要是在相同模块中进行访问即可。</li>
+</ul>
+<h4 id="为属性指定可见性修饰符"><a href="#为属性指定可见性修饰符" class="headerlink" title="为属性指定可见性修饰符"></a>为属性指定可见性修饰符</h4><p>为属性指定可见性修饰符的语法是以 <code>private</code>、<code>protected</code> 或 <code>internal</code> 修饰符开头，后跟定义属性的语法。语法如下图所示：</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-classes-and-objects/img/47807a890d237744.png?hl=zh-cn" alt="47807a890d237744.png"></p>
+<p>也可将可见性修饰符设置为setter函数，并将修饰符放在set之前<img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-classes-and-objects/img/cea29a49b7b26786.png?hl=zh-cn" alt="cea29a49b7b26786.png"></p>
+<p>protected：值应能通过类对象在类的外部读取，只有该类及其子类可以更新或写入这个值，您需要对属性的 <code>set()</code> 函数使用 <code>protected</code> 修饰符。</p>
+<p>对 <code>deviceStatus</code> 属性的 <code>set()</code> 函数使用 <code>protected</code> 修饰符：</p>
+<ol>
+<li>在 <code>SmartDevice</code> 父类的 <code>deviceStatus</code> 属性中，将 <code>protected</code> 修饰符添加到 <code>set()</code> 函数中：</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">open</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SmartDevice</span>(<span class="hljs-keyword">val</span> name: String, <span class="hljs-keyword">val</span> category: String) &#123;<br><br>    ...<br><br>    <span class="hljs-keyword">var</span> deviceStatus = <span class="hljs-string">&quot;online&quot;</span><br>        <span class="hljs-keyword">protected</span> <span class="hljs-keyword">set</span>(value) &#123;<br>           field = value<br>       &#125;<br><br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="为方法指定可见性修饰符"><a href="#为方法指定可见性修饰符" class="headerlink" title="为方法指定可见性修饰符"></a>为方法指定可见性修饰符</h4><p>为方法指定可见性修饰符的语法是以 <code>private</code>、<code>protected</code> 或 <code>internal</code> 修饰符开头，后跟定义方法的语法。语法如下图所示：</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-classes-and-objects/img/e0a60ddc26b841de.png?hl=zh-cn" alt="e0a60ddc26b841de.png"></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SmartTvDevice</span>(deviceName: String, deviceCategory: String) :<br>    SmartDevice(name = deviceName, category = deviceCategory) &#123;<br><br>    ...<br><br>    <span class="hljs-keyword">protected</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">nextChannel</span><span class="hljs-params">()</span></span> &#123;<br>        channelNumber++<br>        println(<span class="hljs-string">&quot;Channel number increased to <span class="hljs-variable">$channelNumber</span>.&quot;</span>)<br>    &#125;      <br><br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="为构造函数指定可见性修饰符"><a href="#为构造函数指定可见性修饰符" class="headerlink" title="为构造函数指定可见性修饰符"></a>为构造函数指定可见性修饰符</h4><p>为构造函数指定可见性修饰符的语法与定义主要构造函数的语法类似，但存在以下两点差异：</p>
+<ul>
+<li>修饰符是在类名称之后、<code>constructor</code> 关键字之前的位置指定。</li>
+<li>为主要构造函数指定修饰符时，即使函数内没有任何形参，也必须保留 <code>constructor</code> 关键字和圆括号。</li>
+</ul>
+<p>语法如下图所示：</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-classes-and-objects/img/6832575eba67f059.png?hl=zh-cn" alt="6832575eba67f059.png"></p>
+<p>例如，您可以查看以下代码段，了解如何在 <code>SmartDevice</code> 构造函数中添加 <code>protected</code> 修饰符：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">open</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SmartDevice</span> <span class="hljs-keyword">protected</span> <span class="hljs-keyword">constructor</span> (<span class="hljs-keyword">val</span> name: String, <span class="hljs-keyword">val</span> category: String) &#123;<br><br>    ...<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="为类指定可见性修饰符"><a href="#为类指定可见性修饰符" class="headerlink" title="为类指定可见性修饰符"></a>为类指定可见性修饰符</h4><p>为类指定可见性修饰符的语法是以 <code>private</code>、<code>protected</code> 或 <code>internal</code> 修饰符开头，后跟定义类的语法。语法如下图所示：</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-classes-and-objects/img/3ab4aa1c94a24a69.png?hl=zh-cn" alt="3ab4aa1c94a24a69.png"></p>
+<p>例如，您可以查看以下代码段，了解如何为 <code>SmartDevice</code> 类指定 <code>internal</code> 修饰符：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">internal</span> <span class="hljs-keyword">open</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SmartDevice</span>(<span class="hljs-keyword">val</span> name: String, <span class="hljs-keyword">val</span> category: String) &#123;<br><br>    ...<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>理想情况下，您应努力严控属性和方法的可见性，因此请尽可能通过 <code>private</code> 修饰符来声明属性和方法。如果您无法确保它们私有，请使用 <code>protected</code> 修饰符；如果您无法确保它们受到保护，请使用 <code>internal</code> 修饰符；如果您无法确保它们仅在内部使用，请使用 <code>public</code> 修饰符。</p>
+<table>
+<thead>
+<tr>
+<th><strong>修饰符</strong></th>
+<th><strong>可在相同类中访问</strong></th>
+<th><strong>可在子类中访问</strong></th>
+<th><strong>可在相同模块中访问</strong></th>
+<th><strong>可在模块之外访问</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>private</code></td>
+<td>✔</td>
+<td>𝗫</td>
+<td>𝗫</td>
+<td>𝗫</td>
+</tr>
+<tr>
+<td><code>protected</code></td>
+<td>✔</td>
+<td>✔</td>
+<td>𝗫</td>
+<td>𝗫</td>
+</tr>
+<tr>
+<td><code>internal</code></td>
+<td>✔</td>
+<td>✔</td>
+<td>✔</td>
+<td>𝗫</td>
+</tr>
+<tr>
+<td><code>public</code></td>
+<td>✔</td>
+<td>✔</td>
+<td>✔</td>
+<td>✔</td>
+</tr>
+</tbody></table>
+<h2 id="定义属性委托"><a href="#定义属性委托" class="headerlink" title="定义属性委托"></a>定义属性委托</h2><p>创建属性委托的语法是以变量声明开头，后面一次跟by关键字以及用于为处理getter和setter函数的委托对象。语法如下图所示：</p>
+<p><img src="https://developer.android.google.cn/static/codelabs/basic-android-kotlin-compose-classes-and-objects/img/928547ad52768115.png?hl=zh-cn" alt="928547ad52768115.png"></p>
+<p>为 <code>var</code> 类型创建委托：</p>
+<ol>
+<li>在 <code>main()</code> 函数之前，创建会实现 <code>ReadWriteProperty&lt;Any?,</code> <code>Int&gt;</code> 接口的 <code>RangeRegulator</code> 类：</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">RangeRegulator</span>() : ReadWriteProperty&lt;Any?, <span class="hljs-built_in">Int</span>&gt;&#123;<span class="hljs-comment">//&lt;&gt;属于通用类型</span><br><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>在 <code>RangeRegulator</code> 类的主体中，替换 <code>getValue()</code> 和 <code>setValue()</code> 方法：</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">RangeRegulator</span>(<br>    initialValue: <span class="hljs-built_in">Int</span>,<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">val</span> minValue: <span class="hljs-built_in">Int</span>,<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">val</span> maxValue: <span class="hljs-built_in">Int</span><br>) : ReadWriteProperty&lt;Any?, <span class="hljs-built_in">Int</span>&gt; &#123;<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">getValue</span><span class="hljs-params">(thisRef: <span class="hljs-type">Any</span>?, property: <span class="hljs-type">KProperty</span>&lt;*&gt;)</span></span>: <span class="hljs-built_in">Int</span> &#123;<br>    &#125;<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">setValue</span><span class="hljs-params">(thisRef: <span class="hljs-type">Any</span>?, property: <span class="hljs-type">KProperty</span>&lt;*&gt;, value: <span class="hljs-type">Int</span>)</span></span> &#123;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left "
+    
+      href="/2025/08/15/hello-world/"
+      title="Hello World"
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+      
+        Hello World
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right  disabled "
+     >
+
+    <p class="title-text">
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2025 超小韓<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+  <script src="/js/toc.js"></script>
+</body>
+</html>
