@@ -205,9 +205,9 @@ class MusicPlayer {
         this.audio.volume = this.volume;
         this.audio.crossOrigin = "anonymous";
         
-        // 使用OSS上的音频文件
-        const audioUrl = 'https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/background_music.mp3';
-        console.log('正在加载音频:', audioUrl);
+        // 使用本地音频文件
+        const audioUrl = '/background_music.mp3';
+        console.log('正在加载本地音频:', audioUrl);
         
         this.loadSingleAudioSource(audioUrl);
 
