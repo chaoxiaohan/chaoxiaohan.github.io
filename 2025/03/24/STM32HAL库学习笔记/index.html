@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 
-<html theme="light" showBanner="true" hasBanner="true" > 
+<html theme="light" showBanner="true" hasBanner="desktop" > 
 <link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet">
 <link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet">
 <link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet">
@@ -43,46 +43,15 @@
 <meta property="og:site_name" content="超小韓の个人博客">
 <meta property="og:description" content="STM32HAL库学习笔记【GPIO】点灯（white）1、工程配置 分配引脚：在Pinout&amp;Configuration页面，将 PA6、PA7、PB0 配置为 GPIO_Output，并分别设置 User label 为 BLUE、GREEN、RED  左键点击对应的引脚，选择 GPIO_Output； 右键点击对应的引脚，选择 User label，分别输入 BLUE、GREEN、R">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E9%85%8D%E7%BD%AE-b0dda05778c3a7cac8e2b15d60776b12.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E9%85%8D%E7%BD%AE-6778d5c04521ea13a7e89c52f44063ae.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E9%85%8D%E7%BD%AE-7f3465dc33de0e3e4f4e23933d2c9da7.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E9%85%8D%E7%BD%AE%E6%97%B6%E9%92%9F%E6%BA%90-d967a2e4219ddd58666f730a79f7def4.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE-347ae32e413ed44e85f705a744e42478.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/Snipaste_2023-05-04_23-06-38-9b482e4f6ad9da35d13b6bde5d2e5afc.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E5%8F%96%E6%A8%A1%E5%8A%A9%E6%89%8B-6cad12174311f98bb95ea9a7f2ac4e72.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E5%B0%8F%E6%81%90%E9%BE%99%E6%B8%B8%E6%88%8F-1d3db5e54615fbbfda42f57e56943513.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/SSD1306%E9%A9%B1%E5%8A%A8%E5%BA%93-d211d937557ab3e2ea01301e2b52693c.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E6%90%9C%E7%B4%A2%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F-1f90d6c95c21d89b203dd406704d63c0.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E6%B7%BB%E5%8A%A0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F-113ba49049fc8e3ab51a1b563d216a30.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/logic1-aedc9e0bf75a81da420816be579f2b1a.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E9%85%8D%E7%BD%AEPINOUT-06626ba36adb01b3f788d32483f95555.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E9%85%8D%E7%BD%AETIM1-f26aa0b1f9330fdb673b47611f4f3541.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E9%85%8D%E7%BD%AE%E6%97%B6%E9%92%9F%E6%BA%90-d967a2e4219ddd58666f730a79f7def4-1755341749687-35.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE-347ae32e413ed44e85f705a744e42478-1755341752755-38.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/TIM1%E9%85%8D%E7%BD%AE-817696ebb9da5a74e153636cb53bfb53.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E9%85%8D%E7%BD%AE%E6%97%B6%E9%92%9F%E6%BA%90-d967a2e4219ddd58666f730a79f7def4-1755341761583-43.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE-347ae32e413ed44e85f705a744e42478-1755341763773-46.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E9%85%8D%E7%BD%AE%E6%97%B6%E9%92%9F%E6%BA%90-d967a2e4219ddd58666f730a79f7def4-1755341767155-49.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE-347ae32e413ed44e85f705a744e42478-1755341769050-52.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E9%85%8D%E7%BD%AE%E6%97%B6%E9%92%9F%E6%BA%90-d967a2e4219ddd58666f730a79f7def4-1755341772241-55.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE-347ae32e413ed44e85f705a744e42478-1755341773945-58.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E9%85%8D%E7%BD%AE%E6%97%B6%E9%92%9F%E6%BA%90-d967a2e4219ddd58666f730a79f7def4-1755341777398-61.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE-347ae32e413ed44e85f705a744e42478-1755341779254-64.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/configUART-627416204c717e0c7e61c6228a19ca6a.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/enableIT-d2f4f193f635a77d9ad8f514e943ca78.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/configDMA-603ec3152ac06c417d674213cb08935c.png">
-<meta property="og:image" content="https://docs.keysking.com/assets/images/enableIT-32fe6591bbdd18442d40013910f42fde.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/configBaud-a22b2ba06f58483550d0dfed5d5d243d.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/configDMA-51811dd271ee6795aed167294dff42be.png">
-<meta property="og:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/enableIT-8ef64087528b33979137745d47dde231.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/HAL1.png">
 <meta property="article:published_time" content="2025-03-23T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-08-17T09:40:32.134Z">
+<meta property="article:modified_time" content="2025-08-17T13:39:03.924Z">
 <meta property="article:author" content="超小韓">
 <meta property="article:tag" content="learn">
 <meta property="article:tag" content="STM32">
 <meta property="article:tag" content="HAL">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/%E9%85%8D%E7%BD%AE-b0dda05778c3a7cac8e2b15d60776b12.png">
+<meta name="twitter:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/HAL1.png">
   
     <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
   
@@ -201,7 +170,7 @@
         
           <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/chaoxiaohan/" title="GitHub"><i class="fa-brands fa-github"></i></a>
         
-          <a class="link-btn" href="mailto:chaoxiaohanhan@outlook.com" title="Email"><i class="fa-solid fa-envelope"></i></a>
+          <a class="link-btn" href="mailto:chaoxiaohan@chaoxiaohan.cyou" title="Email"><i class="fa-solid fa-envelope"></i></a>
          
       </div>  
     </div>
@@ -218,7 +187,7 @@
   <div class="widget-wrap">
     <div class="widget">
       <h3 class="widget-title">标签</h3>
-      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CubeMx/" rel="tag">CubeMx</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%B5%84%E6%BA%90/" rel="tag">资源</a></li></ul>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CubeMx/" rel="tag">CubeMx</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/teach/" rel="tag">teach</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%B5%84%E6%BA%90/" rel="tag">资源</a></li></ul>
     </div>
   </div>
 
@@ -232,7 +201,7 @@
       
         <a class="archive-link" href="/archives/2025/08 ">
           八月 2025 
-          <div class="archive-count">2 </div>
+          <div class="archive-count">3 </div>
         </a>
       
         <a class="archive-link" href="/archives/2025/03 ">
@@ -257,9 +226,15 @@
             </div>
           </a>
         
-          <a class="recent-link" href="/2025/08/01/AndroidDevNote/" title="安卓学习笔记" >
+          <a class="recent-link" href="/2025/08/17/C%E8%AF%AD%E8%A8%80%E6%95%99%E7%A8%8B-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%88VS%EF%BC%89/" title="C语言教程-环境搭建（VS）" >
             <div class="recent-link-text">
-              安卓学习笔记
+              C语言教程-环境搭建（VS）
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/08/01/AndroidDevNote/" title="安卓学习笔记（一）" >
+            <div class="recent-link-text">
+              安卓学习笔记（一）
             </div>
           </a>
         
@@ -304,6 +279,16 @@
 <article id="post-STM32HAL库学习笔记" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
     
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img" rel="gallery_cmefmb4wd0007doxe0864esa3">
+        <img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/HAL1.png" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
    
   <div class="article-inner">
     <div class="article-main">
@@ -1372,12 +1357,12 @@
   <a class="article-nav-btn left "
     
       href="/2025/08/01/AndroidDevNote/"
-      title="安卓学习笔记"
+      title="安卓学习笔记（一）"
      >
     <i class="fa-solid fa-angle-left"></i>
     <p class="title-text">
       
-        安卓学习笔记
+        安卓学习笔记（一）
         
     </p>
   </a>
