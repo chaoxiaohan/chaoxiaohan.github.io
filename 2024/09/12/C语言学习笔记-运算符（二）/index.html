@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+
+
+<html theme="light" showBanner="true" hasBanner="true" > 
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet">
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+<!-- Gaug.es Analytics -->
+<script>
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', 'true');
+    t.setAttribute('data-track-path', 'https://track.gaug.es/track.gif');
+    t.src = 'https://d36ee2fcip1434.cloudfront.net/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+<!-- End Gaug.es Analytics -->
+
+
+  
+  <title>C语言学习笔记-运算符（二） | 超小韓の个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="本篇C语言学习笔记聚焦于各类运算符，详细讲解了算术、比较、赋值、自增自减及逻辑运算符的使用方法与优先级，并探讨了短路运算和三目条件运算符的语法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C语言学习笔记-运算符（二）">
+<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2024/09/12/C%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E8%BF%90%E7%AE%97%E7%AC%A6%EF%BC%88%E4%BA%8C%EF%BC%89/index.html">
+<meta property="og:site_name" content="超小韓の个人博客">
+<meta property="og:description" content="本篇C语言学习笔记聚焦于各类运算符，详细讲解了算术、比较、赋值、自增自减及逻辑运算符的使用方法与优先级，并探讨了短路运算和三目条件运算符的语法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-09-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-18T09:50:16.004Z">
+<meta property="article:author" content="超小韓">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="Virual Studio">
+<meta property="article:tag" content="learn">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/css/music-player.css">
+
+  
+<link rel="stylesheet" href="/css/search.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="/blogBasic/banner.jpg" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>超小韓の个人博客 </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">主页</a>
+    
+      <a class="main-nav-link" href="/archives">文章</a>
+    
+      <a class="main-nav-link" href="/resources">资料</a>
+    
+      <a class="main-nav-link" href="/about">关于我的</a>
+    
+  </nav>
+  <nav id="search-nav">
+    <div id="search-container">
+      <input type="text" id="search-input" placeholder="搜索文章..." autocomplete="off">
+      <div id="search-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20">
+          <path d="M796-121 533-384q-30 26-69.959 40.5T378-329q-108.162 0-183.081-75Q120-479 120-585t75-181q75-75 181.5-75t181 75Q632-691 632-584.85 632-542 618-502q-14 40-42 75l264 262-44 44ZM377-389q81.25 0 138.125-57.5T572-585q0-81-56.875-138.5T377-781q-82.083 0-139.542 57.5Q180-666 180-585t57.458 138.5Q294.917-389 377-389Z"/>
+        </svg>
+      </div>
+      <div id="search-results" class="hidden">
+        <div id="search-results-content"></div>
+      </div>
+    </div>
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">主页</a>
+    
+      <a class="nav-dropdown-link" href="/archives">文章</a>
+    
+      <a class="nav-dropdown-link" href="/resources">资料</a>
+    
+      <a class="nav-dropdown-link" href="/about">关于我的</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=/blogBasic/head.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">超小韓 </div>
+      <div class="dot"></div>
+      <div class="subtitle">生活明朗，万物可爱！ </div>
+      <div class="link-list">
+        
+          <a class="link-btn" href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2537037482&website=www.oicqzone.com" title="QQ"><i class="fa-brands fa-qq"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/353687950" title="哔哩哔哩"><i class="fa-brands fa-bilibili"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/chaoxiaohan/" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        
+          <a class="link-btn" href="mailto:chaoxiaohan@chaoxiaohan.cyou" title="Email"><i class="fa-solid fa-envelope"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+    
+
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">标签</h3>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CubeMx/" rel="tag">CubeMx</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/teach/" rel="tag">teach</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%B5%84%E6%BA%90/" rel="tag">资源</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">归档</h3>
+      
+      
+        <a class="archive-link" href="/archives/2025/08 ">
+          八月 2025 
+          <div class="archive-count">3 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/03 ">
+          三月 2025 
+          <div class="archive-count">2 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2024/09 ">
+          九月 2024 
+          <div class="archive-count">2 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2023/08 ">
+          八月 2023 
+          <div class="archive-count">1 </div>
+        </a>
+      
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">最新文章</h3>
+      <ul>
+        
+          <a class="recent-link" href="/2025/08/17/C%E8%AF%AD%E8%A8%80%E6%95%99%E7%A8%8B-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%88VS%EF%BC%89/" title="C语言教程-环境搭建（VS）" >
+            <div class="recent-link-text">
+              C语言教程-环境搭建（VS）
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/08/17/learning-resources/" title="学习资源汇总" >
+            <div class="recent-link-text">
+              学习资源汇总
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/08/01/AndroidDevNote/" title="安卓学习笔记（一）" >
+            <div class="recent-link-text">
+              安卓学习笔记（一）
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/03/24/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="STM32HAL库学习笔记" >
+            <div class="recent-link-text">
+              STM32HAL库学习笔记
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/03/01/HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0by%E8%B6%85%E5%B0%8F%E9%9F%93/" title="HAL库函数" >
+            <div class="recent-link-text">
+              HAL库函数
+            </div>
+          </a>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+  <div class="sticky">
+    
+      
+        
+          <div class="toc-widget">
+  <h3 class="toc-title">目录</h3>
+  <div class="toc-content">
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#1-%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-list-text">1. 算术运算符</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-list-text">注意事项</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-%E6%AF%94%E8%BE%83%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-list-text">2. 比较运算符</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-list-text">优先级</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#3-%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-list-text">3.赋值运算符</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#4-%E8%87%AA%E5%A2%9E%E5%87%8F%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-list-text">4. 自增减运算符</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E8%87%AA%E5%A2%9E%E8%87%AA%E5%87%8F%E8%AF%AD%E6%B3%95"><span class="toc-list-text">自增自减语法</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%89%8D%E7%BC%80%E5%90%8E%E7%BC%80%E5%8C%BA%E5%88%AB"><span class="toc-list-text">前缀后缀区别</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-1"><span class="toc-list-text">注意事项</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#5-%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-list-text">5. 逻辑运算符</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#6-%E7%9F%AD%E8%B7%AF%E8%BF%90%E7%AE%97"><span class="toc-list-text">6.短路运算</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E7%9F%AD%E8%B7%AF%E8%BF%90%E7%AE%97%E4%BD%9C%E7%94%A8"><span class="toc-list-text">短路运算作用</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E7%9F%AD%E8%B7%AF%E8%BF%90%E7%AE%97%E7%89%B9%E6%80%A7"><span class="toc-list-text">短路运算特性</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#7-%E6%9D%A1%E4%BB%B6%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-list-text">7. 条件运算符</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%89%B9%E6%80%A7%E5%92%8C%E5%B5%8C%E5%A5%97%E5%BA%94%E7%94%A8"><span class="toc-list-text">特性和嵌套应用</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#8-%E9%80%97%E5%8F%B7%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-list-text">8.逗号运算符</span></a></li></ol>
+  </div>
+</div>
+
+        
+      
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-C语言学习笔记-运算符（二）" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        C语言学习笔记-运算符（二）
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2024-09-11T16:00:00.000Z" itemprop="datePublished">2024-09-12</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+    未分类 
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            4.9k 词 
+          </div>
+        </div>
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li></ul>
+
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <h1 id="C语言学习笔记-运算符（二）"><a href="#C语言学习笔记-运算符（二）" class="headerlink" title="C语言学习笔记-运算符（二）"></a>C语言学习笔记-运算符（二）</h1><h2 id="1-算术运算符"><a href="#1-算术运算符" class="headerlink" title="1. 算术运算符"></a>1. 算术运算符</h2><table>
+<thead>
+<tr>
+<th align="center"><strong>运算符</strong></th>
+<th align="center"><strong>术语</strong></th>
+<th align="center"><strong>示例</strong></th>
+<th align="center"><strong>结果</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">+</td>
+<td align="center">正号</td>
+<td align="center">+3</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">-</td>
+<td align="center">负号</td>
+<td align="center">-3</td>
+<td align="center">-3</td>
+</tr>
+<tr>
+<td align="center">+</td>
+<td align="center">加</td>
+<td align="center">10 + 5</td>
+<td align="center">15</td>
+</tr>
+<tr>
+<td align="center">-</td>
+<td align="center">减</td>
+<td align="center">10 - 5</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">*</td>
+<td align="center">乘</td>
+<td align="center">10 * 5</td>
+<td align="center">50</td>
+</tr>
+<tr>
+<td align="center">&#x2F;</td>
+<td align="center">除</td>
+<td align="center">10 &#x2F; 5</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">%</td>
+<td align="center">取余(取模 Modulo)</td>
+<td align="center">10 % 3</td>
+<td align="center">1</td>
+</tr>
+</tbody></table>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ol>
+<li>先 * &#x2F; %，后 + -。</li>
+<li>除法<ul>
+<li>两整数相除，结果整数（舍小数部分）</li>
+<li>两浮点数相除，结果 double 浮点数</li>
+<li>整数和实数相除，自动类型转换为实型</li>
+<li>不允许 除 0（与数学一样）</li>
+</ul>
+</li>
+<li>取模（取余）<ul>
+<li>运算数必须是整型</li>
+<li>对负数取余，结果为余数的绝对值</li>
+<li>不允许 除 0（与数学一样）</li>
+</ul>
+</li>
+</ol>
+<h2 id="2-比较运算符"><a href="#2-比较运算符" class="headerlink" title="2. 比较运算符"></a>2. 比较运算符</h2><table>
+<thead>
+<tr>
+<th align="center"><strong>运算符</strong></th>
+<th align="center"><strong>作用</strong></th>
+<th align="center"><strong>示例</strong></th>
+<th align="left"><strong>结果</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">&lt;</td>
+<td align="center">判断 小于</td>
+<td align="center">4 &lt; 3</td>
+<td align="left">不成立（假）：0</td>
+</tr>
+<tr>
+<td align="center">&lt;&#x3D;</td>
+<td align="center">判断 小于<strong>或</strong>等于</td>
+<td align="center">4 &lt;&#x3D; 3</td>
+<td align="left">不成立（假）：0</td>
+</tr>
+<tr>
+<td align="center">&gt;</td>
+<td align="center">判断 大于</td>
+<td align="center">4 &gt; 3</td>
+<td align="left">成立（真）：1</td>
+</tr>
+<tr>
+<td align="center">&gt;&#x3D;</td>
+<td align="center">判断 大于<strong>或</strong>等于</td>
+<td align="center">4 &gt;&#x3D; 4</td>
+<td align="left">成立（真）：1</td>
+</tr>
+<tr>
+<td align="center">&#x3D;&#x3D;</td>
+<td align="center">判断 相等</td>
+<td align="center">4 &#x3D;&#x3D; 3</td>
+<td align="left">不成立（假）：0</td>
+</tr>
+<tr>
+<td align="center">!&#x3D;</td>
+<td align="center">判断 不相等</td>
+<td align="center">4 !&#x3D; 3</td>
+<td align="left">成立（真）：1</td>
+</tr>
+</tbody></table>
+<p><strong>注意：</strong>判断 “相等”，使用 “&#x3D;&#x3D;”， 不能使用 “&#x3D;”（赋值符）</p>
+<h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><ol>
+<li>整体，比算术运算符 低。</li>
+<li>整体，比赋值运算符 高。</li>
+<li>&gt;  &gt;&#x3D;  &lt;  &lt;&#x3D; 高于 &#x3D;&#x3D; !&#x3D;</li>
+</ol>
+<h2 id="3-赋值运算符"><a href="#3-赋值运算符" class="headerlink" title="3.赋值运算符"></a>3.赋值运算符</h2><table>
+<thead>
+<tr>
+<th align="center"><strong>运算符</strong></th>
+<th align="center"><strong>术语</strong></th>
+<th align="center"><strong>示例</strong></th>
+<th align="center"><strong>结果</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">+&#x3D;</td>
+<td align="center">加等于</td>
+<td align="center">int a&#x3D;1;  a+&#x3D;2;（等同于a &#x3D; a+2）</td>
+<td align="center">a值为 3;</td>
+</tr>
+<tr>
+<td align="center">-&#x3D;</td>
+<td align="center">减等于</td>
+<td align="center">int a&#x3D;5;  a-&#x3D;3;（等同于a &#x3D; a-3）</td>
+<td align="center">a值为 2;</td>
+</tr>
+<tr>
+<td align="center">*&#x3D;</td>
+<td align="center">乘等于</td>
+<td align="center">int a&#x3D;2;  a*&#x3D;2;（等同于a &#x3D; a*2）</td>
+<td align="center">a值为 4;</td>
+</tr>
+<tr>
+<td align="center">&#x2F;&#x3D;</td>
+<td align="center">除等于</td>
+<td align="center">int a&#x3D;4;  a&#x2F;&#x3D;2;（等同于a &#x3D; a&#x2F;2）</td>
+<td align="center">a值为 2;</td>
+</tr>
+<tr>
+<td align="center">%&#x3D;</td>
+<td align="center">模等于</td>
+<td align="center">int a&#x3D;3;  a%&#x3D;2;（等同于a &#x3D; a%2）</td>
+<td align="center">a值为 1;</td>
+</tr>
+</tbody></table>
+<p><strong>注意：</strong>赋值运算符，会修改变量的原始值。 赋值符左侧，必须可修改（变量）。</p>
+<h2 id="4-自增减运算符"><a href="#4-自增减运算符" class="headerlink" title="4. 自增减运算符"></a>4. 自增减运算符</h2><p><strong>目标：实现数据的增 1、减1运算</strong></p>
+<p>自增自减运算也叫 增 1 减 1 运算，都是单目运算。</p>
+<p>作用：</p>
+<ul>
+<li>自增 ++， 放在变量前面或后面，对变量自身值+1。</li>
+<li>自减 –， 放在变量前面或后面，对变量自身值-1。 </li>
+<li>方便实现变量的 +1 或 -1 运算。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center"><strong>运算符</strong></th>
+<th align="center"><strong>术语</strong></th>
+<th align="center"><strong>示例</strong></th>
+<th align="center"><strong>结果</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">++</td>
+<td align="center">自增</td>
+<td align="center">int a&#x3D;1;  a++ 或 ++a;（等同于a &#x3D; a+1）</td>
+<td align="center">a 值为 2;</td>
+</tr>
+<tr>
+<td align="center">–</td>
+<td align="center">自减</td>
+<td align="center">int b&#x3D;5;   b–  或  –b;（等同于b &#x3D; b-1）</td>
+<td align="center">b 值为 4;</td>
+</tr>
+</tbody></table>
+<h3 id="自增自减语法"><a href="#自增自减语法" class="headerlink" title="自增自减语法"></a>自增自减语法</h3><p>++ 对变量值 +1。  – 对变量值 -1。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 目标: 掌握 ++ 自增1, -- 自减1 特性</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>	<span class="hljs-type">int</span> a = <span class="hljs-number">10</span>;<br><br>	<span class="hljs-comment">//a++; // a = a + 1;</span><br>	++a; <span class="hljs-comment">// a = a + 1;		与 a++ 效果相同</span><br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;a = %d\n&quot;</span>, a);<br>	<span class="hljs-comment">//a--; // a = a -1;</span><br>	--a; <span class="hljs-comment">// a = a -1;		与 a-- 效果相同</span><br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;a = %d\n&quot;</span>, a);<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="前缀后缀区别"><a href="#前缀后缀区别" class="headerlink" title="前缀后缀区别"></a>前缀后缀区别</h3><p><strong>注意：++ 和 – 如果 &#x3D;&#x3D;不是单独使用&#x3D;&#x3D;（如：用在表达式中），前缀和后缀 &#x3D;&#x3D;差异巨大&#x3D;&#x3D;</strong> </p>
+<ul>
+<li><p>放在变量前，先 +1、-1 再取值使用。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> a = <span class="hljs-number">10</span>;<br><span class="hljs-type">int</span> res = ++a;  <span class="hljs-comment">// 先 +1，再取 a 值给 res。 （先加再用）</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>放在变量后，先 取值用，再  +1、-1 </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> b = <span class="hljs-number">10</span>;<br><span class="hljs-type">int</span> res2 = b--; <span class="hljs-comment">// 先取 b 值给 res2， 而后 b 再 -1  （先用再减）</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="注意事项-1"><a href="#注意事项-1" class="headerlink" title="注意事项"></a>注意事项</h3><ol>
+<li>不能用于常量</li>
+<li>不能用于表达式</li>
+<li>优先级：整体高于算数运算符（必然高于比较、赋值）；后缀高于前缀</li>
+<li>不要在一个表达式中，对同一变量 多次 ++、– 运算。可读性差，且不用编译系统结果不同。</li>
+</ol>
+<h2 id="5-逻辑运算符"><a href="#5-逻辑运算符" class="headerlink" title="5. 逻辑运算符"></a>5. 逻辑运算符</h2><p>作用：</p>
+<ul>
+<li><p>用程序解决 类似 或者、并且 这种 含有逻辑关系的 情况。</p>
+</li>
+<li><p>将多个条件放在一起运算，最终返回 真（1）或  假（0）</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center"><strong>运算符</strong></th>
+<th align="center"><strong>术语</strong></th>
+<th align="center"><strong>示例</strong></th>
+<th><strong>结果</strong></th>
+<th>速记</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">&amp;&amp;</td>
+<td align="center">与</td>
+<td align="center">2&gt;1 &amp;&amp; 3&gt;2</td>
+<td>&amp;&amp;两边同为真，结果为真，否则为假。</td>
+<td>同真为真</td>
+</tr>
+<tr>
+<td align="center">||</td>
+<td align="center">或</td>
+<td align="center">2&gt;1||3 &gt; 5</td>
+<td>||两边有一个为真，结果为真，二者同为假，结果为假。</td>
+<td>有真为真</td>
+</tr>
+<tr>
+<td align="center">!</td>
+<td align="center">非</td>
+<td align="center">! (2&gt;1)</td>
+<td>取反！表达式为假，加 ! 为真；表达式为真，加 ! 为假。</td>
+<td>真非为假</td>
+</tr>
+</tbody></table>
+<h2 id="6-短路运算"><a href="#6-短路运算" class="headerlink" title="6.短路运算"></a>6.短路运算</h2><p>​		逻辑运算符的特性，导致实际应用中一部分表达式不执行，也能得出整个表达式结果。这一特点经常作为考点出现在计算机二级、期末考试题中。</p>
+<p>在程序中：</p>
+<ul>
+<li>判断 表达式 a &amp;&amp; (b+c) 的结果：<ul>
+<li>当 a 为假时，不必计算 b+c，可直接得出表达式为假的结论。</li>
+</ul>
+</li>
+<li>判断 表达式 a || (b+c) 的结果：<ul>
+<li>当 a 为真时，则不必计算 b+c，就能判断出表达式的值为 真。</li>
+</ul>
+</li>
+</ul>
+<p>**概念：逻辑表达式 运算过程中，只运算左边表达式，就能直接得出整个逻辑表达式的结果。—— 短路运算  **</p>
+<h3 id="短路运算作用"><a href="#短路运算作用" class="headerlink" title="短路运算作用"></a>短路运算作用</h3><p>​		在代码中利用短路运算，可 <strong>避免不必要运算，提高程序执行效率</strong>。 比如有如下代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> a = <span class="hljs-number">5</span>, b = <span class="hljs-number">28</span>;<br><span class="hljs-type">int</span> c = (a &gt; <span class="hljs-number">3</span>) || ((b / <span class="hljs-number">7</span>)*<span class="hljs-number">4</span> % <span class="hljs-number">2</span> != <span class="hljs-number">0</span>)<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;c = %d\n&quot;</span>, c);<br></code></pre></td></tr></table></figure>
+
+<p>​		现要计算 c 值。&#x3D; 右侧表达式含有逻辑或 || 运算符，运算特性 有真为真。|| 左边表达式很容易判断为 真，可确定整个表达式结果为 真。 右侧 b 相关的 复杂表达式 不需要计算 。</p>
+<h3 id="短路运算特性"><a href="#短路运算特性" class="headerlink" title="短路运算特性"></a>短路运算特性</h3><p>​		<strong>左表达式能直接得逻辑表达式结果，右表达式不执行。</strong></p>
+<p><strong>案例 1：</strong>以下代码执行后，a、b、c 的值依次是多少？</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 目标: 掌握运算特性</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>	<span class="hljs-type">int</span> a = <span class="hljs-number">1</span>, b = <span class="hljs-number">2</span>, c = <span class="hljs-number">3</span>;<br>	(a = b + c) || (++b) ;   	<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;a=%d, b=%d, c=%d\n&quot;</span>, a, b, c);<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>​		简单分析代码。 很可能得出结论： a &#x3D; 5，b &#x3D; 3，c &#x3D; 3</p>
+<p>​		但，实际上这里的 b 并没有完成自增运算，值还是 2。 为什么 有前缀 ++ 自增，b 值还是 2 呢？ 因为 <strong>短路运算</strong>！++b 并未执行。 </p>
+<p>​		逻辑 || 运算符，运算特性有真为真。 左侧 a &#x3D; b+c 赋值表达式很容易得出结果为真。 因此 整个 表达式得出结论为真，右侧 ++b 并不需要执行。 因此，即使是 前缀自增，b 没有执行机会，值依然为 2。</p>
+<p>​		正确输出结果：a &#x3D; 5，b &#x3D; 2，c &#x3D; 3</p>
+<p><strong>案例 2：</strong>分析代码，推测 a, x, y 的值分别是什么？</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 目标: 掌握运算特性</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>	<span class="hljs-type">int</span> x = <span class="hljs-number">1</span>, y = <span class="hljs-number">5</span>, a;<br>	a = --x &amp;&amp; ++y;  <br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;a=%d, x=%d, y=%d\n&quot;</span>, a, x, y);  <br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;    <br></code></pre></td></tr></table></figure>
+
+<p>​		同样是逻辑运算表达式，逻辑与&amp;&amp; 运算符，运算特性 同真为真。 x 初值为 1，前缀 –x 执行 结果为 0，假。依然会触发短路运算特性。右侧 ++y 不执行。</p>
+<p>​		因此，输出结果为：a&#x3D;0, x&#x3D;0, y&#x3D;5 </p>
+<p><strong>案例 3：</strong> 依然上述案例 2代码，将 –x 修改为 x–，输出结果为何？</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 目标: 掌握运算特性</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;    <br>    <span class="hljs-type">int</span> x = <span class="hljs-number">1</span>, y = <span class="hljs-number">5</span>, a;<br>	a = x-- &amp;&amp; ++y;  <br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;a=%d, x=%d, y=%d\n&quot;</span>, a, x, y);  <br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>​		修改后，x– 由于是 后缀，因此 先取值 1 为真（而后再-1），所以没有触发 短路运算，继续运算 右侧 ++y，将 y 值自增为 6。 1 &amp;&amp; 6 结果为真， a 值为 1。</p>
+<p>​		因此，输出结果为：a&#x3D;1, x&#x3D;0, y&#x3D;6 </p>
+<p><strong>小知识：合理利用短路运算特性，提高程序执行效率</strong></p>
+<ul>
+<li>编写含**&#x3D;&#x3D;&amp;&amp;&#x3D;&#x3D;**表达式时，&amp;&amp; 同真为真，左表达式值为假时，右表达式不计算， 建议将 **&#x3D;&#x3D;易假 值放左边&#x3D;&#x3D;**。</li>
+<li>编写含**&#x3D;&#x3D;||&#x3D;&#x3D;**表达式时，|| 有真为真，左表达式值为真时，右表达式不计算。 建议将 **&#x3D;&#x3D;易真 值放左边&#x3D;&#x3D;**。</li>
+</ul>
+<h2 id="7-条件运算符"><a href="#7-条件运算符" class="headerlink" title="7. 条件运算符"></a>7. 条件运算符</h2><p><strong>语法：表达式1  ？表达式 2：表达式 3</strong></p>
+<ul>
+<li>表达式 1 一定起 判别 作用。表达式 2 和 表达式 3 只能有一个执行。</li>
+<li>三目运算的结果，必须被使用。</li>
+</ul>
+<p><strong>运算规则：</strong></p>
+<ul>
+<li><p>判断 表达式 1 的结果：</p>
+<ul>
+<li><p>为真，整个三目运算的结果为 表达式 2</p>
+</li>
+<li><p>为假，整个三目运算的结果为 表达式 3</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>能解决什么问题呢？比如，查询成绩系统中，根据成绩判定是否及格？可以用 三目运算来进行判断。</p>
+<p>案例 1：接收学生成绩，判断是否 及格，给出 Y&#x2F;N 结果。**</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 目标: 掌握 三目运算语法特性</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>	<span class="hljs-type">double</span> score;<br>    <br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;请输入成绩:&quot;</span>);<br>	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%lf&quot;</span>, &amp;score);<br><br>	<span class="hljs-type">char</span> res = score &gt;= <span class="hljs-number">60</span> ? <span class="hljs-string">&#x27;Y&#x27;</span> : <span class="hljs-string">&#x27;N&#x27;</span>; <span class="hljs-comment">// 三目运算结果 赋值给 res 变量</span><br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;是否及格? %c\n&quot;</span>, res);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>案例 2：找出两个数中的较小值</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 目标: 掌握 三目运算语法特性</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>	<span class="hljs-type">int</span> a = <span class="hljs-number">10</span>;<br>    <span class="hljs-type">int</span> b = <span class="hljs-number">20</span>;<br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;较小值为：%d\n&quot;</span>, a &lt; b ? a : b);	<span class="hljs-comment">// 三目运算结果在 printf 中使用</span><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="特性和嵌套应用"><a href="#特性和嵌套应用" class="headerlink" title="特性和嵌套应用"></a>特性和嵌套应用</h2><p>​		嵌套条件运算符的写法，在实际编程中较少见，因为代码可读性低。 但，<strong>计算机考试中，经常出做考点。</strong></p>
+<p>​		辨别技巧是，当 表达式中 有 2 个以上问号、冒号，一定是发生了 三目运算嵌套。</p>
+<p>​		处理方法是，先将位于右边的 “?” 与它后面最近一个 “:” 配对。因为，条件运算符的结合性，自右向左。</p>
+<p>​		优先级，高于赋值运算符，低于算数、逻辑、比较运算符。</p>
+<p><strong>案例 1：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> res = w &lt; x ? x + w : x &lt; y ? x : y   	<span class="hljs-comment">//  w &lt; x ? x + w :（x &lt; y ? x : y）</span><br></code></pre></td></tr></table></figure>
+
+<p>​	将 右侧的 ？与后面的 ：配对，x &lt; y ? x : y 看做一组 三目运算表达式，作为另外一组 三目运算的 表达式 3。</p>
+<p> <strong>案例 2：</strong> </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> res = a &gt; b ? c &gt; d ? e : f : g		<span class="hljs-comment">// a &gt; b ? （c &gt; d ? e : f ）: g</span><br></code></pre></td></tr></table></figure>
+
+<p>​	将 右侧的 ？与后面的 ：配对，c &gt; d ? e : f 看做一组 三目运算表达式，作为另外一组 三目运算的 表达式 2。</p>
+<p>​	这种嵌套写法，看其他人写的程序时，能看懂即可。我们不要这样写。</p>
+<h2 id="8-逗号运算符"><a href="#8-逗号运算符" class="headerlink" title="8.逗号运算符"></a>8.逗号运算符</h2><p>C语言中，逗号也是一种运算符。 用逗号将多个表达式连接起来，组成逗号表达式。一般形式为：</p>
+<p><strong>表达式 1，表达式 2，表达式 3，….，表达式 n</strong></p>
+<p>如：a+3, b+4, c+5  是一个 逗号表达式。</p>
+<p>求解过程是 自左向右 依次求解。 整个逗号表达式的值，为最后一个表达式 n 的值。</p>
+<p>逗号运算符的优先级，是所有运算符中最低的。</p>
+<h1 id="附录：运算符优先级"><a href="#附录：运算符优先级" class="headerlink" title="附录：运算符优先级"></a>附录：运算符优先级</h1><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>名称</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>[ ]</td>
+<td>数组下标</td>
+</tr>
+<tr>
+<td>()</td>
+<td>圆括号</td>
+</tr>
+<tr>
+<td>-</td>
+<td>负号</td>
+</tr>
+<tr>
+<td>++、–</td>
+<td>自增、自减<br />windows：先++优于后++ <br />mac、Linux从左到右依次计算</td>
+</tr>
+<tr>
+<td>&amp;</td>
+<td>取地址运算符</td>
+</tr>
+<tr>
+<td>！</td>
+<td>逻辑非</td>
+</tr>
+<tr>
+<td>(类型)</td>
+<td>强制类型转换</td>
+</tr>
+<tr>
+<td>sizeof</td>
+<td>长度运算符</td>
+</tr>
+<tr>
+<td>*</td>
+<td>乘</td>
+</tr>
+<tr>
+<td>&#x2F;</td>
+<td>除</td>
+</tr>
+<tr>
+<td>%</td>
+<td>取余</td>
+</tr>
+<tr>
+<td>+</td>
+<td>加</td>
+</tr>
+<tr>
+<td>-</td>
+<td>减</td>
+</tr>
+<tr>
+<td>&gt;</td>
+<td>大于</td>
+</tr>
+<tr>
+<td>&gt;&#x3D;</td>
+<td>大于等于</td>
+</tr>
+<tr>
+<td>&lt;</td>
+<td>小于</td>
+</tr>
+<tr>
+<td>&lt;&#x3D;</td>
+<td>小于等于</td>
+</tr>
+<tr>
+<td>&#x3D;&#x3D;</td>
+<td>等于</td>
+</tr>
+<tr>
+<td>!&#x3D;</td>
+<td>不等于</td>
+</tr>
+<tr>
+<td>&amp;&amp;</td>
+<td>逻辑与</td>
+</tr>
+<tr>
+<td>||</td>
+<td>逻辑或</td>
+</tr>
+<tr>
+<td>? :</td>
+<td>条件运算符</td>
+</tr>
+<tr>
+<td>&#x3D;</td>
+<td>赋值运算符</td>
+</tr>
+<tr>
+<td>&#x2F;&#x3D;</td>
+<td>除后赋值</td>
+</tr>
+<tr>
+<td>*&#x3D;</td>
+<td>乘后赋值</td>
+</tr>
+<tr>
+<td>%&#x3D;</td>
+<td>取余后赋值</td>
+</tr>
+<tr>
+<td>+&#x3D;</td>
+<td>加后赋值</td>
+</tr>
+<tr>
+<td>-&#x3D;</td>
+<td>减后赋值</td>
+</tr>
+<tr>
+<td>,</td>
+<td>逗号运算符</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>笔记来源：黑马程序员</p>
+</blockquote>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left "
+    
+      href="/2024/09/12/C%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%EF%BC%88%E4%B8%80%EF%BC%89/"
+      title="C语言学习笔记-基本语法（一）"
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+      
+        C语言学习笔记-基本语法（一）
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2023/08/01/text/"
+      title="text"
+     >
+
+    <p class="title-text">
+      
+        text
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+
+  <div id="comment-card" class="comment-card">
+    <div class="main-title-bar">
+      <div class="main-title-dot"></div>
+      <div class="main-title">留言 </div>
+    </div>
+    <div id="giscus-container"></div>
+  </div>
+  <script src="https://giscus.app/client.js"
+    data-repo="chaoxiaohan/myblog"
+    data-repo-id="R_kgDOPe4zOQ"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOPe4zOc4CuRDG"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="noborder_light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async>
+  </script>
+  
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2025 超小韓<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+  <script src="/js/toc.js"></script>
+  <script src="/js/test-audio.js"></script>
+  <script src="/js/music-player.js"></script>
+  <script src="/js/search.js"></script>
+</body>
+</html>

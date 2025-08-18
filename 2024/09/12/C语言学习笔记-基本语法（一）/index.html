@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+
+
+<html theme="light" showBanner="true" hasBanner="true" > 
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet">
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+<!-- Gaug.es Analytics -->
+<script>
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', 'true');
+    t.setAttribute('data-track-path', 'https://track.gaug.es/track.gif');
+    t.src = 'https://d36ee2fcip1434.cloudfront.net/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+<!-- End Gaug.es Analytics -->
+
+
+  
+  <title>C语言学习笔记-基本语法（一） | 超小韓の个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="本文是C语言基础语法学习笔记。内容覆盖了注释、常量、变量的定义与使用，并详细讲解了C语言的各种数据类型，如整型、实型、字符型，以及sizeof运算符和ASCII码表的概念。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C语言学习笔记-基本语法（一）">
+<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2024/09/12/C%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:site_name" content="超小韓の个人博客">
+<meta property="og:description" content="本文是C语言基础语法学习笔记。内容覆盖了注释、常量、变量的定义与使用，并详细讲解了C语言的各种数据类型，如整型、实型、字符型，以及sizeof运算符和ASCII码表的概念。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E5%8F%98%E9%87%8F.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E5%B8%B8%E9%87%8F.png">
+<meta property="article:published_time" content="2024-09-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-18T09:50:15.963Z">
+<meta property="article:author" content="超小韓">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="Virual Studio">
+<meta property="article:tag" content="learn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E5%8F%98%E9%87%8F.png">
+  
+    <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/css/music-player.css">
+
+  
+<link rel="stylesheet" href="/css/search.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="/blogBasic/banner.jpg" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>超小韓の个人博客 </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">主页</a>
+    
+      <a class="main-nav-link" href="/archives">文章</a>
+    
+      <a class="main-nav-link" href="/resources">资料</a>
+    
+      <a class="main-nav-link" href="/about">关于我的</a>
+    
+  </nav>
+  <nav id="search-nav">
+    <div id="search-container">
+      <input type="text" id="search-input" placeholder="搜索文章..." autocomplete="off">
+      <div id="search-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20">
+          <path d="M796-121 533-384q-30 26-69.959 40.5T378-329q-108.162 0-183.081-75Q120-479 120-585t75-181q75-75 181.5-75t181 75Q632-691 632-584.85 632-542 618-502q-14 40-42 75l264 262-44 44ZM377-389q81.25 0 138.125-57.5T572-585q0-81-56.875-138.5T377-781q-82.083 0-139.542 57.5Q180-666 180-585t57.458 138.5Q294.917-389 377-389Z"/>
+        </svg>
+      </div>
+      <div id="search-results" class="hidden">
+        <div id="search-results-content"></div>
+      </div>
+    </div>
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">主页</a>
+    
+      <a class="nav-dropdown-link" href="/archives">文章</a>
+    
+      <a class="nav-dropdown-link" href="/resources">资料</a>
+    
+      <a class="nav-dropdown-link" href="/about">关于我的</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=/blogBasic/head.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">超小韓 </div>
+      <div class="dot"></div>
+      <div class="subtitle">生活明朗，万物可爱！ </div>
+      <div class="link-list">
+        
+          <a class="link-btn" href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2537037482&website=www.oicqzone.com" title="QQ"><i class="fa-brands fa-qq"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/353687950" title="哔哩哔哩"><i class="fa-brands fa-bilibili"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/chaoxiaohan/" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        
+          <a class="link-btn" href="mailto:chaoxiaohan@chaoxiaohan.cyou" title="Email"><i class="fa-solid fa-envelope"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+    
+
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">标签</h3>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CubeMx/" rel="tag">CubeMx</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/teach/" rel="tag">teach</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%B5%84%E6%BA%90/" rel="tag">资源</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">归档</h3>
+      
+      
+        <a class="archive-link" href="/archives/2025/08 ">
+          八月 2025 
+          <div class="archive-count">3 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/03 ">
+          三月 2025 
+          <div class="archive-count">2 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2024/09 ">
+          九月 2024 
+          <div class="archive-count">2 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2023/08 ">
+          八月 2023 
+          <div class="archive-count">1 </div>
+        </a>
+      
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">最新文章</h3>
+      <ul>
+        
+          <a class="recent-link" href="/2025/08/17/C%E8%AF%AD%E8%A8%80%E6%95%99%E7%A8%8B-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%88VS%EF%BC%89/" title="C语言教程-环境搭建（VS）" >
+            <div class="recent-link-text">
+              C语言教程-环境搭建（VS）
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/08/17/learning-resources/" title="学习资源汇总" >
+            <div class="recent-link-text">
+              学习资源汇总
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/08/01/AndroidDevNote/" title="安卓学习笔记（一）" >
+            <div class="recent-link-text">
+              安卓学习笔记（一）
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/03/24/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="STM32HAL库学习笔记" >
+            <div class="recent-link-text">
+              STM32HAL库学习笔记
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/03/01/HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0by%E8%B6%85%E5%B0%8F%E9%9F%93/" title="HAL库函数" >
+            <div class="recent-link-text">
+              HAL库函数
+            </div>
+          </a>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+  <div class="sticky">
+    
+      
+        
+          <div class="toc-widget">
+  <h3 class="toc-title">目录</h3>
+  <div class="toc-content">
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#1%E3%80%81%E6%B3%A8%E9%87%8A"><span class="toc-list-text">1、注释</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-%E5%8D%95%E8%A1%8C%E6%B3%A8%E9%87%8A"><span class="toc-list-text">1.1 单行注释</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-2-%E5%A4%9A%E8%A1%8C%E6%B3%A8%E9%87%8A"><span class="toc-list-text">1.2 多行注释</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-4-%E6%B3%A8%E9%87%8A%E7%9A%84%E5%B0%8F%E6%89%A9%E5%B1%95"><span class="toc-list-text">1.4 注释的小扩展</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-%E5%B8%B8%E9%87%8F"><span class="toc-list-text">2. 常量</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-1-%E4%BB%80%E4%B9%88%E6%98%AF%E5%B8%B8%E9%87%8F"><span class="toc-list-text">2.1 什么是常量</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-%E5%B8%B8%E9%87%8F%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-list-text">2.2 常量的分类</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-3-%E8%BE%93%E5%87%BA%E5%B8%B8%E9%87%8F"><span class="toc-list-text">2.3 输出常量</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-4-%E8%BE%93%E5%87%BA%E5%A4%9A%E4%B8%AA%E5%B8%B8%E9%87%8F"><span class="toc-list-text">2.4 输出多个常量</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-5-%E8%BE%93%E5%87%BA%E5%B9%B6%E6%8D%A2%E8%A1%8C"><span class="toc-list-text">2.5 输出并换行</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#3-%E5%8F%98%E9%87%8F"><span class="toc-list-text">3.变量</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-%E5%8F%98%E9%87%8F%E7%9A%84%E4%B8%89%E8%A6%81%E7%B4%A0"><span class="toc-list-text">3.1 变量的三要素</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89%EF%BC%9A"><span class="toc-list-text">3.2 变量定义：</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-3-%E5%8F%98%E9%87%8F%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-list-text">3.3 变量的注意事项</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#4-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-list-text">4.数据类型</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-1sizeof-%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-list-text">4.1sizeof 运算符</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-2%E6%95%B0%E5%80%BC%E5%9E%8B"><span class="toc-list-text">4.2数值型</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E6%95%B4%E5%9E%8B"><span class="toc-list-text">整型</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#bool%E5%9E%8B"><span class="toc-list-text">bool型</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E5%AE%9E%E5%9E%8B"><span class="toc-list-text">实型</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E5%AD%97%E7%AC%A6%E5%9E%8B"><span class="toc-list-text">字符型</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-3ASCII-%E7%A0%81"><span class="toc-list-text">4.3ASCII 码</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-4%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6"><span class="toc-list-text">4.4转义字符</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-5%E5%AD%97%E7%AC%A6%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA"><span class="toc-list-text">4.5字符输入输出</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#5-scanf-%E8%BE%93%E5%85%A5"><span class="toc-list-text">5.scanf 输入</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-list-text">注意事项</span></a></li></ol></li></ol></li></ol>
+  </div>
+</div>
+
+        
+      
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-C语言学习笔记-基本语法（一）" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        C语言学习笔记-基本语法（一）
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2024-09-11T16:00:00.000Z" itemprop="datePublished">2024-09-12</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+    未分类 
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            4.9k 词 
+          </div>
+        </div>
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li></ul>
+
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <h1 id="C语言学习笔记-基本语法（一）"><a href="#C语言学习笔记-基本语法（一）" class="headerlink" title="C语言学习笔记-基本语法（一）"></a>C语言学习笔记-基本语法（一）</h1><h2 id="1、注释"><a href="#1、注释" class="headerlink" title="1、注释"></a>1、注释</h2><h3 id="1-1-单行注释"><a href="#1-1-单行注释" class="headerlink" title="1.1 单行注释"></a>1.1 单行注释</h3><ul>
+<li>语法：&#x2F;&#x2F; 待注释的内容</li>
+<li>位置：可放在代码后，称之为行尾注释； 也可放代码上一行，称作行上注释。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 这是单行注释文字</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-2-多行注释"><a href="#1-2-多行注释" class="headerlink" title="1.2 多行注释"></a>1.2 多行注释</h3><ul>
+<li>语法：&#x2F;* 待注释的内容 *&#x2F;</li>
+<li>注意：多⾏注释内，可以嵌套单⾏注释。 多⾏注释之间不能嵌套。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/*</span><br><span class="hljs-comment">这是多行注释文字</span><br><span class="hljs-comment">这是多行注释文字</span><br><span class="hljs-comment">这是多行注释文字</span><br><span class="hljs-comment">*/</span><br>注意：多行注释不能嵌套使用。<br></code></pre></td></tr></table></figure>
+
+<h3 id="1-4-注释的小扩展"><a href="#1-4-注释的小扩展" class="headerlink" title="1.4 注释的小扩展"></a>1.4 注释的小扩展</h3><ul>
+<li>注释的快捷键：Ctrl + K，Ctrl + C&#x2F;U</li>
+<li>注释擦除：注释的内容，不参与运行</li>
+<li>注释的嵌套：不管是单行还是多行，最好都不要嵌套</li>
+</ul>
+<h2 id="2-常量"><a href="#2-常量" class="headerlink" title="2. 常量"></a>2. 常量</h2><h3 id="2-1-什么是常量"><a href="#2-1-什么是常量" class="headerlink" title="2.1 什么是常量"></a>2.1 什么是常量</h3><p>​	程序运行的过程中，其值永远不会发生改变的数据</p>
+<h3 id="2-2-常量的分类"><a href="#2-2-常量的分类" class="headerlink" title="2.2 常量的分类"></a>2.2 常量的分类</h3><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E5%8F%98%E9%87%8F.png" alt="常量"></p>
+<h3 id="2-3-输出常量"><a href="#2-3-输出常量" class="headerlink" title="2.3 输出常量"></a>2.3 输出常量</h3><p>利用printf集合占位符的方式可以输出常量</p>
+<p><strong>格式：</strong></p>
+<p>​	printf（参数1，参数2）；</p>
+<p>​	参数1：输出内容的最终样式，以字符串的形式体现 <strong>（必填）</strong></p>
+<p>​	参数2：填补的内容 <strong>（选填）</strong></p>
+<p><strong>占位符：</strong></p>
+<table>
+<thead>
+<tr>
+<th>占位符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>整形</td>
+<td>%d</td>
+</tr>
+<tr>
+<td>实型</td>
+<td>%f</td>
+</tr>
+<tr>
+<td>字符</td>
+<td>%c</td>
+</tr>
+<tr>
+<td>字符串</td>
+<td>%s</td>
+</tr>
+</tbody></table>
+<h3 id="2-4-输出多个常量"><a href="#2-4-输出多个常量" class="headerlink" title="2.4 输出多个常量"></a>2.4 输出多个常量</h3><p>一个printf中可以同时输出多个数据，占位符和后面的数据要一一对应</p>
+<h3 id="2-5-输出并换行"><a href="#2-5-输出并换行" class="headerlink" title="2.5 输出并换行"></a>2.5 输出并换行</h3><table>
+<thead>
+<tr>
+<th>操作系统</th>
+<th>换行符</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>windows</td>
+<td>\r\n</td>
+</tr>
+<tr>
+<td>mac</td>
+<td>\r</td>
+</tr>
+<tr>
+<td>Linux</td>
+<td>\n</td>
+</tr>
+</tbody></table>
+<p>平时写代码的时候，想要换行直接写\n即可，C语言会根据不同的操作系统解析成对应的换行符</p>
+<h2 id="3-变量"><a href="#3-变量" class="headerlink" title="3.变量"></a>3.变量</h2><h3 id="3-1-变量的三要素"><a href="#3-1-变量的三要素" class="headerlink" title="3.1 变量的三要素"></a>3.1 变量的三要素</h3><ol>
+<li>变量名：用来在程序中使用。</li>
+<li>变量类型：开辟内存空间大小。</li>
+<li>变量值：存储的实际数据</li>
+</ol>
+ <img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/常量.png">
+
+<h3 id="3-2-变量定义："><a href="#3-2-变量定义：" class="headerlink" title="3.2 变量定义："></a>3.2 变量定义：</h3><p>​	类型名 变量名 &#x3D; 变量值（一般都这么写）</p>
+<p>​	举例：</p>
+<p>​	int m &#x3D; 57;</p>
+<p>会开辟内存空间给变量。变量声明不会开辟内存空间。</p>
+<h3 id="3-3-变量的注意事项"><a href="#3-3-变量的注意事项" class="headerlink" title="3.3 变量的注意事项"></a>3.3 变量的注意事项</h3><ul>
+<li>只能存一个值 </li>
+<li>变量名不允许重复定义</li>
+<li>一条语句可以定义多个变量 </li>
+<li>变量在使用之前一定要进行赋值</li>
+<li>变量的作用域范围</li>
+</ul>
+<h2 id="4-数据类型"><a href="#4-数据类型" class="headerlink" title="4.数据类型"></a>4.数据类型</h2><h3 id="4-1sizeof-运算符"><a href="#4-1sizeof-运算符" class="headerlink" title="4.1sizeof 运算符"></a>4.1sizeof 运算符</h3><blockquote>
+<p>目标：会查看变量、类型占用内存大小</p>
+</blockquote>
+<p>​		每种数据类型，都有自己固定的占用内存大小和取值范围。具体展开讲解前，我们先来看下，C 语言提供的查看变量或类型占用内存大小的运算符，sizeof。</p>
+<ul>
+<li><p><strong>语法 1：sizeof(变量名)</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> a = <span class="hljs-number">10</span>;<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%llu\n&quot;</span>, <span class="hljs-keyword">sizeof</span>(a));<span class="hljs-comment">//sizeof(a) 获取 a 变量占用内存大小。可以用 printf 显示出来</span><br><span class="hljs-comment">// 查看 sizeof 返回的占用内存大小，需要使用 %llu 格式符</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>语法 2：sizeof(类型名)</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%llu\n&quot;</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">double</span>)); <span class="hljs-comment">// 也可以使用 sizeof 直接查看某种类型占用的内存大小</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="4-2数值型"><a href="#4-2数值型" class="headerlink" title="4.2数值型"></a>4.2数值型</h3><h4 id="整型"><a href="#整型" class="headerlink" title="整型"></a>整型</h4><table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>字节数</th>
+<th>格式符</th>
+<th>数据范围</th>
+<th>最小值宏</th>
+<th>最大值宏</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>short（短整型）</td>
+<td>2</td>
+<td>%hd</td>
+<td>-2<sup>15</sup> ~ 2<sup>15</sup>-1 (-32768 ~ 32767)</td>
+<td>SHRT_MIN</td>
+<td>SHRT_MAX</td>
+</tr>
+<tr>
+<td><strong>int（整型）</strong></td>
+<td><strong>4</strong></td>
+<td><strong>%d</strong></td>
+<td><strong>-2<sup>31</sup> ~ 2<sup>31</sup>-1 (-2147483648 ~ 2147483647)</strong></td>
+<td>INT_MIN</td>
+<td>INT_MAX</td>
+</tr>
+<tr>
+<td>long（长整型）</td>
+<td>4</td>
+<td>%ld</td>
+<td>-2<sup>31</sup> ~ 2<sup>31</sup>-1 (-2147483648 ~ 2147483647)</td>
+<td>LONG_MIN</td>
+<td>LONG_MAX</td>
+</tr>
+<tr>
+<td>long long（长长整型）</td>
+<td>8</td>
+<td>%lld</td>
+<td>-2<sup>63</sup> ~ 2<sup>63</sup>-1</td>
+<td>LLONG_MIN</td>
+<td>LLONG_MAX</td>
+</tr>
+<tr>
+<td>unsigned short（无符号 短整型）</td>
+<td>同 short</td>
+<td>%hu</td>
+<td>0 ~  2<sup>16</sup>-1 (0 ~ 65535)</td>
+<td>0</td>
+<td>USHRT_MAX</td>
+</tr>
+<tr>
+<td>unsigned int（无符号 整型）</td>
+<td>同 int</td>
+<td>%u</td>
+<td>0 ~  2<sup>32</sup>-1 (0 ~ 4294967295)</td>
+<td>0</td>
+<td>UINT_MAX</td>
+</tr>
+<tr>
+<td>unsigned long（无符号 长整型）</td>
+<td>同 long</td>
+<td>%lu</td>
+<td>0 ~  2<sup>32</sup>-1 (0 ~ 4294967295)</td>
+<td>0</td>
+<td>ULONG_MAX</td>
+</tr>
+<tr>
+<td>unsigned long long（无符号 长长整型）</td>
+<td>同 long long</td>
+<td>%llu</td>
+<td>0 ~  2<sup>64</sup>-1</td>
+<td>0</td>
+<td>ULLONG_MAX</td>
+</tr>
+</tbody></table>
+<p>上表中列出的占用字节数和取值范围，是大多数情况下各种类型的取值。</p>
+<p>由于，C 标准没有具体规定以上各类数据所占用的字节数。因此，在不同系统、编译器下，数据类型占用的字节数会有所不同。</p>
+<blockquote>
+<p>比如：int 类型，在 Turbo C 环境占 2 字节，取值范围与 short 相同。 而在 Visual C 环境下是 4 字节。</p>
+<p>再如：long 类型，相同的 gcc 编译器下，在 Windows 系统中占 4 字节，而在 Linux 系统中占 8 字节。</p>
+</blockquote>
+<p>可以使用 sizeof 查看 数据类型 占用内存的大小。</p>
+<p>可以引入头文件 #include &lt;limits.h&gt; 借助宏来查看 数据类型 在当前平台上 对应的最小、最大值。</p>
+<h4 id="bool型"><a href="#bool型" class="headerlink" title="bool型"></a>bool型</h4><blockquote>
+<p>目标：知道 bool 类型两种取值</p>
+</blockquote>
+<p>​		C语言在设计之初是没有布尔类型的，使用 1 和 0，对应表示真、假。</p>
+<p>​		但，其他编程语言像 C++、java 都设计有布尔数类型。 C语言在1999 年推出的新标准（C99）中，也加入了 布尔类型。用 true 来代表 1，为真；用 false 来代表 0，为假。使用时，需要引入头文件 #include &lt;stdbool.h&gt;</p>
+<h4 id="实型"><a href="#实型" class="headerlink" title="实型"></a>实型</h4><p>​		实型表示有符号的十进制小数，在计算机内部以浮点方式表示（小数点是浮动的），因此也叫浮点型。</p>
+<p>​		常见实型有两种： float (单精度)、 double (双精度)</p>
+<p>​		实型数据没有八、十六进制，也没有 unsigned 无符号形式。在计算机底层采用的是近似计算，实现比较复杂，且不同平台处理方式不同。我们这里只学习它基本的知识。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>字节数</th>
+<th>格式符</th>
+<th>有效数字</th>
+<th>常量后缀</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>float (单精度)</td>
+<td>4</td>
+<td>%f</td>
+<td>6~7</td>
+<td>f</td>
+</tr>
+<tr>
+<td>double (双精度)</td>
+<td>8</td>
+<td>%lf</td>
+<td>15~16</td>
+<td>无</td>
+</tr>
+</tbody></table>
+<h4 id="字符型"><a href="#字符型" class="headerlink" title="字符型"></a>字符型</h4><p>​		C 语言定义 char 类型来表示字符数据。 其本质依然是存储数值，因此与数值型类似，也有有符号、无符号之分。占用 1 个字节内存大小。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>字节数</th>
+<th>格式符</th>
+<th>数据范围</th>
+<th>最小值宏</th>
+<th>最大值宏</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>char</td>
+<td>1</td>
+<td>%hhd</td>
+<td>-2<sup>7</sup> ~ 2<sup>7</sup>-1 (-128 ~ 127)</td>
+<td>CHAR_MIN</td>
+<td>CHAR_MAX</td>
+</tr>
+<tr>
+<td>unsigned char</td>
+<td>1</td>
+<td>%hhu</td>
+<td>0~2<sup>8</sup>-1 (0 ~ 255)</td>
+<td>0</td>
+<td>UCHAR_MAX</td>
+</tr>
+</tbody></table>
+<h3 id="4-3ASCII-码"><a href="#4-3ASCII-码" class="headerlink" title="4.3ASCII 码"></a>4.3ASCII 码</h3><p>​		char 类型在程序中，最常用来表示字符。其本质依然是一个数字，但每个值都对应一个固定的字符，共定义了128个字符。称之为 ASCII 码 (American Standard Code for Information Interchange) 美国信息交换标准代码。</p>
+<table>
+<thead>
+<tr>
+<th><strong>ASCII值</strong></th>
+<th><strong>控制字符</strong></th>
+<th><strong>ASCII值</strong></th>
+<th><strong>字符</strong></th>
+<th><strong>ASCII值</strong></th>
+<th><strong>字符</strong></th>
+<th><strong>ASCII值</strong></th>
+<th><strong>字符</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>0</strong></td>
+<td><strong>NUL</strong></td>
+<td><strong>32</strong></td>
+<td><strong>(space)</strong></td>
+<td>64</td>
+<td>@</td>
+<td>96</td>
+<td>、</td>
+</tr>
+<tr>
+<td>1</td>
+<td>SOH</td>
+<td>33</td>
+<td>!</td>
+<td><strong>65</strong></td>
+<td><strong>A</strong></td>
+<td><strong>97</strong></td>
+<td><strong>a</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>STX</td>
+<td>34</td>
+<td>“</td>
+<td>66</td>
+<td>B</td>
+<td>98</td>
+<td>b</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ETX</td>
+<td>35</td>
+<td>#</td>
+<td>67</td>
+<td>C</td>
+<td>99</td>
+<td>c</td>
+</tr>
+<tr>
+<td>4</td>
+<td>EOT</td>
+<td>36</td>
+<td>$</td>
+<td>68</td>
+<td>D</td>
+<td>100</td>
+<td>d</td>
+</tr>
+<tr>
+<td>5</td>
+<td>ENQ</td>
+<td>37</td>
+<td>%</td>
+<td>69</td>
+<td>E</td>
+<td>101</td>
+<td>e</td>
+</tr>
+<tr>
+<td>6</td>
+<td>ACK</td>
+<td>38</td>
+<td>&amp;</td>
+<td>70</td>
+<td>F</td>
+<td>102</td>
+<td>f</td>
+</tr>
+<tr>
+<td>7</td>
+<td>BEL</td>
+<td>39</td>
+<td>‘</td>
+<td>71</td>
+<td>G</td>
+<td>103</td>
+<td>g</td>
+</tr>
+<tr>
+<td>8</td>
+<td>BS</td>
+<td>40</td>
+<td>(</td>
+<td>72</td>
+<td>H</td>
+<td>104</td>
+<td>h</td>
+</tr>
+<tr>
+<td>9</td>
+<td>HT</td>
+<td>41</td>
+<td>)</td>
+<td>73</td>
+<td>I</td>
+<td>105</td>
+<td>i</td>
+</tr>
+<tr>
+<td><strong>10</strong></td>
+<td><strong>LF</strong></td>
+<td>42</td>
+<td>*</td>
+<td>74</td>
+<td>J</td>
+<td>106</td>
+<td>j</td>
+</tr>
+<tr>
+<td>11</td>
+<td>VT</td>
+<td>43</td>
+<td>+</td>
+<td>75</td>
+<td>K</td>
+<td>107</td>
+<td>k</td>
+</tr>
+<tr>
+<td>12</td>
+<td>FF</td>
+<td>44</td>
+<td>,</td>
+<td>76</td>
+<td>L</td>
+<td>108</td>
+<td>l</td>
+</tr>
+<tr>
+<td>13</td>
+<td>CR</td>
+<td>45</td>
+<td>-</td>
+<td>77</td>
+<td>M</td>
+<td>109</td>
+<td>m</td>
+</tr>
+<tr>
+<td>14</td>
+<td>SO</td>
+<td>46</td>
+<td>.</td>
+<td>78</td>
+<td>N</td>
+<td>110</td>
+<td>n</td>
+</tr>
+<tr>
+<td>15</td>
+<td>SI</td>
+<td>47</td>
+<td>&#x2F;</td>
+<td>79</td>
+<td>O</td>
+<td>111</td>
+<td>o</td>
+</tr>
+<tr>
+<td>16</td>
+<td>DLE</td>
+<td><strong>48</strong></td>
+<td><strong>0</strong></td>
+<td>80</td>
+<td>P</td>
+<td>112</td>
+<td>p</td>
+</tr>
+<tr>
+<td>17</td>
+<td>DCI</td>
+<td>49</td>
+<td>1</td>
+<td>81</td>
+<td>Q</td>
+<td>113</td>
+<td>q</td>
+</tr>
+<tr>
+<td>18</td>
+<td>DC2</td>
+<td>50</td>
+<td>2</td>
+<td>82</td>
+<td>R</td>
+<td>114</td>
+<td>r</td>
+</tr>
+<tr>
+<td>19</td>
+<td>DC3</td>
+<td>51</td>
+<td>3</td>
+<td>83</td>
+<td>S</td>
+<td>115</td>
+<td>s</td>
+</tr>
+<tr>
+<td>20</td>
+<td>DC4</td>
+<td>52</td>
+<td>4</td>
+<td>84</td>
+<td>T</td>
+<td>116</td>
+<td>t</td>
+</tr>
+<tr>
+<td>21</td>
+<td>NAK</td>
+<td>53</td>
+<td>5</td>
+<td>85</td>
+<td>U</td>
+<td>117</td>
+<td>u</td>
+</tr>
+<tr>
+<td>22</td>
+<td>SYN</td>
+<td>54</td>
+<td>6</td>
+<td>86</td>
+<td>V</td>
+<td>118</td>
+<td>v</td>
+</tr>
+<tr>
+<td>23</td>
+<td>TB</td>
+<td>55</td>
+<td>7</td>
+<td>87</td>
+<td>W</td>
+<td>119</td>
+<td>w</td>
+</tr>
+<tr>
+<td>24</td>
+<td>CAN</td>
+<td>56</td>
+<td>8</td>
+<td>88</td>
+<td>X</td>
+<td>120</td>
+<td>x</td>
+</tr>
+<tr>
+<td>25</td>
+<td>EM</td>
+<td>57</td>
+<td>9</td>
+<td>89</td>
+<td>Y</td>
+<td>121</td>
+<td>y</td>
+</tr>
+<tr>
+<td>26</td>
+<td>SUB</td>
+<td>58</td>
+<td>:</td>
+<td>90</td>
+<td>Z</td>
+<td>122</td>
+<td>z</td>
+</tr>
+<tr>
+<td>27</td>
+<td>ESC</td>
+<td>59</td>
+<td>;</td>
+<td>91</td>
+<td>[</td>
+<td>123</td>
+<td>{</td>
+</tr>
+<tr>
+<td>28</td>
+<td>FS</td>
+<td>60</td>
+<td>&lt;</td>
+<td>92</td>
+<td>\</td>
+<td>124</td>
+<td>|</td>
+</tr>
+<tr>
+<td>29</td>
+<td>GS</td>
+<td>61</td>
+<td>&#x3D;</td>
+<td>93</td>
+<td>]</td>
+<td>125</td>
+<td>}</td>
+</tr>
+<tr>
+<td>30</td>
+<td>RS</td>
+<td>62</td>
+<td>&gt;</td>
+<td>94</td>
+<td>^</td>
+<td>126</td>
+<td>~</td>
+</tr>
+<tr>
+<td>31</td>
+<td>US</td>
+<td>63</td>
+<td>?</td>
+<td>95</td>
+<td>_</td>
+<td>127</td>
+<td>DEL</td>
+</tr>
+</tbody></table>
+<p>​		上表中有 6 个字符对应的 ASCII 较为常见，建议大家记下，会为后续写代码提供很多方便。</p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>ASCII 码</th>
+<th>字符</th>
+<th>ASCII 码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>空</strong></td>
+<td><strong>0</strong></td>
+<td><strong>‘\n’</strong></td>
+<td><strong>10</strong></td>
+</tr>
+<tr>
+<td><strong>空格</strong></td>
+<td><strong>32</strong></td>
+<td><strong>0</strong></td>
+<td><strong>48</strong></td>
+</tr>
+<tr>
+<td><strong>A</strong></td>
+<td><strong>65</strong></td>
+<td><strong>a</strong></td>
+<td><strong>97</strong></td>
+</tr>
+</tbody></table>
+<p>​		需注意的是，我们从键盘键入的所有内容都是字符。如，键入数字 7，实际是字符 ‘7’，真正存储在计算机内的是 55（字符 7 的 ASCII 码值），而如果我们键入了 35，实际上这是两个字符。真正存储在计算机内的是 51 和 53（字符 3 和 字符 5 的 ASCII 码值）。</p>
+<p>​		我们可以用 printf 结合 格式符 %c，显示字符。 如果用 %d，就显示 其 ASCII 值了。</p>
+<h3 id="4-4转义字符"><a href="#4-4转义字符" class="headerlink" title="4.4转义字符"></a>4.4转义字符</h3><p>C 语言提供了一类特殊的字符，是由 \ 和特定字符组合而成，称之为 转义字符。他们都是 <strong>&#x3D;&#x3D;一个&#x3D;&#x3D;</strong> 字符，如：</p>
+<ul>
+<li>‘\n’ 这是 1 个字符。 代表 回车换行（回车键）。</li>
+<li>‘\t’ 也是 1 个字符。代表 制表符 （Tab键）。</li>
+<li>‘\b’ 同样是 1 个字符。 代表 退格符（Backspace 键）。</li>
+<li>‘\0’ 是一个字符。代表 空。对应 ASCII 值 0。</li>
+<li>‘\ddd’ 是一个字符。ddd 对应 3 个八进制数（没有用 0 开头）。 如：\141 对应 ASCII 值为 97，代表 ‘a’。</li>
+<li>‘\xhh’ 是一个字符。x 表十六进制，hh 对应 2 个十六进制数。 如：\x41 对应 ASCII 值为 65，代表 ‘A’。</li>
+</ul>
+<p>\ 还可以在特定环境下，将一个字符还原其本身意。</p>
+<p>比如，现在想在 printf(“%d\n”，10)；输出 10 的时候，用 “” 把 10 包裹住。 如果直接写 printf(“  “%d” \n”，10)；是会报错的。这时，可以使用 <code>\&quot;</code> 将 “ 进行转义，还原其本身意。</p>
+<h3 id="4-5字符输入输出"><a href="#4-5字符输入输出" class="headerlink" title="4.5字符输入输出"></a>4.5字符输入输出</h3><p>C 语言提供了专门的函数，方便在程序中 获取、输出 字符数据。</p>
+<ul>
+<li><p><strong>getchar()：获取用户从键盘写入的一个字符。</strong></p>
+<ol>
+<li>程序执行到 getchar() 会暂停，等待用户键入字符数据。 </li>
+<li>一次 getchar() 调用，只读取一个字符。如用户键入多个字符，需要多次调用 getchar()读取。</li>
+<li>函数调用完成，会返回实际读到的字符 对应的 ASCII 值。</li>
+<li>用户键入字符结束，敲的回车键，对应‘\n’ 字符，也可以使用 getchar() 读取。</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> ret = getchar();<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>putchar(ch)：将 ch 对应的字符，输出到屏幕。</strong></p>
+<ol>
+<li>ch 可以是变量也可以是常量。</li>
+<li>一次 putchar() 调用，只写出一个字符（不含换行符 ‘\n’）。</li>
+<li>函数调用完成，会返回实际写出的字符 对应的 ASCII 值。</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">char</span> ch = <span class="hljs-string">&#x27;A&#x27;</span>;<br><span class="hljs-type">int</span> ret = <span class="hljs-built_in">putchar</span>(ch);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="5-scanf-输入"><a href="#5-scanf-输入" class="headerlink" title="5.scanf 输入"></a>5.scanf 输入</h2><blockquote>
+<p>目标：接收用户输入数据</p>
+</blockquote>
+<p>​		我们可以借助 getchar() 读取用键入的字符数据。 如果想要读取其他数据怎么办呢？C语言提供了 scanf() 函数，可以结合 格式符 读取各种类型数据。</p>
+<ul>
+<li><p>作用：从标准输入设备（键盘）上按格式获取数据。</p>
+</li>
+<li><p>语法：scanf(“格式控制字符串“, ……); 需指定头文件 #include &lt;stdio.h&gt;</p>
+<ul>
+<li>参 1： 必须是字符串，且必须包含 格式说明符（占位符）<ul>
+<li>格式符 与 数据类型中使用方式一致。 常用的有 %d、%c、%f、%lf 等。</li>
+</ul>
+</li>
+<li>后续参数（变参）：个数，直接受 参 1 格式匹配符影响。<ul>
+<li>对应 格式符的 必须是 变量地址（&amp;变量名，可取变量地址），代表数据存放位置。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>示例：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-built_in">printf</span>(“请输入一个字符：”);	<span class="hljs-comment">// 借助 printf 提示用户输入</span><br><span class="hljs-type">char</span> ch = <span class="hljs-number">0</span>;	<span class="hljs-comment">// 准备变量，存储数据</span><br><span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%c&quot;</span>, &amp;ch);	<span class="hljs-comment">// 使用变量地址，与 格式符对应</span><br><br><span class="hljs-built_in">printf</span>(“请输入三个整数，用逗号间隔：”);<br><span class="hljs-type">int</span> a, b, c;   <span class="hljs-comment">// 可以不赋初值。</span><br><span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d,%d,%d&quot;</span>, &amp;a, &amp;b, &amp;c);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><ol>
+<li><p>不要在 scanf 的参 1 中，添加类似 printf() 的提示字符串和 \n 换行符。</p>
+</li>
+<li><p>键入数据时，数据个数、类型、顺序，必须与参 1 中占位符一一对应。</p>
+</li>
+<li><p>键入数据时，数据间的分割符，必须与 参 1 中 占位符的分割符一致。</p>
+</li>
+<li><p>scanf 的返回值，代表格式符成功匹配数据的次数。（较少使用）</p>
+</li>
+<li><p>VS2019 以后的版本编译时，会将 scanf 划为 “不安全函数”，爆出C4996 错误，推荐你使用 s_scanf() 函数。</p>
+<p>但，学习、练习、测试时，直接使用 scanf 很方便，可暂时屏蔽该错误。</p>
+<ul>
+<li><strong>方法 1：</strong>在项目中设置：工程名→右键→属性→C&#x2F;C++→预处理器→预处理器定义→编辑→将  _CRT_SECURE_NO_WARNINGS 加入“预处理定义” 中</li>
+<li><strong>方法 2：</strong>在每个.c文件开头（第一行）添加宏：#define _CRT_SECURE_NO_WARNINGS</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>笔记来源：黑马程序员</p>
+</blockquote>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left "
+    
+      href="/2025/03/01/HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0by%E8%B6%85%E5%B0%8F%E9%9F%93/"
+      title="HAL库函数"
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+      
+        HAL库函数
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2024/09/12/C%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E8%BF%90%E7%AE%97%E7%AC%A6%EF%BC%88%E4%BA%8C%EF%BC%89/"
+      title="C语言学习笔记-运算符（二）"
+     >
+
+    <p class="title-text">
+      
+        C语言学习笔记-运算符（二）
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+
+  <div id="comment-card" class="comment-card">
+    <div class="main-title-bar">
+      <div class="main-title-dot"></div>
+      <div class="main-title">留言 </div>
+    </div>
+    <div id="giscus-container"></div>
+  </div>
+  <script src="https://giscus.app/client.js"
+    data-repo="chaoxiaohan/myblog"
+    data-repo-id="R_kgDOPe4zOQ"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOPe4zOc4CuRDG"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="noborder_light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async>
+  </script>
+  
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2025 超小韓<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+  <script src="/js/toc.js"></script>
+  <script src="/js/test-audio.js"></script>
+  <script src="/js/music-player.js"></script>
+  <script src="/js/search.js"></script>
+</body>
+</html>
