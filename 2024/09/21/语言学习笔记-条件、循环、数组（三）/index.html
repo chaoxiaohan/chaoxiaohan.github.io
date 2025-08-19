@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+
+
+<html theme="light" showBanner="true" hasBanner="true" > 
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet">
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+<!-- Gaug.es Analytics -->
+<script>
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', 'true');
+    t.setAttribute('data-track-path', 'https://track.gaug.es/track.gif');
+    t.src = 'https://d36ee2fcip1434.cloudfront.net/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+<!-- End Gaug.es Analytics -->
+
+
+  
+  <title>C语言学习笔记-条件、循环、数组（三） | 超小韓の个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="本文围绕 C 语言的条件语句（if、switch）、循环语句（while、for 等）及数组展开，详解其语法、用法与实例，助你掌握这些基础且关键的编程结构。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C语言学习笔记-条件、循环、数组（三）">
+<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2024/09/21/%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%9D%A1%E4%BB%B6%E3%80%81%E5%BE%AA%E7%8E%AF%E3%80%81%E6%95%B0%E7%BB%84%EF%BC%88%E4%B8%89%EF%BC%89/index.html">
+<meta property="og:site_name" content="超小韓の个人博客">
+<meta property="og:description" content="本文围绕 C 语言的条件语句（if、switch）、循环语句（while、for 等）及数组展开，详解其语法、用法与实例，助你掌握这些基础且关键的编程结构。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2014/09/c-break-statement-works.jpg">
+<meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2014/09/c-continue-statement-works.jpg">
+<meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2015/01/goto.png">
+<meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2014/09/c-arrays-2021-1-18-3.png">
+<meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2014/09/c-array-2021-01-18-2.png">
+<meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2014/09/c-arrays-2021-1-18-4.png">
+<meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2014/09/c-array-2021-01-18-2.png">
+<meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2014/09/two_dimensional_arrays.jpg">
+<meta property="article:published_time" content="2024-09-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-19T09:36:43.805Z">
+<meta property="article:author" content="超小韓">
+<meta property="article:tag" content="Virual Studio">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="learn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.runoob.com/wp-content/uploads/2014/09/c-break-statement-works.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/css/music-player.css">
+
+  
+<link rel="stylesheet" href="/css/search.css">
+
+  
+<link rel="stylesheet" href="/css/toc-fix.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="/blogBasic/banner.jpg" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>超小韓の个人博客 </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">主页</a>
+    
+      <a class="main-nav-link" href="/archives">文章</a>
+    
+      <a class="main-nav-link" href="/resources">资料</a>
+    
+      <a class="main-nav-link" href="/about">关于我的</a>
+    
+  </nav>
+  <nav id="search-nav">
+    <div id="search-container">
+      <input type="text" id="search-input" placeholder="搜索文章..." autocomplete="off">
+      <div id="search-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20">
+          <path d="M796-121 533-384q-30 26-69.959 40.5T378-329q-108.162 0-183.081-75Q120-479 120-585t75-181q75-75 181.5-75t181 75Q632-691 632-584.85 632-542 618-502q-14 40-42 75l264 262-44 44ZM377-389q81.25 0 138.125-57.5T572-585q0-81-56.875-138.5T377-781q-82.083 0-139.542 57.5Q180-666 180-585t57.458 138.5Q294.917-389 377-389Z"/>
+        </svg>
+      </div>
+      <div id="search-results" class="hidden">
+        <div id="search-results-content"></div>
+      </div>
+    </div>
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">主页</a>
+    
+      <a class="nav-dropdown-link" href="/archives">文章</a>
+    
+      <a class="nav-dropdown-link" href="/resources">资料</a>
+    
+      <a class="nav-dropdown-link" href="/about">关于我的</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=/blogBasic/head.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">超小韓 </div>
+      <div class="dot"></div>
+      <div class="subtitle">生活明朗，万物可爱！ </div>
+      <div class="link-list">
+        
+          <a class="link-btn" href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2537037482&website=www.oicqzone.com" title="QQ"><i class="fa-brands fa-qq"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/353687950" title="哔哩哔哩"><i class="fa-brands fa-bilibili"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/chaoxiaohan/" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        
+          <a class="link-btn" href="mailto:chaoxiaohan@chaoxiaohan.cyou" title="Email"><i class="fa-solid fa-envelope"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+    
+
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">标签</h3>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CubeMx/" rel="tag">CubeMx</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/teach/" rel="tag">teach</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%B5%84%E6%BA%90/" rel="tag">资源</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">归档</h3>
+      
+      
+        <a class="archive-link" href="/archives/2025/08 ">
+          八月 2025 
+          <div class="archive-count">3 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/03 ">
+          三月 2025 
+          <div class="archive-count">2 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2024/09 ">
+          九月 2024 
+          <div class="archive-count">4 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2023/08 ">
+          八月 2023 
+          <div class="archive-count">1 </div>
+        </a>
+      
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">最新文章</h3>
+      <ul>
+        
+          <a class="recent-link" href="/2025/08/17/C%E8%AF%AD%E8%A8%80%E6%95%99%E7%A8%8B-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%88VS%EF%BC%89/" title="C语言教程-环境搭建（VS）" >
+            <div class="recent-link-text">
+              C语言教程-环境搭建（VS）
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/08/17/learning-resources/" title="学习资源汇总" >
+            <div class="recent-link-text">
+              学习资源汇总
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/08/01/AndroidDevNote/" title="安卓学习笔记（一）" >
+            <div class="recent-link-text">
+              安卓学习笔记（一）
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/03/24/STM32HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="STM32HAL库学习笔记" >
+            <div class="recent-link-text">
+              STM32HAL库学习笔记
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/03/01/HAL%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0by%E8%B6%85%E5%B0%8F%E9%9F%93/" title="HAL库函数" >
+            <div class="recent-link-text">
+              HAL库函数
+            </div>
+          </a>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+  <div class="sticky">
+    
+      
+        
+          <div class="toc-widget">
+  <h3 class="toc-title">目录</h3>
+  <div class="toc-content">
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E4%B8%80-%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5"><span class="toc-list-text">一.条件语句</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#1-1-if%E8%AF%AD%E5%8F%A5"><span class="toc-list-text">1.1 if语句</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#1-2-if%E2%80%A6else-if%E2%80%A6else-%E8%AF%AD%E5%8F%A5"><span class="toc-list-text">1.2 if…else if…else 语句</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#1-3-switch%E8%AF%AD%E5%8F%A5"><span class="toc-list-text">1.3 switch语句</span></a></li></ol></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E4%BA%8C-%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5"><span class="toc-list-text">二.循环语句</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-1while%E5%BE%AA%E7%8E%AF"><span class="toc-list-text">2.1while循环</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-2for%E5%BE%AA%E7%8E%AF"><span class="toc-list-text">2.2for循环</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-3do%E2%80%A6while%E5%BE%AA%E7%8E%AF"><span class="toc-list-text">2.3do…while循环</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-4break%E8%AF%AD%E5%8F%A5"><span class="toc-list-text">2.4break语句</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-5continue%E8%AF%AD%E5%8F%A5"><span class="toc-list-text">2.5continue语句</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-6goto%E8%AF%AD%E5%8F%A5"><span class="toc-list-text">2.6goto语句</span></a></li></ol></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E4%B8%89-%E6%95%B0%E7%BB%84"><span class="toc-list-text">三.数组</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#3-1%E6%95%B0%E7%BB%84%E5%9F%BA%E7%A1%80"><span class="toc-list-text">3.1数组基础</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-1%E5%A3%B0%E6%98%8E%E6%95%B0%E7%BB%84"><span class="toc-list-text">3.1.1声明数组</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-2%E5%88%9D%E5%A7%8B%E5%8C%96%E6%95%B0%E7%BB%84"><span class="toc-list-text">3.1.2初始化数组</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-3%E8%AE%BF%E9%97%AE%E6%95%B0%E7%BB%84%E5%85%83%E7%B4%A0"><span class="toc-list-text">3.1.3访问数组元素</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-4%E8%8E%B7%E5%8F%96%E6%95%B0%E7%BB%84%E9%95%BF%E5%BA%A6"><span class="toc-list-text">3.1.4获取数组长度</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-1-5%E6%95%B0%E7%BB%84%E5%90%8D"><span class="toc-list-text">3.1.5数组名</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#3-2%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84"><span class="toc-list-text">3.2多维数组</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-1%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84"><span class="toc-list-text">3.2.1二维数组</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-2%E5%88%9D%E5%A7%8B%E5%8C%96%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84"><span class="toc-list-text">3.2.2初始化二维数组</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-2-3%E8%AE%BF%E9%97%AE%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E5%85%83%E7%B4%A0"><span class="toc-list-text">3.2.3访问二维数组元素</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#3-3%E4%BC%A0%E9%80%92%E6%95%B0%E7%BB%84%E7%BB%99%E5%87%BD%E6%95%B0"><span class="toc-list-text">3.3传递数组给函数</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#3-4%E4%BB%8E%E5%87%BD%E6%95%B0%E8%BF%94%E5%9B%9E%E6%95%B0%E7%BB%84"><span class="toc-list-text">3.4从函数返回数组</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#3-5%E6%8C%87%E5%90%91%E6%95%B0%E7%BB%84%E7%9A%84%E6%8C%87%E9%92%88"><span class="toc-list-text">3.5指向数组的指针</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#3-6%E9%9D%99%E6%80%81%E6%95%B0%E7%BB%84%E5%92%8C%E5%8A%A8%E6%80%81%E6%95%B0%E7%BB%84"><span class="toc-list-text">3.6静态数组和动态数组</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-6-1%E9%9D%99%E6%80%81%E6%95%B0%E7%BB%84"><span class="toc-list-text">3.6.1静态数组</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-6-2%E5%8A%A8%E6%80%81%E6%95%B0%E7%BB%84"><span class="toc-list-text">3.6.2动态数组</span></a></li></ol></li></ol></li></ol>
+  </div>
+</div>
+
+        
+      
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-语言学习笔记-条件、循环、数组（三）" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        C语言学习笔记-条件、循环、数组（三）
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2024-09-20T16:00:00.000Z" itemprop="datePublished">2024-09-21</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+    未分类 
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            15k 词 
+          </div>
+        </div>
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li></ul>
+
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <h1 id="一-条件语句"><a href="#一-条件语句" class="headerlink" title="一.条件语句"></a>一.条件语句</h1><h2 id="1-1-if语句"><a href="#1-1-if语句" class="headerlink" title="1.1 if语句"></a>1.1 if语句</h2><p>C 语言中 <strong>if…else</strong> 语句的语法：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">if</span>(boolean_expression)<br>&#123;<br>   <span class="hljs-comment">/* 如果布尔表达式为真将执行的语句 */</span><br>&#125;<br><span class="hljs-keyword">else</span><br>&#123;<br>   <span class="hljs-comment">/* 如果布尔表达式为假将执行的语句 */</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>如果布尔表达式为 <strong>true</strong>，则执行 <strong>if</strong> 块内的代码。如果布尔表达式为 <strong>false</strong>，则执行 <strong>else</strong> 块内的代码。</p>
+<p>C 语言把任何<strong>非零</strong>和<strong>非空</strong>的值假定为 <strong>true</strong>，把<strong>零</strong>或 <strong>null</strong> 假定为 <strong>false</strong>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br> <br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span> <span class="hljs-params">()</span><br>&#123;<br>   <span class="hljs-comment">/* 局部变量定义 */</span><br>   <span class="hljs-type">int</span> a = <span class="hljs-number">100</span>;<br> <br>   <span class="hljs-comment">/* 检查布尔条件 */</span><br>   <span class="hljs-keyword">if</span>( a &lt; <span class="hljs-number">20</span> )<br>   &#123;<br>       <span class="hljs-comment">/* 如果条件为真，则输出下面的语句 */</span><br>       <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;a 小于 20\n&quot;</span> );<br>   &#125;<br>   <span class="hljs-keyword">else</span><br>   &#123;<br>       <span class="hljs-comment">/* 如果条件为假，则输出下面的语句 */</span><br>       <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;a 大于 20\n&quot;</span> );<br>   &#125;<br>   <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;a 的值是 %d\n&quot;</span>, a);<br> <br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>当上面的代码被编译和执行时，它会产生下列结果：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">a</span> 大于 <span class="hljs-number">20</span><br><span class="hljs-attribute">a</span> 的值是 <span class="hljs-number">100</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="1-2-if…else-if…else-语句"><a href="#1-2-if…else-if…else-语句" class="headerlink" title="1.2 if…else if…else 语句"></a>1.2 if…else if…else 语句</h2><p>一个 <strong>if</strong> 语句后可跟一个可选的 <strong>else if…else</strong> 语句，这可用于测试多种条件。</p>
+<p>当使用 if…else if…else 语句时，以下几点需要注意：</p>
+<ul>
+<li>一个 if 后可跟零个或一个 else，else 必须在所有 else if 之后。</li>
+<li>一个 if 后可跟零个或多个 else if，else if 必须在 else 之前。</li>
+<li>一旦某个 else if 匹配成功，其他的 else if 或 else 将不会被测试。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">if</span>(boolean_expression <span class="hljs-number">1</span>)<br>&#123;<br>   <span class="hljs-comment">/* 当布尔表达式 1 为真时执行 */</span><br>&#125;<br><span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>( boolean_expression <span class="hljs-number">2</span>)<br>&#123;<br>   <span class="hljs-comment">/* 当布尔表达式 2 为真时执行 */</span><br>&#125;<br><span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>( boolean_expression <span class="hljs-number">3</span>)<br>&#123;<br>   <span class="hljs-comment">/* 当布尔表达式 3 为真时执行 */</span><br>&#125;<br><span class="hljs-keyword">else</span> <br>&#123;<br>   <span class="hljs-comment">/* 当上面条件都不为真时执行 */</span><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="1-3-switch语句"><a href="#1-3-switch语句" class="headerlink" title="1.3 switch语句"></a>1.3 switch语句</h2><p>switch 语句是一种有限制的控制流语句，它用于根据表达式的值执行不同的代码块。</p>
+<p>一个 <strong>switch</strong> 语句允许测试一个变量等于多个值时的情况，每个值称为一个 case，且被测试的变量会对每个 <strong>switch case</strong> 进行检查。</p>
+<p>C 语言中 <strong>switch</strong> 语句的语法：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">switch</span>(expression)&#123;<br>    <span class="hljs-keyword">case</span> constant-expression  :<br>       statement(s);<br>       <span class="hljs-keyword">break</span>; <span class="hljs-comment">/* 可选的 */</span><br>    <span class="hljs-keyword">case</span> constant-expression  :<br>       statement(s);<br>       <span class="hljs-keyword">break</span>; <span class="hljs-comment">/* 可选的 */</span><br>  <br>    <span class="hljs-comment">/* 您可以有任意数量的 case 语句 */</span><br>    <span class="hljs-keyword">default</span> : <span class="hljs-comment">/* 可选的 */</span><br>       statement(s);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>switch 语句说明：</strong></p>
+<ul>
+<li>switch 后面的表达式的值将会与每个 case 后面的常量值进行比较，直到找到匹配的值或者执行到 default（如果存在）。</li>
+<li>如果找到匹配的值，将执行相应 case 后面的代码块，然后跳出 switch 语句。</li>
+<li>如果没有匹配的值，并且有 default，则执行 default 后面的代码块。</li>
+<li>如果没有匹配的值，并且没有 default，则跳过整个 switch 语句直到结束。</li>
+</ul>
+<p><strong>switch</strong> 语句必须遵循下面的规则：</p>
+<ul>
+<li><strong>switch 表达式的类型：</strong> switch 语句中的表达式必须是整数类型（char、short、int或枚举），或者是能够隐式转换为整数类型的表达式。</li>
+<li><strong>case 标签的唯一性：</strong> 在 switch 语句中，每个 case 标签必须是唯一的，不能有重复的值。</li>
+<li><strong>默认情况的可选性：</strong> switch 语句中的 default 标签是可选的。如果没有匹配的 case 标签，则会执行 default 标签下的代码块（如果存在）。</li>
+<li><strong>case 标签中的常量值：</strong> case 标签后面的值必须是一个常量表达式，这意味着它的值在编译时就能确定。</li>
+<li><strong>case 标签的顺序：</strong> switch 语句中的 case 标签的顺序并不重要，它们可以按照任意顺序编写。程序会按照 case 标签出现的顺序依次匹配。</li>
+<li><strong>break 语句的使用：</strong> 在每个 case 标签的代码块结束处通常需要使用 break 语句来终止 switch 语句的执行。如果没有 break 语句，程序将会继续执行下一个 case 标签中的代码，直到遇到 break 语句或 switch 语句结束。</li>
+<li><strong>switch 语句的嵌套：</strong> switch 语句可以嵌套在其他 switch 语句中，但是需要注意代码的可读性和复杂性。</li>
+<li><strong>case 标签和表达式的范围：</strong> switch 语句的 case 标签可以是整数常量表达式，但不能是浮点数或字符串。</li>
+</ul>
+<h1 id="二-循环语句"><a href="#二-循环语句" class="headerlink" title="二.循环语句"></a>二.循环语句</h1><p>有的时候，我们可能需要多次执行同一块代码。一般情况下，语句是按顺序执行的：函数中的第一个语句先执行，接着是第二个语句，依此类推。</p>
+<p>编程语言提供了更为复杂执行路径的多种控制结构。</p>
+<p>循环语句允许我们多次执行一个语句或语句组</p>
+<h2 id="2-1while循环"><a href="#2-1while循环" class="headerlink" title="2.1while循环"></a>2.1while循环</h2><p>C 语言中 <strong>while</strong> 循环的语法：</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs scss"><span class="hljs-built_in">while</span>(condition)<br>&#123;<br>   <span class="hljs-built_in">statement</span>(s);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在这里，<strong>statement(s)</strong> 可以是一个单独的语句，也可以是几个语句组成的代码块。</p>
+<p><strong>condition</strong> 可以是任意的表达式，当为任意非零值时都为 true。当条件为 true 时执行循环。 当条件为 false 时，退出循环，程序流将继续执行紧接着循环的下一条语句。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br> <br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span> <span class="hljs-params">()</span><br>&#123;<br>  */\* 局部变量定义 \*<span class="hljs-comment">/*</span><br><span class="hljs-comment">  int a = 10;</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">  */</span>\* <span class="hljs-keyword">while</span> 循环执行 \*<span class="hljs-comment">/*</span><br><span class="hljs-comment">  while( a &lt; 20 )</span><br><span class="hljs-comment">  &#123;</span><br><span class="hljs-comment">   printf(&quot;a 的值： %d**\n**&quot;, a);</span><br><span class="hljs-comment">   a++;</span><br><span class="hljs-comment">  &#125;</span><br><span class="hljs-comment"> </span><br><span class="hljs-comment">  return 0;</span><br><span class="hljs-comment">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>当上面的代码被编译和执行时，它会产生下列结果：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C">a 的值： <span class="hljs-number">10</span><br>a 的值： <span class="hljs-number">11</span><br>a 的值： <span class="hljs-number">12</span><br>a 的值： <span class="hljs-number">13</span><br>a 的值： <span class="hljs-number">14</span><br>a 的值： <span class="hljs-number">15</span><br>a 的值： <span class="hljs-number">16</span><br>a 的值： <span class="hljs-number">17</span><br>a 的值： <span class="hljs-number">18</span><br>a 的值： <span class="hljs-number">19</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="2-2for循环"><a href="#2-2for循环" class="headerlink" title="2.2for循环"></a>2.2for循环</h2><p>C 语言中 <strong>for</strong> 循环的语法：</p>
+<p>for ( init; condition; increment ) {   statement(s); }</p>
+<p>下面是 for 循环的控制流：</p>
+<ol>
+<li><p><strong>init</strong> 会首先被执行，且只会执行一次。这一步允许您声明并初始化任何循环控制变量。您也可以不在这里写任何语句，只要有一个分号出现即可。</p>
+</li>
+<li><p>接下来，会判断 <strong>condition</strong>。如果为真，则执行循环主体。如果为假，则不执行循环主体，且控制流会跳转到紧接着 for 循环的下一条语句。</p>
+</li>
+<li><p>在执行完 for 循环主体后，控制流会跳回上面的 <strong>increment</strong> 语句。该语句允许您更新循环控制变量。该语句可以留空，只要在条件后有一个分号出现即可。</p>
+</li>
+<li><p>条件再次被判断。如果为真，则执行循环，这个过程会不断重复（循环主体，然后增加步值，再然后重新判断条件）。在条件变为假时，for 循环终止。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br> <br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span> <span class="hljs-params">()</span><br>&#123;<br>   <span class="hljs-comment">/* for 循环执行 */</span><br>   <span class="hljs-keyword">for</span>( <span class="hljs-type">int</span> a = <span class="hljs-number">10</span>; a &lt; <span class="hljs-number">20</span>; a = a + <span class="hljs-number">1</span> )<br>   &#123;<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;a 的值： %d\n&quot;</span>, a);<br>   &#125;<br> <br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>当上面的代码被编译和执行时，它会产生下列结果：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">a</span> 的值： <span class="hljs-number">10</span><br><span class="hljs-attribute">a</span> 的值： <span class="hljs-number">11</span><br><span class="hljs-attribute">a</span> 的值： <span class="hljs-number">12</span><br><span class="hljs-attribute">a</span> 的值： <span class="hljs-number">13</span><br><span class="hljs-attribute">a</span> 的值： <span class="hljs-number">14</span><br><span class="hljs-attribute">a</span> 的值： <span class="hljs-number">15</span><br><span class="hljs-attribute">a</span> 的值： <span class="hljs-number">16</span><br><span class="hljs-attribute">a</span> 的值： <span class="hljs-number">17</span><br><span class="hljs-attribute">a</span> 的值： <span class="hljs-number">18</span><br><span class="hljs-attribute">a</span> 的值： <span class="hljs-number">19</span><br></code></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="2-3do…while循环"><a href="#2-3do…while循环" class="headerlink" title="2.3do…while循环"></a>2.3do…while循环</h2><p>不像 <strong>for</strong> 和 <strong>while</strong> 循环，它们是在循环头部测试循环条件。在 C 语言中，<strong>do…while</strong> 循环是在循环的尾部检查它的条件。</p>
+<p><strong>do…while</strong> 循环与 while 循环类似，但是 do…while 循环会确保至少执行一次循环。</p>
+<p>C 语言中 <strong>do…while</strong> 循环的语法：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">do</span><br>&#123;<br>   statement(s);<br><br>&#125;<span class="hljs-keyword">while</span>( condition );<br></code></pre></td></tr></table></figure>
+
+<p>请注意，条件表达式出现在循环的尾部，所以循环中的 statement(s) 会在条件被测试之前至少执行一次。</p>
+<p>如果条件为真，控制流会跳转回上面的 do，然后重新执行循环中的 statement(s)。这个过程会不断重复，直到给定条件变为假为止。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br> <br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span> <span class="hljs-params">()</span><br>&#123;<br>  */\* 局部变量定义 \*<span class="hljs-comment">/*</span><br><span class="hljs-comment">  int a = 10;</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">  */</span>\* <span class="hljs-keyword">do</span> 循环执行，在条件被测试之前至少执行一次 \*<span class="hljs-comment">/*</span><br><span class="hljs-comment">  do</span><br><span class="hljs-comment">  &#123;</span><br><span class="hljs-comment">    printf(&quot;a 的值： %d**\n**&quot;, a);</span><br><span class="hljs-comment">    a = a + 1;</span><br><span class="hljs-comment">  &#125;while( a &lt; 20 );</span><br><span class="hljs-comment"> </span><br><span class="hljs-comment">  return 0;</span><br><span class="hljs-comment">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>当上面的代码被编译和执行时，它会产生下列结果：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C">a 的值： <span class="hljs-number">10</span><br>a 的值： <span class="hljs-number">11</span><br>a 的值： <span class="hljs-number">12</span><br>a 的值： <span class="hljs-number">13</span><br>a 的值： <span class="hljs-number">14</span><br>a 的值： <span class="hljs-number">15</span><br>a 的值： <span class="hljs-number">16</span><br>a 的值： <span class="hljs-number">17</span><br>a 的值： <span class="hljs-number">18</span><br>a 的值： <span class="hljs-number">19</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="2-4break语句"><a href="#2-4break语句" class="headerlink" title="2.4break语句"></a>2.4break语句</h2><p>C 语言中 <strong>break</strong> 语句有以下两种用法：</p>
+<ol>
+<li>当 <strong>break</strong> 语句出现在一个循环内时，循环会立即终止，且程序流将继续执行紧接着循环的下一条语句。</li>
+<li>它可用于终止 <strong>switch</strong> 语句中的一个 case。</li>
+</ol>
+<p>如果您使用的是嵌套循环（即一个循环内嵌套另一个循环），break 语句会停止执行最内层的循环，然后开始执行该块之后的下一行代码。</p>
+<p>C 语言中 <strong>break</strong> 语句的语法：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">break</span>;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/09/c-break-statement-works.jpg" alt="img"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br> <br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span> <span class="hljs-params">()</span><br>&#123;<br>   <span class="hljs-comment">/* 局部变量定义 */</span><br>   <span class="hljs-type">int</span> a = <span class="hljs-number">10</span>;<br><br>   <span class="hljs-comment">/* while 循环执行 */</span><br>   <span class="hljs-keyword">while</span>( a &lt; <span class="hljs-number">20</span> )<br>   &#123;<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;a 的值： %d\n&quot;</span>, a);<br>      a++;<br>      <span class="hljs-keyword">if</span>( a &gt; <span class="hljs-number">15</span>)<br>      &#123;<br>         <span class="hljs-comment">/* 使用 break 语句终止循环 */</span><br>          <span class="hljs-keyword">break</span>;<br>      &#125;<br>   &#125;<br> <br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>当上面的代码被编译和执行时，它会产生下列结果：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C">a 的值： <span class="hljs-number">10</span><br>a 的值： <span class="hljs-number">11</span><br>a 的值： <span class="hljs-number">12</span><br>a 的值： <span class="hljs-number">13</span><br>a 的值： <span class="hljs-number">14</span><br>a 的值： <span class="hljs-number">15</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="2-5continue语句"><a href="#2-5continue语句" class="headerlink" title="2.5continue语句"></a>2.5continue语句</h2><p>C 语言中的 <strong>continue</strong> 语句有点像 <strong>break</strong> 语句。但它不是强制终止，continue 会跳过当前循环中的代码，强迫开始下一次循环。</p>
+<p>对于 <strong>for</strong> 循环，<strong>continue</strong> 语句执行后自增语句仍然会执行。对于 <strong>while</strong> 和 <strong>do…while</strong> 循环，<strong>continue</strong> 语句重新执行条件判断语句。</p>
+<p>C 语言中 <strong>continue</strong> 语句的语法：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">continue</span>;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/09/c-continue-statement-works.jpg" alt="img"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br> <br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span> <span class="hljs-params">()</span><br>&#123;<br>   <span class="hljs-comment">/* 局部变量定义 */</span><br>   <span class="hljs-type">int</span> a = <span class="hljs-number">10</span>;<br><br>   <span class="hljs-comment">/* do 循环执行 */</span><br>   <span class="hljs-keyword">do</span><br>   &#123;<br>      <span class="hljs-keyword">if</span>( a == <span class="hljs-number">15</span>)<br>      &#123;<br>         <span class="hljs-comment">/* 跳过迭代 */</span><br>         a = a + <span class="hljs-number">1</span>;<br>         <span class="hljs-keyword">continue</span>;<br>      &#125;<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;a 的值： %d\n&quot;</span>, a);<br>      a++;<br>     <br>   &#125;<span class="hljs-keyword">while</span>( a &lt; <span class="hljs-number">20</span> );<br> <br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>当上面的代码被编译和执行时，它会产生下列结果：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C">a 的值： <span class="hljs-number">10</span><br>a 的值： <span class="hljs-number">11</span><br>a 的值： <span class="hljs-number">12</span><br>a 的值： <span class="hljs-number">13</span><br>a 的值： <span class="hljs-number">14</span><br>a 的值： <span class="hljs-number">16</span><br>a 的值： <span class="hljs-number">17</span><br>a 的值： <span class="hljs-number">18</span><br>a 的值： <span class="hljs-number">19</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="2-6goto语句"><a href="#2-6goto语句" class="headerlink" title="2.6goto语句"></a>2.6goto语句</h2><p>C 语言中的 <strong>goto</strong> 语句允许把控制无条件转移到同一函数内的被标记的语句。</p>
+<p><strong>注意：</strong>在任何编程语言中，都不建议使用 goto 语句。因为它使得程序的控制流难以跟踪，使程序难以理解和难以修改。任何使用 goto 语句的程序可以改写成不需要使用 goto 语句的写法。</p>
+<p>C 语言中 <strong>goto</strong> 语句的语法：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs css">goto <span class="hljs-selector-tag">label</span>;<br>..<br>.<br><span class="hljs-selector-tag">label</span>: statement;<br></code></pre></td></tr></table></figure>
+
+<p>在这里，<strong>label</strong> 可以是任何除 C 关键字以外的纯文本，它可以设置在 C 程序中 <strong>goto</strong> 语句的前面或者后面。</p>
+<p><img src="https://www.runoob.com/wp-content/uploads/2015/01/goto.png" alt="img"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br> <br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span> <span class="hljs-params">()</span><br>&#123;<br>   <span class="hljs-comment">/* 局部变量定义 */</span><br>   <span class="hljs-type">int</span> a = <span class="hljs-number">10</span>;<br> <br>   <span class="hljs-comment">/* do 循环执行 */</span><br>   LOOP:<span class="hljs-keyword">do</span><br>   &#123;<br>      <span class="hljs-keyword">if</span>( a == <span class="hljs-number">15</span>)<br>      &#123;<br>         <span class="hljs-comment">/* 跳过迭代 */</span><br>         a = a + <span class="hljs-number">1</span>;<br>         <span class="hljs-keyword">goto</span> LOOP;<br>      &#125;<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;a 的值： %d\n&quot;</span>, a);<br>      a++;<br>     <br>   &#125;<span class="hljs-keyword">while</span>( a &lt; <span class="hljs-number">20</span> );<br> <br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>当上面的代码被编译和执行时，它会产生下列结果：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C">a 的值： <span class="hljs-number">10</span><br>a 的值： <span class="hljs-number">11</span><br>a 的值： <span class="hljs-number">12</span><br>a 的值： <span class="hljs-number">13</span><br>a 的值： <span class="hljs-number">14</span><br>a 的值： <span class="hljs-number">16</span><br>a 的值： <span class="hljs-number">17</span><br>a 的值： <span class="hljs-number">18</span><br>a 的值： <span class="hljs-number">19</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="三-数组"><a href="#三-数组" class="headerlink" title="三.数组"></a>三.数组</h1><p>C 语言支持<strong>数组</strong>数据结构，它可以存储一个固定大小的相同类型元素的顺序集合。数组是用来存储一系列数据，但它往往被认为是一系列相同类型的变量。</p>
+<p>数组的声明并不是声明一个个单独的变量，比如 runoob0、runoob1、…、runoob99，而是声明一个数组变量，比如 runoob，然后使用 runoob[0]、runoob[1]、…、runoob[99] 来代表一个个单独的变量。</p>
+<p>所有的数组都是由连续的内存位置组成。最低的地址对应第一个元素，最高的地址对应最后一个元素。</p>
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/09/c-arrays-2021-1-18-3.png" alt="C 中的数组"></p>
+<p>数组中的特定元素可以通过索引访问，第一个索引值为 <strong>0</strong>。</p>
+<p>C 语言还允许我们使用指针来处理数组，这使得对数组的操作更加灵活和高效。</p>
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/09/c-array-2021-01-18-2.png" alt="img"></p>
+<h2 id="3-1数组基础"><a href="#3-1数组基础" class="headerlink" title="3.1数组基础"></a>3.1数组基础</h2><h3 id="3-1-1声明数组"><a href="#3-1-1声明数组" class="headerlink" title="3.1.1声明数组"></a>3.1.1声明数组</h3><p>在 C 中要声明一个数组，需要指定元素的类型和元素的数量，如下所示：</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada"><span class="hljs-keyword">type</span> <span class="hljs-type">arrayName </span>[ arraySize ];<br></code></pre></td></tr></table></figure>
+
+<p>这叫做一维数组。<strong>arraySize</strong> 必须是一个大于零的整数常量，<strong>type</strong> 可以是任意有效的 C 数据类型。例如，要声明一个类型为 double 的包含 10 个元素的数组 <strong>balance</strong>，声明语句如下：</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs scss">double balance<span class="hljs-selector-attr">[10]</span>;<br></code></pre></td></tr></table></figure>
+
+<p>现在 <em>balance</em> 是一个可用的数组，可以容纳 10 个类型为 double 的数字。</p>
+<h3 id="3-1-2初始化数组"><a href="#3-1-2初始化数组" class="headerlink" title="3.1.2初始化数组"></a>3.1.2初始化数组</h3><p>在 C 中，您可以逐个初始化数组，也可以使用一个初始化语句，如下所示：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">double</span> balance[<span class="hljs-number">5</span>] = &#123;<span class="hljs-number">1000</span>.<span class="hljs-number">0</span>, <span class="hljs-number">2</span>.<span class="hljs-number">0</span>, <span class="hljs-number">3</span>.<span class="hljs-number">4</span>, <span class="hljs-number">7</span>.<span class="hljs-number">0</span>, <span class="hljs-number">50</span>.<span class="hljs-number">0</span>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>大括号 { } 之间的值的数目不能大于我们在数组声明时在方括号 [ ] 中指定的元素数目。</p>
+<p>如果您省略掉了数组的大小，数组的大小则为初始化时元素的个数。因此，如果：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">double</span> balance[] = &#123;<span class="hljs-number">1000</span>.<span class="hljs-number">0</span>, <span class="hljs-number">2</span>.<span class="hljs-number">0</span>, <span class="hljs-number">3</span>.<span class="hljs-number">4</span>, <span class="hljs-number">7</span>.<span class="hljs-number">0</span>, <span class="hljs-number">50</span>.<span class="hljs-number">0</span>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>您将创建一个数组，它与前一个实例中所创建的数组是完全相同的。下面是一个为数组中某个元素赋值的实例：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">balance</span>[<span class="hljs-number">4</span>] = <span class="hljs-number">50</span>.<span class="hljs-number">0</span>;<br></code></pre></td></tr></table></figure>
+
+<p>上述的语句把数组中第五个元素的值赋为 50.0。所有的数组都是以 0 作为它们第一个元素的索引，也被称为基索引，数组的最后一个索引是数组的总大小减去 1。以下是上面所讨论的数组的的图形表示：</p>
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/09/c-arrays-2021-1-18-4.png" alt="数组表示"></p>
+<p>下图是一个长度为 <strong>10</strong> 的数组，第一个元素的索引值为 <strong>0</strong>，第九个元素 <strong>runoob</strong> 的索引值为 <strong>8</strong>:</p>
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/09/c-array-2021-01-18-2.png" alt="img"></p>
+<h3 id="3-1-3访问数组元素"><a href="#3-1-3访问数组元素" class="headerlink" title="3.1.3访问数组元素"></a>3.1.3访问数组元素</h3><p>数组元素可以通过数组名称加索引进行访问。元素的索引是放在方括号内，跟在数组名称的后边。例如：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">double salary <span class="hljs-operator">=</span> balance[<span class="hljs-number">9</span>]<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<p>上面的语句将把数组中第 10 个元素的值赋给 salary 变量。下面的实例使用了上述的三个概念，即，声明数组、数组赋值、访问数组：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br> <br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span> <span class="hljs-params">()</span><br>&#123;<br>   <span class="hljs-type">int</span> n[ <span class="hljs-number">10</span> ]; <span class="hljs-comment">/* n 是一个包含 10 个整数的数组 */</span><br>   <span class="hljs-type">int</span> i,j;<br> <br>   <span class="hljs-comment">/* 初始化数组元素 */</span>         <br>   <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++ )<br>   &#123;<br>      n[ i ] = i + <span class="hljs-number">100</span>; <span class="hljs-comment">/* 设置元素 i 为 i + 100 */</span><br>   &#125;<br>   <br>   <span class="hljs-comment">/* 输出数组中每个元素的值 */</span><br>   <span class="hljs-keyword">for</span> (j = <span class="hljs-number">0</span>; j &lt; <span class="hljs-number">10</span>; j++ )<br>   &#123;<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Element[%d] = %d\n&quot;</span>, j, n[j] );<br>   &#125;<br> <br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>当上面的代码被编译和执行时，它会产生下列结果：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C">Element[<span class="hljs-number">0</span>] = <span class="hljs-number">100</span><br>Element[<span class="hljs-number">1</span>] = <span class="hljs-number">101</span><br>Element[<span class="hljs-number">2</span>] = <span class="hljs-number">102</span><br>Element[<span class="hljs-number">3</span>] = <span class="hljs-number">103</span><br>Element[<span class="hljs-number">4</span>] = <span class="hljs-number">104</span><br>Element[<span class="hljs-number">5</span>] = <span class="hljs-number">105</span><br>Element[<span class="hljs-number">6</span>] = <span class="hljs-number">106</span><br>Element[<span class="hljs-number">7</span>] = <span class="hljs-number">107</span><br>Element[<span class="hljs-number">8</span>] = <span class="hljs-number">108</span><br>Element[<span class="hljs-number">9</span>] = <span class="hljs-number">109</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-1-4获取数组长度"><a href="#3-1-4获取数组长度" class="headerlink" title="3.1.4获取数组长度"></a>3.1.4获取数组长度</h3><p>数组长度可以使用 <strong>sizeof</strong> 运算符来获取数组的长度，例如：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">int</span> numbers[] = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>&#125;;<br><span class="hljs-attribute">int</span> length = sizeof(numbers) / sizeof(numbers[<span class="hljs-number">0</span>]);<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span> <span class="hljs-built_in">array</span>[] = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>&#125;;<br>    <span class="hljs-type">int</span> length = <span class="hljs-keyword">sizeof</span>(<span class="hljs-built_in">array</span>) / <span class="hljs-keyword">sizeof</span>(<span class="hljs-built_in">array</span>[<span class="hljs-number">0</span>]);<br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;数组长度为: %d\n&quot;</span>, length);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>使用宏定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> LENGTH(array) (sizeof(array) / sizeof(array[0]))</span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span> <span class="hljs-built_in">array</span>[] = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>&#125;;<br>    <span class="hljs-type">int</span> length = LENGTH(<span class="hljs-built_in">array</span>);<br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;数组长度为: %d\n&quot;</span>, length);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>以上实例输出结果为：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">数组长度为: 5</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-1-5数组名"><a href="#3-1-5数组名" class="headerlink" title="3.1.5数组名"></a>3.1.5数组名</h3><p>在 C 语言中，数组名表示数组的地址，即数组首元素的地址。当我们在声明和定义一个数组时，该数组名就代表着该数组的地址。</p>
+<p>例如，在以下代码中：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">int</span> myArray[<span class="hljs-number">5</span>] = &#123;<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>在这里，myArray 是数组名，它表示整数类型的数组，包含 5 个元素。myArray 也代表着数组的地址，即第一个元素的地址。</p>
+<p>数组名本身是一个常量指针，意味着它的值是不能被改变的，一旦确定，就不能再指向其他地方。</p>
+<p>我们可以使用&amp;运算符来获取数组的地址，如下所示：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">int</span> myArray[<span class="hljs-number">5</span>] = &#123;<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>&#125;;<br><span class="hljs-attribute">int</span> *ptr = &amp;myArray[<span class="hljs-number">0</span>]; // 或者直接写作 int *ptr = myArray;<br></code></pre></td></tr></table></figure>
+
+<p>在上面的例子中，ptr 指针变量被初始化为 myArray 的地址，即数组的第一个元素的地址。</p>
+<p>需要注意的是，虽然数组名表示数组的地址，但在大多数情况下，数组名会自动转换为指向数组首元素的指针。这意味着我们可以直接将数组名用于指针运算，例如在函数传递参数或遍历数组时：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">printArray</span><span class="hljs-params">(<span class="hljs-type">int</span> arr[], <span class="hljs-type">int</span> size)</span> &#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; size; i++) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d &quot;</span>, arr[i]); <span class="hljs-comment">// 数组名arr被当作指针使用</span><br>    &#125;<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span> myArray[<span class="hljs-number">5</span>] = &#123;<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>&#125;;<br>    printArray(myArray, <span class="hljs-number">5</span>); <span class="hljs-comment">// 将数组名传递给函数</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在上述代码中，printArray 函数接受一个整数数组和数组大小作为参数，我们将 myArray 数组名传递给函数，函数内部可以像使用指针一样使用 arr 数组名。</p>
+<h2 id="3-2多维数组"><a href="#3-2多维数组" class="headerlink" title="3.2多维数组"></a>3.2多维数组</h2><p>C 语言支持多维数组。多维数组声明的一般形式如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">type name<span class="hljs-selector-attr">[size1]</span><span class="hljs-selector-attr">[size2]</span>...<span class="hljs-selector-attr">[sizeN]</span>;<br></code></pre></td></tr></table></figure>
+
+<p>例如，下面的声明创建了一个三维 5 . 10 . 4 整型数组：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">int</span> threedim[<span class="hljs-number">5</span>][<span class="hljs-number">10</span>][<span class="hljs-number">4</span>];<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-2-1二维数组"><a href="#3-2-1二维数组" class="headerlink" title="3.2.1二维数组"></a>3.2.1二维数组</h3><p>多维数组最简单的形式是二维数组。一个二维数组，在本质上，是一个一维数组的列表。声明一个 x 行 y 列的二维整型数组，形式如下：</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada"><span class="hljs-keyword">type</span> <span class="hljs-type">arrayName </span>[ x ][ y ];<br></code></pre></td></tr></table></figure>
+
+<p>其中，<strong>type</strong> 可以是任意有效的 C 数据类型，<strong>arrayName</strong> 是一个有效的 C 标识符。一个二维数组可以被认为是一个带有 x 行和 y 列的表格。下面是一个二维数组，包含 3 行和 4 列：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">int <span class="hljs-attribute">x</span><span class="hljs-selector-attr">[3]</span><span class="hljs-selector-attr">[4]</span>;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/09/two_dimensional_arrays.jpg" alt="C 中的二维数组"></p>
+<p>因此，数组中的每个元素是使用形式为 a[ i , j ] 的元素名称来标识的，其中 a 是数组名称，i 和 j 是唯一标识 a 中每个元素的下标。</p>
+<h3 id="3-2-2初始化二维数组"><a href="#3-2-2初始化二维数组" class="headerlink" title="3.2.2初始化二维数组"></a>3.2.2初始化二维数组</h3><p>多维数组可以通过在括号内为每行指定值来进行初始化。下面是一个带有 3 行 4 列的数组。</p>
+<figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs prolog">int a[<span class="hljs-number">3</span>][<span class="hljs-number">4</span>] = &#123;  <br> &#123;<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>&#125; ,   <span class="hljs-comment">/*  初始化索引号为 0 的行 */</span><br> &#123;<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>&#125; ,   <span class="hljs-comment">/*  初始化索引号为 1 的行 */</span><br> &#123;<span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>, <span class="hljs-number">11</span>&#125;   <span class="hljs-comment">/*  初始化索引号为 2 的行 */</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>内部嵌套的括号是可选的，下面的初始化与上面是等同的：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">int</span> a[<span class="hljs-number">3</span>][<span class="hljs-number">4</span>] = &#123;<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>,<span class="hljs-number">10</span>,<span class="hljs-number">11</span>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-2-3访问二维数组元素"><a href="#3-2-3访问二维数组元素" class="headerlink" title="3.2.3访问二维数组元素"></a>3.2.3访问二维数组元素</h3><p>二维数组中的元素是通过使用下标（即数组的行索引和列索引）来访问的。例如：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">int val <span class="hljs-operator">=</span> a[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>]<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<p>上面的语句将获取数组中第 3 行第 4 个元素。您可以通过上面的示意图来进行验证。让我们来看看下面的程序，我们将使用嵌套循环来处理二维数组：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br> <br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span> <span class="hljs-params">()</span><br>&#123;<br>   <span class="hljs-comment">/* 一个带有 5 行 2 列的数组 */</span><br>   <span class="hljs-type">int</span> a[<span class="hljs-number">5</span>][<span class="hljs-number">2</span>] = &#123; &#123;<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;, &#123;<span class="hljs-number">1</span>,<span class="hljs-number">2</span>&#125;, &#123;<span class="hljs-number">2</span>,<span class="hljs-number">4</span>&#125;, &#123;<span class="hljs-number">3</span>,<span class="hljs-number">6</span>&#125;,&#123;<span class="hljs-number">4</span>,<span class="hljs-number">8</span>&#125;&#125;;<br>   <span class="hljs-type">int</span> i, j;<br> <br>   <span class="hljs-comment">/* 输出数组中每个元素的值 */</span><br>   <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++ )<br>   &#123;<br>      <span class="hljs-keyword">for</span> ( j = <span class="hljs-number">0</span>; j &lt; <span class="hljs-number">2</span>; j++ )<br>      &#123;<br>         <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;a[%d][%d] = %d\n&quot;</span>, i,j, a[i][j] );<br>      &#125;<br>   &#125;<br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>当上面的代码被编译和执行时，它会产生下列结果：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C">a[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] = <span class="hljs-number">0</span><br>a[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>] = <span class="hljs-number">0</span><br>a[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] = <span class="hljs-number">1</span><br>a[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>] = <span class="hljs-number">2</span><br>a[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>] = <span class="hljs-number">2</span><br>a[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>] = <span class="hljs-number">4</span><br>a[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>] = <span class="hljs-number">3</span><br>a[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>] = <span class="hljs-number">6</span><br>a[<span class="hljs-number">4</span>][<span class="hljs-number">0</span>] = <span class="hljs-number">4</span><br>a[<span class="hljs-number">4</span>][<span class="hljs-number">1</span>] = <span class="hljs-number">8</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="3-3传递数组给函数"><a href="#3-3传递数组给函数" class="headerlink" title="3.3传递数组给函数"></a>3.3传递数组给函数</h2><p>如果您想要在函数中传递一个一维数组作为参数，您必须以下面三种方式来声明函数形式参数，这三种声明方式的结果是一样的，因为每种方式都会告诉编译器将要接收一个整型指针。同样地，您也可以传递一个多维数组作为形式参数。</p>
+<p>方式 1</p>
+<p>形式参数是一个指针（您可以在下一章中学习到有关指针的知识）：</p>
+<p>void myFunction(int *param) { . . . }</p>
+<p>方式 2</p>
+<p>形式参数是一个已定义大小的数组：</p>
+<p>void myFunction(int param[10]) { . . . }</p>
+<p>方式 3</p>
+<p>形式参数是一个未定义大小的数组：</p>
+<p>void myFunction(int param[]) { . . . }</p>
+<p>现在，让我们来看下面这个函数，它把数组作为参数，同时还传递了另一个参数，根据所传的参数，会返回数组中元素的平均值：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">double</span> <span class="hljs-title function_">getAverage</span><span class="hljs-params">(<span class="hljs-type">int</span> arr[], <span class="hljs-type">int</span> size)</span><br>&#123;<br>  <span class="hljs-type">int</span>    i;<br>  <span class="hljs-type">double</span> avg;<br>  <span class="hljs-type">double</span> sum;<br> <br>  <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; size; ++i)<br>  &#123;<br>    sum += arr[i];<br>  &#125;<br> <br>  avg = sum / size;<br> <br>  <span class="hljs-keyword">return</span> avg;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>现在，让我们调用上面的函数，如下所示：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br> <br><span class="hljs-comment">/* 函数声明 */</span><br><span class="hljs-type">double</span> <span class="hljs-title function_">getAverage</span><span class="hljs-params">(<span class="hljs-type">int</span> arr[], <span class="hljs-type">int</span> size)</span>;<br> <br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span> <span class="hljs-params">()</span><br>&#123;<br>   <span class="hljs-comment">/* 带有 5 个元素的整型数组 */</span><br>   <span class="hljs-type">int</span> balance[<span class="hljs-number">5</span>] = &#123;<span class="hljs-number">1000</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">17</span>, <span class="hljs-number">50</span>&#125;;<br>   <span class="hljs-type">double</span> avg;<br> <br>   <span class="hljs-comment">/* 传递一个指向数组的指针作为参数 */</span><br>   avg = getAverage( balance, <span class="hljs-number">5</span> ) ;<br> <br>   <span class="hljs-comment">/* 输出返回值 */</span><br>   <span class="hljs-built_in">printf</span>( <span class="hljs-string">&quot;平均值是： %f &quot;</span>, avg );<br>    <br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br> <br><span class="hljs-type">double</span> <span class="hljs-title function_">getAverage</span><span class="hljs-params">(<span class="hljs-type">int</span> arr[], <span class="hljs-type">int</span> size)</span><br>&#123;<br>  <span class="hljs-type">int</span>    i;<br>  <span class="hljs-type">double</span> avg;<br>  <span class="hljs-type">double</span> sum=<span class="hljs-number">0</span>;<br> <br>  <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; size; ++i)<br>  &#123;<br>    sum += arr[i];<br>  &#125;<br> <br>  avg = sum / size;<br> <br>  <span class="hljs-keyword">return</span> avg;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>当上面的代码被编译和执行时，它会产生下列结果：</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dns">平均值是： <span class="hljs-number">214.400000</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="3-4从函数返回数组"><a href="#3-4从函数返回数组" class="headerlink" title="3.4从函数返回数组"></a>3.4从函数返回数组</h2><p>C 语言不允许返回一个完整的数组作为函数的参数。但是，您可以通过指定不带索引的数组名来返回一个指向数组的指针。我们将在下一章中讲解有关指针的知识，您可以先跳过本章，等了解了 C 指针的概念之后，再来学习本章的内容。</p>
+<p>如果您想要从函数返回一个一维数组，您必须声明一个返回指针的函数，如下：</p>
+<p>int * myFunction() { . . . }</p>
+<p>另外，C 不支持在函数外返回局部变量的地址，除非定义局部变量为 <strong>static</strong> 变量。</p>
+<p>现在，让我们来看下面的函数，它会生成 10 个随机数，并使用数组来返回它们，具体如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;time.h&gt;</span></span><br> <br><span class="hljs-comment">/* 要生成和返回随机数的函数 */</span><br><span class="hljs-type">int</span> * <span class="hljs-title function_">getRandom</span><span class="hljs-params">( )</span><br>&#123;<br>  <span class="hljs-type">static</span> <span class="hljs-type">int</span>  r[<span class="hljs-number">10</span>];<br>  <span class="hljs-type">int</span> i;<br> <br>  <span class="hljs-comment">/* 设置种子 */</span><br>  srand( (<span class="hljs-type">unsigned</span>)time( <span class="hljs-literal">NULL</span> ) );<br>  <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; ++i)<br>  &#123;<br>     r[i] = rand();<br>     <span class="hljs-built_in">printf</span>( <span class="hljs-string">&quot;r[%d] = %d\n&quot;</span>, i, r[i]);<br> <br>  &#125;<br> <br>  <span class="hljs-keyword">return</span> r;<br>&#125;<br> <br><span class="hljs-comment">/* 要调用上面定义函数的主函数 */</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span> <span class="hljs-params">()</span><br>&#123;<br>   <span class="hljs-comment">/* 一个指向整数的指针 */</span><br>   <span class="hljs-type">int</span> *p;<br>   <span class="hljs-type">int</span> i;<br> <br>   p = getRandom();<br>   <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++ )<br>   &#123;<br>       <span class="hljs-built_in">printf</span>( <span class="hljs-string">&quot;*(p + %d) : %d\n&quot;</span>, i, *(p + i));<br>   &#125;<br> <br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>当上面的代码被编译和执行时，它会产生下列结果：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs C">r[<span class="hljs-number">0</span>] = <span class="hljs-number">313959809</span><br>r[<span class="hljs-number">1</span>] = <span class="hljs-number">1759055877</span><br>r[<span class="hljs-number">2</span>] = <span class="hljs-number">1113101911</span><br>r[<span class="hljs-number">3</span>] = <span class="hljs-number">2133832223</span><br>r[<span class="hljs-number">4</span>] = <span class="hljs-number">2073354073</span><br>r[<span class="hljs-number">5</span>] = <span class="hljs-number">167288147</span><br>r[<span class="hljs-number">6</span>] = <span class="hljs-number">1827471542</span><br>r[<span class="hljs-number">7</span>] = <span class="hljs-number">834791014</span><br>r[<span class="hljs-number">8</span>] = <span class="hljs-number">1901409888</span><br>r[<span class="hljs-number">9</span>] = <span class="hljs-number">1990469526</span><br>*(p + <span class="hljs-number">0</span>) : <span class="hljs-number">313959809</span><br>*(p + <span class="hljs-number">1</span>) : <span class="hljs-number">1759055877</span><br>*(p + <span class="hljs-number">2</span>) : <span class="hljs-number">1113101911</span><br>*(p + <span class="hljs-number">3</span>) : <span class="hljs-number">2133832223</span><br>*(p + <span class="hljs-number">4</span>) : <span class="hljs-number">2073354073</span><br>*(p + <span class="hljs-number">5</span>) : <span class="hljs-number">167288147</span><br>*(p + <span class="hljs-number">6</span>) : <span class="hljs-number">1827471542</span><br>*(p + <span class="hljs-number">7</span>) : <span class="hljs-number">834791014</span><br>*(p + <span class="hljs-number">8</span>) : <span class="hljs-number">1901409888</span><br>*(p + <span class="hljs-number">9</span>) : <span class="hljs-number">1990469526</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="3-5指向数组的指针"><a href="#3-5指向数组的指针" class="headerlink" title="3.5指向数组的指针"></a>3.5指向数组的指针</h2><p>您可以先跳过本章，等了解了 C 指针的概念之后，再来学习本章的内容。</p>
+<p>如果您对 C 语言中指针的概念有所了解，那么就可以开始本章的学习。</p>
+<p>组名本身是一个常量指针，意味着它的值是不能被改变的，一旦确定，就不能再指向其他地方。</p>
+<p>因此，在下面的声明中：</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs scss">double balance<span class="hljs-selector-attr">[50]</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>balance</strong> 是一个指向 &amp;balance[0] 的指针，即数组 balance 的第一个元素的地址。因此，下面的程序片段把 <strong>p</strong> 赋值为 <strong>balance</strong> 的第一个元素的地址：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs abnf">double *p<span class="hljs-comment">;</span><br>double balance[<span class="hljs-number">10</span>]<span class="hljs-comment">;</span><br><br><span class="hljs-attribute">p</span> <span class="hljs-operator">=</span> balance<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<p>使用数组名作为常量指针是合法的，反之亦然。因此，*(balance + 4) 是一种访问 balance[4] 数据的合法方式。</p>
+<p>一旦您把第一个元素的地址存储在 p 中，您就可以使用 <em>p、</em>(p+1)、*(p+2) 等来访问数组元素。下面的实例演示了上面讨论到的这些概念：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br> <br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span> <span class="hljs-params">()</span><br>&#123;<br>   <span class="hljs-comment">/* 带有 5 个元素的整型数组 */</span><br>   <span class="hljs-type">double</span> balance[<span class="hljs-number">5</span>] = &#123;<span class="hljs-number">1000.0</span>, <span class="hljs-number">2.0</span>, <span class="hljs-number">3.4</span>, <span class="hljs-number">17.0</span>, <span class="hljs-number">50.0</span>&#125;;<br>   <span class="hljs-type">double</span> *p;<br>   <span class="hljs-type">int</span> i;<br> <br>   p = balance;<br> <br>   <span class="hljs-comment">/* 输出数组中每个元素的值 */</span><br>   <span class="hljs-built_in">printf</span>( <span class="hljs-string">&quot;使用指针的数组值\n&quot;</span>);<br>   <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++ )<br>   &#123;<br>       <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;*(p + %d) : %f\n&quot;</span>,  i, *(p + i) );<br>   &#125;<br> <br>   <span class="hljs-built_in">printf</span>( <span class="hljs-string">&quot;使用 balance 作为地址的数组值\n&quot;</span>);<br>   <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++ )<br>   &#123;<br>       <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;*(balance + %d) : %f\n&quot;</span>,  i, *(balance + i) );<br>   &#125;<br> <br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>当上面的代码被编译和执行时，它会产生下列结果：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs C">使用指针的数组值<br>*(p + <span class="hljs-number">0</span>) : <span class="hljs-number">1000.000000</span><br>*(p + <span class="hljs-number">1</span>) : <span class="hljs-number">2.000000</span><br>*(p + <span class="hljs-number">2</span>) : <span class="hljs-number">3.400000</span><br>*(p + <span class="hljs-number">3</span>) : <span class="hljs-number">17.000000</span><br>*(p + <span class="hljs-number">4</span>) : <span class="hljs-number">50.000000</span><br>使用 balance 作为地址的数组值<br>*(balance + <span class="hljs-number">0</span>) : <span class="hljs-number">1000.000000</span><br>*(balance + <span class="hljs-number">1</span>) : <span class="hljs-number">2.000000</span><br>*(balance + <span class="hljs-number">2</span>) : <span class="hljs-number">3.400000</span><br>*(balance + <span class="hljs-number">3</span>) : <span class="hljs-number">17.000000</span><br>*(balance + <span class="hljs-number">4</span>) : <span class="hljs-number">50.000000</span><br></code></pre></td></tr></table></figure>
+
+<p>在上面的实例中，p 是一个指向 double 型的指针，这意味着它可以存储一个 double 类型的变量。一旦我们有了 p 中的地址，*<strong>p</strong> 将给出存储在 p 中相应地址的值，正如上面实例中所演示的。</p>
+<h2 id="3-6静态数组和动态数组"><a href="#3-6静态数组和动态数组" class="headerlink" title="3.6静态数组和动态数组"></a>3.6静态数组和动态数组</h2><p>在 C 语言中，有两种类型的数组：</p>
+<ul>
+<li>静态数组：编译时分配内存，大小固定。</li>
+<li>动态数组：运行时手动分配内存，大小可变。</li>
+</ul>
+<p>静态数组的生命周期与作用域相关，而动态数组的生命周期由程序员控制。</p>
+<p>在使用动态数组时，需要注意合理地分配和释放内存，以避免内存泄漏和访问无效内存的问题。</p>
+<hr>
+<h3 id="3-6-1静态数组"><a href="#3-6-1静态数组" class="headerlink" title="3.6.1静态数组"></a>3.6.1静态数组</h3><p>静态数组是指在编译时确定大小的数组，其大小在程序运行期间不能改变。</p>
+<p>在 C 语言中，静态数组的内存分配在栈区，通常使用方括号 <strong>[]</strong> 来定义。</p>
+<p>静态数组的特点包括：</p>
+<ul>
+<li>内存分配：静态数组的内存通常分配在栈上，随着函数的调用和返回而自动管理。</li>
+<li>大小固定：在定义时指定大小，且在程序运行过程中不能更改。</li>
+<li>效率：由于在栈上分配内存，访问速度较快。</li>
+<li>生命周期：静态数组的生命周期始于其定义时。如果在函数内部定义，生命周期与函数的调用相同；如果在全局范围定义，生命周期贯穿整个程序运行。</li>
+</ul>
+<p>静态数组的声明和初始化示例：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">int</span> staticArray[<span class="hljs-number">5</span>]; // 静态数组声明<br><span class="hljs-attribute">int</span> staticArray[] = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>&#125;; // 静态数组声明并初始化<br></code></pre></td></tr></table></figure>
+
+<p>对于静态数组，可以使用 sizeof 运算符来获取数组长度，例如：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">int</span> array[] = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>&#125;;<br><span class="hljs-attribute">int</span> length = sizeof(array) / sizeof(array[<span class="hljs-number">0</span>]);<br></code></pre></td></tr></table></figure>
+
+<p>以上代码中 sizeof(array) 返回整个数组所占用的字节数，而 sizeof(array[0]) 返回数组中单个元素的字节数，将两者相除，就得到了数组的长度。</p>
+<p>以上是一个简单的静态数组实例：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span> staticArray[] = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>&#125;; <span class="hljs-comment">// 静态数组声明并初始化</span><br>    <span class="hljs-type">int</span> length = <span class="hljs-keyword">sizeof</span>(staticArray) / <span class="hljs-keyword">sizeof</span>(staticArray[<span class="hljs-number">0</span>]);<br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;静态数组: &quot;</span>);<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; length; i++) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d &quot;</span>, staticArray[i]);<br>    &#125;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\n&quot;</span>);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>以上实例中，我们声明并初始化了一个静态数组 staticArray，它包含了 5 个整数元素，然后我们通过 sizeof 运算符，我们计算了静态数组的长度，并使用循环遍历并打印数组的元素。</p>
+<p>输出结果：</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs tap">静态数组:<span class="hljs-number"> 1 </span>2<span class="hljs-number"> 3 </span>4 5<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="3-6-2动态数组"><a href="#3-6-2动态数组" class="headerlink" title="3.6.2动态数组"></a>3.6.2动态数组</h3><p>动态数组是在运行时通过动态内存分配函数（如 <strong>malloc</strong> 和 <strong>calloc</strong>）手动分配内存的数组。</p>
+<p>动态数组特点如下：</p>
+<ul>
+<li>内存分配：动态数组的内存空间在运行时通过动态内存分配函数手动分配，并存储在堆上。需要使用 <code>malloc</code>、<code>calloc</code> 等函数来申请内存，并使用 <code>free</code> 函数来释放内存。</li>
+<li>大小可变：动态数组的大小在运行时可以根据需要进行调整。可以使用 <code>realloc</code> 函数来重新分配内存，并改变数组的大小。</li>
+<li>生命周期：动态数组的生命周期由程序员控制。需要在使用完数组后手动释放内存，以避免内存泄漏。</li>
+</ul>
+<p>动态数组的声明、内存分配和释放实例：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-type">int</span> size = <span class="hljs-number">5</span>;<br><span class="hljs-type">int</span> *dynamicArray = (<span class="hljs-type">int</span> *)<span class="hljs-built_in">malloc</span>(size * <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int</span>)); <span class="hljs-comment">// 动态数组内存分配</span><br><span class="hljs-comment">// 使用动态数组</span><br><span class="hljs-built_in">free</span>(dynamicArray); <span class="hljs-comment">// 动态数组内存释放</span><br></code></pre></td></tr></table></figure>
+
+<p>动态分配的数组，可以在动态分配内存时保存数组长度，并在需要时使用该长度，例如：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-type">int</span> size = <span class="hljs-number">5</span>; <span class="hljs-comment">// 数组长度</span><br><span class="hljs-type">int</span> *array = <span class="hljs-built_in">malloc</span>(size * <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int</span>));<br><br><span class="hljs-comment">// 使用数组</span><br><br><span class="hljs-built_in">free</span>(array); <span class="hljs-comment">// 释放内存</span><br></code></pre></td></tr></table></figure>
+
+<p>以上代码我们使用 malloc 函数动态分配了一个整型数组，并将长度保存在变量 size 中。然后可以根据需要使用这个长度进行操作，在使用完数组后，使用 free 函数释放内存。</p>
+<blockquote>
+<p><strong>注意：</strong>动态数组的使用需要注意内存管理的问题，确保在不再需要使用数组时释放内存，避免内存泄漏和访问无效的内存位置。</p>
+</blockquote>
+<p>以上是一个简单的动态数组使用实例：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span> size = <span class="hljs-number">5</span>;<br>    <span class="hljs-type">int</span> *dynamicArray = (<span class="hljs-type">int</span> *)<span class="hljs-built_in">malloc</span>(size * <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>)); <span class="hljs-comment">// 动态数组内存分配</span><br><br>    <span class="hljs-keyword">if</span> (dynamicArray == <span class="hljs-literal">NULL</span>) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Memory allocation failed.\n&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    &#125;<br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Enter %d elements: &quot;</span>, size);<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; size; i++) &#123;<br>        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;dynamicArray[i]);<br>    &#125;<br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Dynamic Array: &quot;</span>);<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; size; i++) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d &quot;</span>, dynamicArray[i]);<br>    &#125;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\n&quot;</span>);<br><br>    <span class="hljs-built_in">free</span>(dynamicArray); <span class="hljs-comment">// 动态数组内存释放</span><br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>以上实例中，我们首先声明了一个变量 size 来指定动态数组的大小。</p>
+<p>然后使用 malloc 函数为动态数组分配内存，并通过 sizeof 运算符计算所需的内存大小。</p>
+<p>接下来，通过循环和 scanf 函数，从用户输入中读取元素值并存储到动态数组中。</p>
+<p>最后，使用循环遍历并打印动态数组的元素。在程序结束时，使用 free 函数释放动态数组所占用的内存。</p>
+<p>请注意，在使用动态数组时，需要检查内存分配是否成功（即 dynamicArray 是否为 NULL），以避免在内存分配失败时发生错误。</p>
+<blockquote>
+<p>笔记来源：菜鸟教程</p>
+</blockquote>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left "
+    
+      href="/2024/09/28/C%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%87%BD%E6%95%B0%E3%80%81%E6%8C%87%E9%92%88%EF%BC%88%E5%9B%9B%EF%BC%89/"
+      title="C语言学习笔记-函数、指针（四）"
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+      
+        C语言学习笔记-函数、指针（四）
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2024/09/15/C%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E8%BF%90%E7%AE%97%E7%AC%A6%EF%BC%88%E4%BA%8C%EF%BC%89/"
+      title="C语言学习笔记-运算符（二）"
+     >
+
+    <p class="title-text">
+      
+        C语言学习笔记-运算符（二）
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+
+  <div id="comment-card" class="comment-card">
+    <div class="main-title-bar">
+      <div class="main-title-dot"></div>
+      <div class="main-title">留言 </div>
+    </div>
+    <div id="giscus-container"></div>
+  </div>
+  <script src="https://giscus.app/client.js"
+    data-repo="chaoxiaohan/myblog"
+    data-repo-id="R_kgDOPe4zOQ"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOPe4zOc4CuRDG"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="noborder_light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async>
+  </script>
+  
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2025 超小韓<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+  <script src="/js/toc.js"></script>
+  <script src="/js/test-audio.js"></script>
+  <script src="/js/music-player.js"></script>
+  <script src="/js/search.js"></script>
+</body>
+</html>

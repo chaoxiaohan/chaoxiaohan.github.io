@@ -456,6 +456,7 @@ navbar,
 #page-nav .page-nav-btn,
 .archive-main-card,
 .back-to-top-btn,
+.toc-content,
 .widget,
 .info-card {
   background: var(--card-background);
@@ -2856,48 +2857,48 @@ input[type="range"] {
   transition: background 0.15s ease-out;
 }
 .toc-widget {
-  margin-bottom: 1.5rem;
-  background: var(--widget-bg);
-  border-radius: 8px;
-  padding: 1rem;
-  -webkit-box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  max-height: 80vh;
-  overflow: hidden;
+  margin-bottom: 16px;
+}
+.toc-title {
+  color: var(--widget-title);
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  -webkit-transition: color 0.15s ease-out;
+  -moz-transition: color 0.15s ease-out;
+  -ms-transition: color 0.15s ease-out;
+  transition: color 0.15s ease-out;
   display: -webkit-box;
   display: -moz-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: box;
   display: flex;
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
 }
-.toc-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 0 0 0.8rem 0;
-  color: var(--text-color);
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 0.5rem;
+.toc-title:before {
+  content: '';
+  display: block;
+  height: 14px;
+  width: 4px;
+  border-radius: 2px;
+  background-color: var(--primary);
+  margin-right: 10px;
+  margin-top: 4px;
+  margin-left: -4px;
 }
 .toc-content {
-  font-size: 0.9rem;
-  line-height: 1.4;
+  color: #777;
+  padding: 20px 0 20px 20px;
   overflow-y: auto;
   overflow-x: hidden;
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-  padding-right: 8px;
+  max-height: 60vh;
   scrollbar-width: thin;
-  scrollbar-color: var(--text-color-tertiary) transparent;
+  scrollbar-color: var(--neut-L30) transparent;
+}
+.toc-content a {
+  color: var(--link);
+  text-decoration: none;
+  font-size: 16px;
 }
 .toc-content::-webkit-scrollbar {
   width: 4px;
@@ -2906,11 +2907,11 @@ input[type="range"] {
   background: transparent;
 }
 .toc-content::-webkit-scrollbar-thumb {
-  background: var(--text-color-tertiary);
+  background: var(--neut-L30);
   border-radius: 2px;
 }
 .toc-content::-webkit-scrollbar-thumb:hover {
-  background: var(--text-color-secondary);
+  background: var(--neut-L50);
 }
 .toc-list {
   list-style: none;
@@ -2926,33 +2927,47 @@ input[type="range"] {
   margin: 0.2rem 0;
 }
 .toc-list a {
-  color: var(--text-color-secondary);
+  height: 40px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -moz-box-pack: justify;
+  -ms-flex-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  color: var(--btn-text-neutral-text) !important;
+  font-weight: medium;
+  border-radius: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
+  -webkit-transition: background 0.15s ease-out, color 0.15s ease-out, padding 0.15s ease-out;
+  -moz-transition: background 0.15s ease-out, color 0.15s ease-out, padding 0.15s ease-out;
+  -ms-transition: background 0.15s ease-out, color 0.15s ease-out, padding 0.15s ease-out;
+  transition: background 0.15s ease-out, color 0.15s ease-out, padding 0.15s ease-out;
   text-decoration: none;
-  display: block;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  -webkit-transition: all 0.2s ease;
-  -moz-transition: all 0.2s ease;
-  -ms-transition: all 0.2s ease;
-  transition: all 0.2s ease;
 }
 .toc-list a:hover {
-  color: var(--primary-color);
-  background: var(--hover-bg);
-  -webkit-transform: translateX(3px);
-  -moz-transform: translateX(3px);
-  -ms-transform: translateX(3px);
-  transform: translateX(3px);
+  padding-left: 12px;
+  background: var(--btn-text-hover);
+  color: var(--btn-text-light-text) !important;
 }
 .toc-list a.active {
-  color: var(--primary-color);
-  background: var(--hover-bg);
-  font-weight: 700;
-  border-left: 3px solid var(--primary-color);
-  padding-left: 0.3rem;
+  background: var(--btn-text-active);
+  color: var(--btn-text-content) !important;
+  font-weight: medium;
+  padding-left: 12px;
 }
 .toc-list .toc-number {
-  color: var(--text-color-tertiary);
+  color: var(--neut-L50);
   margin-right: 0.5rem;
   font-size: 0.85rem;
 }
@@ -2960,17 +2975,36 @@ input[type="range"] {
   font-weight: 500;
 }
 .toc-list .toc-level-2 > a {
-  font-size: 0.85rem;
+  font-size: 15px;
+  padding-left: 24px;
+}
+.toc-list .toc-level-2 > a:hover,
+.toc-list .toc-level-2 > a.active {
+  padding-left: 28px;
 }
 .toc-list .toc-level-3 > a {
-  font-size: 0.8rem;
+  font-size: 14px;
+  padding-left: 36px;
   opacity: 0.8;
+}
+.toc-list .toc-level-3 > a:hover,
+.toc-list .toc-level-3 > a.active {
+  padding-left: 40px;
 }
 .toc-list .toc-level-4 > a,
 .toc-list .toc-level-5 > a,
 .toc-list .toc-level-6 > a {
-  font-size: 0.75rem;
+  font-size: 13px;
+  padding-left: 48px;
   opacity: 0.7;
+}
+.toc-list .toc-level-4 > a:hover,
+.toc-list .toc-level-5 > a:hover,
+.toc-list .toc-level-6 > a:hover,
+.toc-list .toc-level-4 > a.active,
+.toc-list .toc-level-5 > a.active,
+.toc-list .toc-level-6 > a.active {
+  padding-left: 52px;
 }
 @media (max-width: 768px) {
   .toc-widget {
