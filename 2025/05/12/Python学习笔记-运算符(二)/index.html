@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+
+
+<html theme="light" showBanner="true" hasBanner="true" > 
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet">
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+<!-- Gaug.es Analytics -->
+<script>
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', 'true');
+    t.setAttribute('data-track-path', 'https://track.gaug.es/track.gif');
+    t.src = 'https://d36ee2fcip1434.cloudfront.net/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+<!-- End Gaug.es Analytics -->
+
+
+  
+  <title>Python学习笔记-运算符（二） | 超小韓の个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="本文详细介绍了Python的算术、比较、赋值、位、逻辑、成员及身份运算符，并总结了它们的优先级。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python学习笔记-运算符（二）">
+<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2025/05/12/Python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E8%BF%90%E7%AE%97%E7%AC%A6(%E4%BA%8C)/index.html">
+<meta property="og:site_name" content="超小韓の个人博客">
+<meta property="og:description" content="本文详细介绍了Python的算术、比较、赋值、位、逻辑、成员及身份运算符，并总结了它们的优先级。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-05-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-23T14:54:28.552Z">
+<meta property="article:author" content="超小韓">
+<meta property="article:tag" content="learn">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/css/music-player.css">
+
+  
+<link rel="stylesheet" href="/css/search.css">
+
+  
+<link rel="stylesheet" href="/css/toc-fix.css">
+
+  
+<link rel="stylesheet" href="/css/code-copy.css">
+
+  
+<link rel="stylesheet" href="/css/mobile-warning.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="/blogBasic/banner.jpg" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>超小韓の个人博客 </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">主页</a>
+    
+      <a class="main-nav-link" href="/archives">文章</a>
+    
+      <a class="main-nav-link" href="/resources">资料</a>
+    
+      <a class="main-nav-link" href="/about">关于我的</a>
+    
+  </nav>
+  <nav id="search-nav">
+    <div id="search-container">
+      <input type="text" id="search-input" placeholder="搜索文章..." autocomplete="off">
+      <div id="search-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20">
+          <path d="M796-121 533-384q-30 26-69.959 40.5T378-329q-108.162 0-183.081-75Q120-479 120-585t75-181q75-75 181.5-75t181 75Q632-691 632-584.85 632-542 618-502q-14 40-42 75l264 262-44 44ZM377-389q81.25 0 138.125-57.5T572-585q0-81-56.875-138.5T377-781q-82.083 0-139.542 57.5Q180-666 180-585t57.458 138.5Q294.917-389 377-389Z"/>
+        </svg>
+      </div>
+      <div id="search-results" class="hidden">
+        <div id="search-results-content"></div>
+      </div>
+    </div>
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">主页</a>
+    
+      <a class="nav-dropdown-link" href="/archives">文章</a>
+    
+      <a class="nav-dropdown-link" href="/resources">资料</a>
+    
+      <a class="nav-dropdown-link" href="/about">关于我的</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=/blogBasic/head.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">超小韓 </div>
+      <div class="dot"></div>
+      <div class="subtitle">生活明朗，万物可爱！ </div>
+      <div class="link-list">
+        
+          <a class="link-btn" href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2537037482&website=www.oicqzone.com" title="QQ"><i class="fa-brands fa-qq"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/353687950" title="哔哩哔哩"><i class="fa-brands fa-bilibili"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/chaoxiaohan/" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        
+          <a class="link-btn" href="mailto:chaoxiaohan@chaoxiaohan.cyou" title="Email"><i class="fa-solid fa-envelope"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+    
+
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">标签</h3>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Compose/" rel="tag">Compose</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CubeMx/" rel="tag">CubeMx</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCv/" rel="tag">OpenCv</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/teach/" rel="tag">teach</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%8D%9A%E5%9B%BE/" rel="tag">博图</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" rel="tag">工程实践</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%A5%BF%E9%97%A8%E5%AD%90%E6%9D%AF/" rel="tag">西门子杯</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%B5%84%E6%BA%90/" rel="tag">资源</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">归档</h3>
+      
+      
+        <a class="archive-link" href="/archives/2025/08 ">
+          八月 2025 
+          <div class="archive-count">4 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/05 ">
+          五月 2025 
+          <div class="archive-count">3 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/04 ">
+          四月 2025 
+          <div class="archive-count">1 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/03 ">
+          三月 2025 
+          <div class="archive-count">2 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2024/09 ">
+          九月 2024 
+          <div class="archive-count">4 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2023/08 ">
+          八月 2023 
+          <div class="archive-count">1 </div>
+        </a>
+      
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">最新文章</h3>
+      <ul>
+        
+          <a class="recent-link" href="/2025/08/22/C%E8%AF%AD%E8%A8%80%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/" title="C语言入门指南" >
+            <div class="recent-link-text">
+              C语言入门指南
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/08/17/C%E8%AF%AD%E8%A8%80%E6%95%99%E7%A8%8B-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%88VS%EF%BC%89/" title="C语言教程-环境搭建（VS）" >
+            <div class="recent-link-text">
+              C语言教程-环境搭建（VS）
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/08/17/learning-resources/" title="学习资源汇总" >
+            <div class="recent-link-text">
+              学习资源汇总
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/08/01/AndroidDevNote/" title="安卓原生开发学习笔记-Kotlin、Compose（一）" >
+            <div class="recent-link-text">
+              安卓原生开发学习笔记-Kotlin、Compose（一）
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/05/12/OpenCv%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%EF%BC%88%E4%B8%80%EF%BC%89/" title="OpenCv学习笔记-（一）" >
+            <div class="recent-link-text">
+              OpenCv学习笔记-（一）
+            </div>
+          </a>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+  <div class="sticky">
+    
+      
+        
+          <div class="toc-widget">
+  <h3 class="toc-title">目录</h3>
+  <div class="toc-content">
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81Python%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-list-text">一、Python算术运算符</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81Python-%E6%AF%94%E8%BE%83%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-list-text">二、Python 比较运算符</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81Python%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-list-text">三、Python赋值运算符</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81Python%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-list-text">四、Python位运算符</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81Python%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-list-text">五、Python逻辑运算符</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E5%85%AD%E3%80%81Python%E6%88%90%E5%91%98%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-list-text">六、Python成员运算符</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E4%B8%83%E3%80%81Python%E8%BA%AB%E4%BB%BD%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-list-text">七、Python身份运算符</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E5%85%AB%E3%80%81Python%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-list-text">八、Python运算符优先级</span></a></li></ol>
+  </div>
+</div>
+
+        
+      
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-Python学习笔记-运算符(二)" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        Python学习笔记-运算符（二）
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2025-05-11T16:00:00.000Z" itemprop="datePublished">2025-05-12</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+    未分类 
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            3.8k 词 
+          </div>
+        </div>
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li></ul>
+
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <h1 id="一、Python算术运算符"><a href="#一、Python算术运算符" class="headerlink" title="一、Python算术运算符"></a>一、Python算术运算符</h1><p>以下假设变量 <strong>a&#x3D;10</strong>，变量 <strong>b&#x3D;21</strong>：</p>
+<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">描述</th>
+<th align="left">实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">+</td>
+<td align="left">加 - 两个对象相加</td>
+<td align="left">a + b 输出结果 31</td>
+</tr>
+<tr>
+<td align="left">-</td>
+<td align="left">减 - 得到负数或是一个数减去另一个数</td>
+<td align="left">a - b 输出结果 -11</td>
+</tr>
+<tr>
+<td align="left">*</td>
+<td align="left">乘 - 两个数相乘或是返回一个被重复若干次的字符串</td>
+<td align="left">a * b 输出结果 210</td>
+</tr>
+<tr>
+<td align="left">&#x2F;</td>
+<td align="left">除 - x 除以 y</td>
+<td align="left">b &#x2F; a 输出结果 2.1</td>
+</tr>
+<tr>
+<td align="left">%</td>
+<td align="left">取模 - 返回除法的余数</td>
+<td align="left">b % a 输出结果 1</td>
+</tr>
+<tr>
+<td align="left">**</td>
+<td align="left">幂 - 返回x的y次幂</td>
+<td align="left">a**b 为10的21次方</td>
+</tr>
+<tr>
+<td align="left">&#x2F;&#x2F;</td>
+<td align="left">取整除 - 往小的方向取整数</td>
+<td align="left"><code>&gt;&gt;&gt; 9//2 4 &gt;&gt;&gt; -9//2 -5</code></td>
+</tr>
+</tbody></table>
+<h1 id="二、Python-比较运算符"><a href="#二、Python-比较运算符" class="headerlink" title="二、Python 比较运算符"></a>二、Python 比较运算符</h1><p>以下假设变量 a 为 10，变量 b 为20：</p>
+<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">描述</th>
+<th align="left">实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">&#x3D;&#x3D;</td>
+<td align="left">等于 - 比较对象是否相等</td>
+<td align="left">(a &#x3D;&#x3D; b) 返回 False。</td>
+</tr>
+<tr>
+<td align="left">!&#x3D;</td>
+<td align="left">不等于 - 比较两个对象是否不相等</td>
+<td align="left">(a !&#x3D; b) 返回 True。</td>
+</tr>
+<tr>
+<td align="left">&gt;</td>
+<td align="left">大于 - 返回x是否大于y</td>
+<td align="left">(a &gt; b) 返回 False。</td>
+</tr>
+<tr>
+<td align="left">&lt;</td>
+<td align="left">小于 - 返回x是否小于y。所有比较运算符返回1表示真，返回0表示假。这分别与特殊的变量True和False等价。注意，这些变量名的大写。</td>
+<td align="left">(a &lt; b) 返回 True。</td>
+</tr>
+<tr>
+<td align="left">&gt;&#x3D;</td>
+<td align="left">大于等于 - 返回x是否大于等于y。</td>
+<td align="left">(a &gt;&#x3D; b) 返回 False。</td>
+</tr>
+<tr>
+<td align="left">&lt;&#x3D;</td>
+<td align="left">小于等于 - 返回x是否小于等于y。</td>
+<td align="left">(a &lt;&#x3D; b) 返回 True。</td>
+</tr>
+</tbody></table>
+<h1 id="三、Python赋值运算符"><a href="#三、Python赋值运算符" class="headerlink" title="三、Python赋值运算符"></a>三、Python赋值运算符</h1><p>以下假设变量a为10，变量b为20：</p>
+<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">描述</th>
+<th align="left">实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">&#x3D;</td>
+<td align="left">简单的赋值运算符</td>
+<td align="left">c &#x3D; a + b 将 a + b 的运算结果赋值为 c</td>
+</tr>
+<tr>
+<td align="left">+&#x3D;</td>
+<td align="left">加法赋值运算符</td>
+<td align="left">c +&#x3D; a 等效于 c &#x3D; c + a</td>
+</tr>
+<tr>
+<td align="left">-&#x3D;</td>
+<td align="left">减法赋值运算符</td>
+<td align="left">c -&#x3D; a 等效于 c &#x3D; c - a</td>
+</tr>
+<tr>
+<td align="left">*&#x3D;</td>
+<td align="left">乘法赋值运算符</td>
+<td align="left">c *&#x3D; a 等效于 c &#x3D; c * a</td>
+</tr>
+<tr>
+<td align="left">&#x2F;&#x3D;</td>
+<td align="left">除法赋值运算符</td>
+<td align="left">c &#x2F;&#x3D; a 等效于 c &#x3D; c &#x2F; a</td>
+</tr>
+<tr>
+<td align="left">%&#x3D;</td>
+<td align="left">取模赋值运算符</td>
+<td align="left">c %&#x3D; a 等效于 c &#x3D; c % a</td>
+</tr>
+<tr>
+<td align="left">**&#x3D;</td>
+<td align="left">幂赋值运算符</td>
+<td align="left">c **&#x3D; a 等效于 c &#x3D; c ** a</td>
+</tr>
+<tr>
+<td align="left">&#x2F;&#x2F;&#x3D;</td>
+<td align="left">取整除赋值运算符</td>
+<td align="left">c &#x2F;&#x2F;&#x3D; a 等效于 c &#x3D; c &#x2F;&#x2F; a</td>
+</tr>
+<tr>
+<td align="left">:&#x3D;</td>
+<td align="left">海象运算符，这个运算符的主要目的是在表达式中同时进行赋值和返回赋值的值。<strong>Python3.8 版本新增运算符</strong>。</td>
+<td align="left">在这个示例中，赋值表达式可以避免调用 len() 两次:<code>if (n := len(a)) &gt; 10:    print(f&quot;List is too long (&#123;n&#125; elements, expected &lt;= 10)&quot;)</code></td>
+</tr>
+</tbody></table>
+<p> Python 3.8 及更高版本中，引入了一种新的语法特性，称为”海象运算符”（Walrus Operator），它使用 <strong>:&#x3D;</strong> 符号。这个运算符的主要目的是在表达式中同时进行赋值和返回赋值的值。</p>
+<p>使用海象运算符可以在一些情况下简化代码，尤其是在需要在表达式中使用赋值结果的情况下。这对于简化循环条件或表达式中的重复计算很有用。</p>
+<p>下面是一个简单的实例，演示了海象运算符的使用：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># 传统写法</span><br><span class="hljs-attribute">n</span> = <span class="hljs-number">10</span><br><span class="hljs-attribute">if</span> n &gt; <span class="hljs-number">5</span>:<br>    <span class="hljs-attribute">print</span>(n)<br><br><span class="hljs-comment"># 使用海象运算符</span><br><span class="hljs-attribute">if</span> (n := <span class="hljs-number">10</span>) &gt; <span class="hljs-number">5</span>:<br>    <span class="hljs-attribute">print</span>(n)<br></code></pre></td></tr></table></figure>
+
+<p>   if (n :&#x3D; 10) &gt; 5:</p>
+<p>   ：这是使用海象运算符（:&#x3D;）的写法。海象运算符在表达式中进行赋值操作。</p>
+<ul>
+<li><code>(n := 10)</code>：将变量 <code>n</code> 赋值为 10，同时返回这个赋值结果。</li>
+<li><code>&gt; 5</code>：检查赋值后的 <code>n</code> 是否大于 5。如果条件为真，则执行接下来的代码块。</li>
+</ul>
+<p><code>print(n)</code>：如果条件为真，打印变量 <code>n</code> 的值（即 10）。</p>
+<p><strong>海象运算符的优点：</strong></p>
+<ul>
+<li>海象运算符（<code>:=</code>）允许在表达式内部进行赋值，这可以减少代码的重复，提高代码的可读性和简洁性。</li>
+<li>在上述例子中，传统写法需要单独一行来赋值 <code>n</code>，然后在 <code>if</code> 语句中进行条件检查。而使用海象运算符的写法可以在 <code>if</code> 语句中直接进行赋值和条件检查。</li>
+</ul>
+<h1 id="四、Python位运算符"><a href="#四、Python位运算符" class="headerlink" title="四、Python位运算符"></a>四、Python位运算符</h1><p>按位运算符是把数字看作二进制来进行计算的。Python中的按位运算法则如下：</p>
+<p>下表中变量 a 为 60，b 为 13二进制格式如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-string">a</span> <span class="hljs-string">=</span> <span class="hljs-number">0011 </span><span class="hljs-number">1100</span><br><br><span class="hljs-string">b</span> <span class="hljs-string">=</span> <span class="hljs-number">0000 </span><span class="hljs-number">1101</span><br><br><span class="hljs-string">-----------------</span><br><br><span class="hljs-string">a&amp;b</span> <span class="hljs-string">=</span> <span class="hljs-number">0000 </span><span class="hljs-number">1100</span><br><br><span class="hljs-string">a|b</span> <span class="hljs-string">=</span> <span class="hljs-number">0011 </span><span class="hljs-number">1101</span><br><br><span class="hljs-string">a^b</span> <span class="hljs-string">=</span> <span class="hljs-number">0011 </span><span class="hljs-number">0001</span><br><br><span class="hljs-string">~a</span>  <span class="hljs-string">=</span> <span class="hljs-number">1100 </span><span class="hljs-number">0011</span><br></code></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">描述</th>
+<th align="left">实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">&amp;</td>
+<td align="left">按位与运算符：参与运算的两个值,如果两个相应位都为1,则该位的结果为1,否则为0</td>
+<td align="left">(a &amp; b) 输出结果 12 ，二进制解释： 0000 1100</td>
+</tr>
+<tr>
+<td align="left">|</td>
+<td align="left">按位或运算符：只要对应的二个二进位有一个为1时，结果位就为1。</td>
+<td align="left">(a | b) 输出结果 61 ，二进制解释： 0011 1101</td>
+</tr>
+<tr>
+<td align="left">^</td>
+<td align="left">按位异或运算符：当两对应的二进位相异时，结果为1</td>
+<td align="left">(a ^ b) 输出结果 49 ，二进制解释： 0011 0001</td>
+</tr>
+<tr>
+<td align="left">~</td>
+<td align="left">按位取反运算符：对数据的每个二进制位取反,即把1变为0,把0变为1。**~x** 类似于 <strong>-x-1</strong></td>
+<td align="left">(~a ) 输出结果 -61 ，二进制解释： 1100 0011， 在一个有符号二进制数的补码形式。</td>
+</tr>
+<tr>
+<td align="left">&lt;&lt;</td>
+<td align="left">左移动运算符：运算数的各二进位全部左移若干位，由”&lt;&lt;”右边的数指定移动的位数，高位丢弃，低位补0。</td>
+<td align="left">a &lt;&lt; 2 输出结果 240 ，二进制解释： 1111 0000</td>
+</tr>
+<tr>
+<td align="left">&gt;&gt;</td>
+<td align="left">右移动运算符：把”&gt;&gt;”左边的运算数的各二进位全部右移若干位，”&gt;&gt;”右边的数指定移动的位数</td>
+<td align="left">a &gt;&gt; 2 输出结果 15 ，二进制解释： 0000 1111</td>
+</tr>
+</tbody></table>
+<h1 id="五、Python逻辑运算符"><a href="#五、Python逻辑运算符" class="headerlink" title="五、Python逻辑运算符"></a>五、Python逻辑运算符</h1><p>Python语言支持逻辑运算符，以下假设变量 a 为 10, b为 20:</p>
+<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">逻辑表达式</th>
+<th align="left">描述</th>
+<th align="left">实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">and</td>
+<td align="left">x and y</td>
+<td align="left">布尔”与” - 如果 x 为 False，x and y 返回 x 的值，否则返回 y 的计算值。</td>
+<td align="left">(a and b) 返回 20。</td>
+</tr>
+<tr>
+<td align="left">or</td>
+<td align="left">x or y</td>
+<td align="left">布尔”或” - 如果 x 是 True，它返回 x 的值，否则它返回 y 的计算值。</td>
+<td align="left">(a or b) 返回 10。</td>
+</tr>
+<tr>
+<td align="left">not</td>
+<td align="left">not x</td>
+<td align="left">布尔”非” - 如果 x 为 True，返回 False 。如果 x 为 False，它返回 True。</td>
+<td align="left">not(a and b) 返回 False</td>
+</tr>
+</tbody></table>
+<h1 id="六、Python成员运算符"><a href="#六、Python成员运算符" class="headerlink" title="六、Python成员运算符"></a>六、Python成员运算符</h1><p>除了以上的一些运算符之外，Python还支持成员运算符，测试实例中包含了一系列的成员，包括字符串，列表或元组。</p>
+<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">描述</th>
+<th align="left">实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">in</td>
+<td align="left">如果在指定的序列中找到值返回 True，否则返回 False。</td>
+<td align="left">x 在 y 序列中 , 如果 x 在 y 序列中返回 True。</td>
+</tr>
+<tr>
+<td align="left">not in</td>
+<td align="left">如果在指定的序列中没有找到值返回 True，否则返回 False。</td>
+<td align="left">x 不在 y 序列中 , 如果 x 不在 y 序列中返回 True。</td>
+</tr>
+</tbody></table>
+<h1 id="七、Python身份运算符"><a href="#七、Python身份运算符" class="headerlink" title="七、Python身份运算符"></a>七、Python身份运算符</h1><p>身份运算符用于比较两个对象的存储单元</p>
+<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">描述</th>
+<th align="left">实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">is</td>
+<td align="left">is 是判断两个标识符是不是引用自一个对象</td>
+<td align="left"><strong>x is y</strong>, 类似 <strong>id(x) &#x3D;&#x3D; id(y)</strong> , 如果引用的是同一个对象则返回 True，否则返回 False</td>
+</tr>
+<tr>
+<td align="left">is not</td>
+<td align="left">is not 是判断两个标识符是不是引用自不同对象</td>
+<td align="left"><strong>x is not y</strong> ， 类似 **id(x) !&#x3D; id(y)**。如果引用的不是同一个对象则返回结果 True，否则返回 False。</td>
+</tr>
+</tbody></table>
+<p><strong>注：</strong> <a target="_blank" rel="noopener" href="https://www.runoob.com/python/python-func-id.html">id()</a> 函数用于获取对象内存地址。</p>
+<p>is 与 &#x3D;&#x3D; 区别：</p>
+<p>is 用于判断两个变量引用对象是否为同一个， &#x3D;&#x3D; 用于判断引用变量的值是否相等。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python">&gt;&gt;&gt;a = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]<br><span class="hljs-meta">&gt;&gt;&gt; </span>b = a<br><span class="hljs-meta">&gt;&gt;&gt; </span>b <span class="hljs-keyword">is</span> a <br><span class="hljs-literal">True</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>b == a<br><span class="hljs-literal">True</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>b = a[:]<br><span class="hljs-meta">&gt;&gt;&gt; </span>b <span class="hljs-keyword">is</span> a<br><span class="hljs-literal">False</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>b == a<br><span class="hljs-literal">True</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="八、Python运算符优先级"><a href="#八、Python运算符优先级" class="headerlink" title="八、Python运算符优先级"></a>八、Python运算符优先级</h1><p>以下表格列出了从最高到最低优先级的所有运算符， 相同单元格内的运算符具有相同优先级。 运算符均指二元运算，除非特别指出。 相同单元格内的运算符从左至右分组（除了幂运算是从右至左分组）：</p>
+<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>(expressions...)</code>,<code>[expressions...]</code>, <code>&#123;key: value...&#125;</code>, <code>&#123;expressions...&#125;</code></td>
+<td align="left">圆括号的表达式</td>
+</tr>
+<tr>
+<td align="left"><code>x[index]</code>, <code>x[index:index]</code>, <code>x(arguments...)</code>, <code>x.attribute</code></td>
+<td align="left">读取，切片，调用，属性引用</td>
+</tr>
+<tr>
+<td align="left">await x</td>
+<td align="left">await 表达式</td>
+</tr>
+<tr>
+<td align="left"><code>**</code></td>
+<td align="left">乘方(指数)</td>
+</tr>
+<tr>
+<td align="left"><code>+x</code>, <code>-x</code>, <code>~x</code></td>
+<td align="left">正，负，按位非 NOT</td>
+</tr>
+<tr>
+<td align="left"><code>*</code>, <code>@</code>, <code>/</code>, <code>//</code>, <code>%</code></td>
+<td align="left">乘，矩阵乘，除，整除，取余</td>
+</tr>
+<tr>
+<td align="left"><code>+</code>, <code>-</code></td>
+<td align="left">加和减</td>
+</tr>
+<tr>
+<td align="left"><code>&lt;&lt;</code>, <code>&gt;&gt;</code></td>
+<td align="left">移位</td>
+</tr>
+<tr>
+<td align="left"><code>&amp;</code></td>
+<td align="left">按位与 AND</td>
+</tr>
+<tr>
+<td align="left"><code>^</code></td>
+<td align="left">按位异或 XOR</td>
+</tr>
+<tr>
+<td align="left">&#96;</td>
+<td align="left">&#96;</td>
+</tr>
+<tr>
+<td align="left"><code>in,not in, is,is not, &lt;, &lt;=, &gt;, &gt;=, !=, ==</code></td>
+<td align="left">比较运算，包括成员检测和标识号检测</td>
+</tr>
+<tr>
+<td align="left"><code>not x</code></td>
+<td align="left">逻辑非 NOT</td>
+</tr>
+<tr>
+<td align="left"><code>and</code></td>
+<td align="left">逻辑与 AND</td>
+</tr>
+<tr>
+<td align="left"><code>or</code></td>
+<td align="left">逻辑或 OR</td>
+</tr>
+<tr>
+<td align="left"><code>if -- else</code></td>
+<td align="left">条件表达式</td>
+</tr>
+<tr>
+<td align="left"><code>lambda</code></td>
+<td align="left">lambda 表达式</td>
+</tr>
+<tr>
+<td align="left"><code>:=</code></td>
+<td align="left">赋值表达式</td>
+</tr>
+</tbody></table>
+<p><strong>注意：</strong>Python3 已不支持 <strong>&lt;&gt;</strong> 运算符，可以使用 <strong>!&#x3D;</strong> 代替，如果你一定要使用这种比较运算符，可以使用以下的方式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">from</span> __future__ <span class="hljs-keyword">import</span> barry_as_FLUFL<br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-number">1</span> &lt;&gt; <span class="hljs-number">2</span><br><span class="hljs-literal">True</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>笔记来源：菜鸟教程</p>
+</blockquote>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left "
+    
+      href="/2025/05/12/OpenCv%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%EF%BC%88%E4%B8%80%EF%BC%89/"
+      title="OpenCv学习笔记-（一）"
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+      
+        OpenCv学习笔记-（一）
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2025/05/01/%E8%A5%BF%E9%97%A8%E5%AD%90%E6%9D%AF-%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E8%B5%84%E6%96%99/"
+      title="西门子杯-工程实践资料"
+     >
+
+    <p class="title-text">
+      
+        西门子杯-工程实践资料
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+
+  <div id="comment-card" class="comment-card">
+    <div class="main-title-bar">
+      <div class="main-title-dot"></div>
+      <div class="main-title">留言 </div>
+    </div>
+    <div id="giscus-container"></div>
+  </div>
+  <script src="https://giscus.app/client.js"
+    data-repo="chaoxiaohan/myblog"
+    data-repo-id="R_kgDOPe4zOQ"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOPe4zOc4CuRDG"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="noborder_light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async>
+  </script>
+  
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2025 超小韓<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+  <script src="/js/toc.js"></script>
+  <script src="/js/test-audio.js"></script>
+  <script src="/js/music-player.js"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/code-copy.js"></script>
+  <script src="/js/mobile-warning.js"></script>
+</body>
+</html>
