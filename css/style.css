@@ -145,6 +145,7 @@
     --link-hover-bg: oklch(0.95 0.025 var(--primary-hue));
     --link-active-bg: oklch(0.9 0.05 var(--primary-hue));
     --article-code-bg: oklch(0.95 0.02 var(--primary-hue));
+    --article-block: oklch(0.98 0.005 var(--primary-hue));
     --blockquote-bg: oklch(0.98 0.005 var(--primary-hue));
     --badge-bg: oklch(0.95 0.02 var(--primary-hue));
     --text-on-light: oklch(0.55 0.12 var(--primary-hue));
@@ -174,6 +175,7 @@
     --link-hover-bg: #e2f0ff;
     --link-active-bg: #c6e1ff;
     --article-code-bg: #e5f0fc;
+    --article-block: #f6f9fc;
     --blockquote-bg: #f6f9fc;
     --badge-bg: #e5f0fc;
     --text-on-light: #3275b4;
@@ -2657,6 +2659,150 @@ pre .coffeescript .title {
 pre .keyword,
 pre .javascript .function {
   color: #c9c;
+}
+pre code .hljs-comment,
+pre code .hljs-title {
+  color: #999;
+}
+pre code .hljs-variable,
+pre code .hljs-attribute,
+pre code .hljs-tag,
+pre code .hljs-regexp,
+pre code .hljs-deletion {
+  color: #f2777a;
+}
+pre code .hljs-number,
+pre code .hljs-built_in,
+pre code .hljs-literal,
+pre code .hljs-params,
+pre code .hljs-constant {
+  color: #f99157;
+}
+pre code .hljs-class,
+pre code .hljs-title.class_,
+pre code .hljs-title.class_.inherited__ {
+  color: #9c9;
+}
+pre code .hljs-string,
+pre code .hljs-symbol,
+pre code .hljs-bullet,
+pre code .hljs-addition {
+  color: #9c9;
+}
+pre code .hljs-meta {
+  color: #6cc;
+}
+pre code .hljs-function,
+pre code .hljs-title.function_,
+pre code .hljs-section {
+  color: #69c;
+}
+pre code .hljs-keyword,
+pre code .hljs-selector-tag,
+pre code .hljs-type {
+  color: #c9c;
+}
+:root[theme='light'] .article-entry .highlight,
+:root[theme='light'] .article-entry pre {
+  color: #333;
+}
+:root[theme='light'] pre .comment,
+:root[theme='light'] pre .title {
+  color: #666;
+}
+:root[theme='light'] pre .variable,
+:root[theme='light'] pre .attribute,
+:root[theme='light'] pre .tag,
+:root[theme='light'] pre .regexp,
+:root[theme='light'] pre .ruby .constant,
+:root[theme='light'] pre .xml .tag .title,
+:root[theme='light'] pre .xml .pi,
+:root[theme='light'] pre .xml .doctype,
+:root[theme='light'] pre .html .doctype,
+:root[theme='light'] pre .css .id,
+:root[theme='light'] pre .css .class,
+:root[theme='light'] pre .css .pseudo {
+  color: #d73a49;
+}
+:root[theme='light'] pre .number,
+:root[theme='light'] pre .preprocessor,
+:root[theme='light'] pre .built_in,
+:root[theme='light'] pre .literal,
+:root[theme='light'] pre .params,
+:root[theme='light'] pre .constant {
+  color: #e36209;
+}
+:root[theme='light'] pre .class,
+:root[theme='light'] pre .ruby .class .title,
+:root[theme='light'] pre .css .rules .attribute {
+  color: #22863a;
+}
+:root[theme='light'] pre .string,
+:root[theme='light'] pre .value,
+:root[theme='light'] pre .inheritance,
+:root[theme='light'] pre .header,
+:root[theme='light'] pre .ruby .symbol,
+:root[theme='light'] pre .xml .cdata {
+  color: #22863a;
+}
+:root[theme='light'] pre .css .hexcolor {
+  color: #032f62;
+}
+:root[theme='light'] pre .function,
+:root[theme='light'] pre .python .decorator,
+:root[theme='light'] pre .python .title,
+:root[theme='light'] pre .ruby .function .title,
+:root[theme='light'] pre .ruby .title .keyword,
+:root[theme='light'] pre .perl .sub,
+:root[theme='light'] pre .javascript .title,
+:root[theme='light'] pre .coffeescript .title {
+  color: #005cc5;
+}
+:root[theme='light'] pre .keyword,
+:root[theme='light'] pre .javascript .function {
+  color: #6f42c1;
+}
+:root[theme='light'] pre code .hljs-comment,
+:root[theme='light'] pre code .hljs-title {
+  color: #666;
+}
+:root[theme='light'] pre code .hljs-variable,
+:root[theme='light'] pre code .hljs-attribute,
+:root[theme='light'] pre code .hljs-tag,
+:root[theme='light'] pre code .hljs-regexp,
+:root[theme='light'] pre code .hljs-deletion {
+  color: #d73a49;
+}
+:root[theme='light'] pre code .hljs-number,
+:root[theme='light'] pre code .hljs-built_in,
+:root[theme='light'] pre code .hljs-literal,
+:root[theme='light'] pre code .hljs-params,
+:root[theme='light'] pre code .hljs-constant {
+  color: #e36209;
+}
+:root[theme='light'] pre code .hljs-class,
+:root[theme='light'] pre code .hljs-title.class_,
+:root[theme='light'] pre code .hljs-title.class_.inherited__ {
+  color: #22863a;
+}
+:root[theme='light'] pre code .hljs-string,
+:root[theme='light'] pre code .hljs-symbol,
+:root[theme='light'] pre code .hljs-bullet,
+:root[theme='light'] pre code .hljs-addition {
+  color: #22863a;
+}
+:root[theme='light'] pre code .hljs-meta {
+  color: #032f62;
+}
+:root[theme='light'] pre code .hljs-function,
+:root[theme='light'] pre code .hljs-title.function_,
+:root[theme='light'] pre code .hljs-section {
+  color: #005cc5;
+}
+:root[theme='light'] pre code .hljs-keyword,
+:root[theme='light'] pre code .hljs-selector-tag,
+:root[theme='light'] pre code .hljs-type {
+  color: #6f42c1;
 }
 .back-to-top-wrapper {
   width: 60px;

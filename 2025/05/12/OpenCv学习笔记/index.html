@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+
+
+<html theme="light" showBanner="true" hasBanner="true" > 
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet">
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+<!-- Gaug.es Analytics -->
+<script>
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', 'true');
+    t.setAttribute('data-track-path', 'https://track.gaug.es/track.gif');
+    t.src = 'https://d36ee2fcip1434.cloudfront.net/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+<!-- End Gaug.es Analytics -->
+
+
+  
+  <title>OpenCv学习笔记 | 超小韓の个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="本文作为OpenCV学习入门，介绍了其基础概念、安装与配置方法，并通过一个简单的图像处理示例，演示了基本使用流程，为后续学习奠定基础。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenCv学习笔记">
+<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2025/05/12/OpenCv%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="超小韓の个人博客">
+<meta property="og:description" content="本文作为OpenCV学习入门，介绍了其基础概念、安装与配置方法，并通过一个简单的图像处理示例，演示了基本使用流程，为后续学习奠定基础。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-05-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-09-03T04:33:06.358Z">
+<meta property="article:author" content="超小韓">
+<meta property="article:tag" content="learn">
+<meta property="article:tag" content="OpenCv">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/css/music-player.css">
+
+  
+<link rel="stylesheet" href="/css/search.css">
+
+  
+<link rel="stylesheet" href="/css/toc-fix.css">
+
+  
+<link rel="stylesheet" href="/css/code-copy.css">
+
+  
+<link rel="stylesheet" href="/css/mobile-warning.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="/blogBasic/banner.jpg" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>超小韓の个人博客 </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">主页</a>
+    
+      <a class="main-nav-link" href="/archives">文章</a>
+    
+      <a class="main-nav-link" href="/resources">资料</a>
+    
+      <a class="main-nav-link" href="/about">关于我的</a>
+    
+  </nav>
+  <nav id="search-nav">
+    <div id="search-container">
+      <select id="search-mode-selector" name="search-mode">
+        <option value="exact">精确</option>
+        <option value="fuzzy">模糊</option>
+      </select>
+      <input type="text" id="search-input" placeholder="搜索文章..." autocomplete="off">
+      <div id="search-results" class="hidden">
+        <div id="search-results-content"></div>
+      </div>
+    </div>
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">主页</a>
+    
+      <a class="nav-dropdown-link" href="/archives">文章</a>
+    
+      <a class="nav-dropdown-link" href="/resources">资料</a>
+    
+      <a class="nav-dropdown-link" href="/about">关于我的</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=/blogBasic/head.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">超小韓 </div>
+      <div class="dot"></div>
+      <div class="subtitle">生活明朗，万物可爱！ </div>
+      <div class="link-list">
+        
+          <a class="link-btn" href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2537037482&website=www.oicqzone.com" title="QQ"><i class="fa-brands fa-qq"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/353687950" title="哔哩哔哩"><i class="fa-brands fa-bilibili"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/chaoxiaohan/" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        
+          <a class="link-btn" href="mailto:chaoxiaohan@chaoxiaohan.cyou" title="Email"><i class="fa-solid fa-envelope"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+    
+
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">标签</h3>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Compose/" rel="tag">Compose</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CubeMx/" rel="tag">CubeMx</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCv/" rel="tag">OpenCv</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/resourse/" rel="tag">resourse</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/teach/" rel="tag">teach</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%8D%9A%E5%9B%BE/" rel="tag">博图</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" rel="tag">工程实践</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%A5%BF%E9%97%A8%E5%AD%90%E6%9D%AF/" rel="tag">西门子杯</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">归档</h3>
+      
+      
+        <a class="archive-link" href="/archives/2025/08 ">
+          八月 2025 
+          <div class="archive-count">1 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/07 ">
+          七月 2025 
+          <div class="archive-count">3 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/05 ">
+          五月 2025 
+          <div class="archive-count">3 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/04 ">
+          四月 2025 
+          <div class="archive-count">1 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/03 ">
+          三月 2025 
+          <div class="archive-count">2 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2024/09 ">
+          九月 2024 
+          <div class="archive-count">4 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2023/08 ">
+          八月 2023 
+          <div class="archive-count">1 </div>
+        </a>
+      
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">最新文章</h3>
+      <ul>
+        
+          <a class="recent-link" href="/2025/08/04/AndroidDevNote/" title="安卓原生开发学习笔记-Kotlin、Compose（一）" >
+            <div class="recent-link-text">
+              安卓原生开发学习笔记-Kotlin、Compose（一）
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/07/22/C%E8%AF%AD%E8%A8%80%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/" title="C语言入门指南" >
+            <div class="recent-link-text">
+              C语言入门指南
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/07/17/C%E8%AF%AD%E8%A8%80%E6%95%99%E7%A8%8B-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%88VS%EF%BC%89/" title="C语言教程-环境搭建（VS）" >
+            <div class="recent-link-text">
+              C语言教程-环境搭建（VS）
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/07/05/learning-resources/" title="学习资源汇总" >
+            <div class="recent-link-text">
+              学习资源汇总
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/05/12/Python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E8%BF%90%E7%AE%97%E7%AC%A6(%E4%BA%8C)/" title="Python学习笔记-运算符（二）" >
+            <div class="recent-link-text">
+              Python学习笔记-运算符（二）
+            </div>
+          </a>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+  <div class="sticky">
+    
+      
+        
+          <div class="toc-widget">
+  <h3 class="toc-title">目录</h3>
+  <div class="toc-content">
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C"><span class="toc-list-text">一、基础操作</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E8%AF%BB%E5%8F%96%E6%98%BE%E7%A4%BA%E5%9B%BE%E7%89%87"><span class="toc-list-text">读取显示图片</span></a></li></ol></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80"><span class="toc-list-text">二、图像处理基础</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-1%E5%9B%BE%E5%83%8F%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-list-text">2.1图像基本操作</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-2%E5%9B%BE%E5%83%8F%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97"><span class="toc-list-text">2.2图像算术运算</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-1%E5%9F%BA%E7%A1%80%E8%BF%90%E7%AE%97"><span class="toc-list-text">2.2.1基础运算</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-2%E5%9B%BE%E5%83%8F%E4%BD%8D%E8%BF%90%E7%AE%97-AND-OR-NOT-XOR"><span class="toc-list-text">2.2.2图像位运算 (AND, OR, NOT, XOR)</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-2-3%E5%9B%BE%E5%83%8F%E6%B7%B7%E5%90%88"><span class="toc-list-text">2.2.3图像混合</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-3%E5%9B%BE%E5%83%8F%E9%98%88%E5%80%BC%E5%A4%84%E7%90%86"><span class="toc-list-text">2.3图像阈值处理</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-3-1%E7%AE%80%E5%8D%95%E9%98%88%E5%80%BC%E5%A4%84%E7%90%86"><span class="toc-list-text">2.3.1简单阈值处理</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-3-2%E8%87%AA%E9%80%82%E5%BA%94%E9%98%88%E5%80%BC%E5%A4%84%E7%90%86"><span class="toc-list-text">2.3.2自适应阈值处理</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-3-3Otsu%E2%80%99s-%E4%BA%8C%E5%80%BC%E5%8C%96"><span class="toc-list-text">2.3.3Otsu’s 二值化</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-4%E5%9B%BE%E5%83%8F%E5%B9%B3%E6%BB%91%E5%A4%84%E7%90%86"><span class="toc-list-text">2.4图像平滑处理</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-4-1%E5%9D%87%E5%80%BC%E6%BB%A4%E6%B3%A2"><span class="toc-list-text">2.4.1均值滤波</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-4-2%E9%AB%98%E6%96%AF%E6%BB%A4%E6%B3%A2"><span class="toc-list-text">2.4.2高斯滤波</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-4-3%E4%B8%AD%E5%80%BC%E6%BB%A4%E6%B3%A2"><span class="toc-list-text">2.4.3中值滤波</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-4-4%E5%8F%8C%E8%BE%B9%E6%BB%A4%E6%B3%A2"><span class="toc-list-text">2.4.4双边滤波</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-5%E5%9B%BE%E5%83%8F%E7%9A%84%E9%A2%9C%E8%89%B2%E7%A9%BA%E9%97%B4%E4%B8%8E%E8%BD%AC%E6%8D%A2"><span class="toc-list-text">2.5图像的颜色空间与转换</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-6%E5%9B%BE%E5%83%8F%E7%9A%84%E5%A4%A7%E5%B0%8F%E8%B0%83%E6%95%B4%E4%B8%8E%E8%A3%81%E5%89%AA"><span class="toc-list-text">2.6图像的大小调整与裁剪</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-7%E5%9B%BE%E5%83%8F%E5%B9%B3%E6%BB%91%E4%B8%8E%E5%8E%BB%E5%99%AA%EF%BC%88%E6%A8%A1%E7%B3%8A%E5%A4%84%E7%90%86%EF%BC%89"><span class="toc-list-text">2.7图像平滑与去噪（模糊处理）</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-8%E5%9B%BE%E5%83%8F%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B"><span class="toc-list-text">2.8图像边缘检测</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-8-1-Canny-%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B"><span class="toc-list-text">2.8.1.Canny 边缘检测</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#2-8-1-1-Canny-%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B%E7%9A%84%E6%AD%A5%E9%AA%A4"><span class="toc-list-text">2.8.1.1 Canny 边缘检测的步骤</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#2-8-1-2-%E4%BD%BF%E7%94%A8-OpenCV-%E5%AE%9E%E7%8E%B0-Canny-%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B"><span class="toc-list-text">2.8.1.2 使用 OpenCV 实现 Canny 边缘检测</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-8-2Sobel-%E7%AE%97%E5%AD%90"><span class="toc-list-text">2.8.2Sobel 算子</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#2-8-2-1-Sobel-%E7%AE%97%E5%AD%90%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-list-text">2.8.2.1 Sobel 算子的原理</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#2-8-2-2-%E4%BD%BF%E7%94%A8-OpenCV-%E5%AE%9E%E7%8E%B0-Sobel-%E7%AE%97%E5%AD%90"><span class="toc-list-text">2.8.2.2 使用 OpenCV 实现 Sobel 算子</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-8-3-Laplacian-%E7%AE%97%E5%AD%90"><span class="toc-list-text">2.8.3 Laplacian 算子</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#2-8-3-1-Laplacian-%E7%AE%97%E5%AD%90%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-list-text">2.8.3.1 Laplacian 算子的原理</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#2-8-3-2-%E4%BD%BF%E7%94%A8-OpenCV-%E5%AE%9E%E7%8E%B0-Laplacian-%E7%AE%97%E5%AD%90"><span class="toc-list-text">2.8.3.2 使用 OpenCV 实现 Laplacian 算子</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%B8%B8%E7%94%A8%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B%E5%87%BD%E6%95%B0%E5%AF%B9%E6%AF%94"><span class="toc-list-text">常用边缘检测函数对比</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-9%E5%BD%A2%E6%80%81%E5%AD%A6%E6%93%8D%E4%BD%9C"><span class="toc-list-text">2.9形态学操作</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-9-1%E8%85%90%E8%9A%80"><span class="toc-list-text">2.9.1腐蚀</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-9-2%E8%86%A8%E8%83%80"><span class="toc-list-text">2.9.2膨胀</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-9-3%E5%BC%80%E8%BF%90%E7%AE%97"><span class="toc-list-text">2.9.3开运算</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-9-4%E9%97%AD%E8%BF%90%E7%AE%97"><span class="toc-list-text">2.9.4闭运算</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-9-5%E5%BD%A2%E6%80%81%E5%AD%A6%E6%A2%AF%E5%BA%A6"><span class="toc-list-text">2.9.5形态学梯度</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-10%E5%9B%BE%E5%83%8F%E8%BD%AE%E5%BB%93%E6%A3%80%E6%B5%8B"><span class="toc-list-text">2.10图像轮廓检测</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-10-1%E8%BD%AE%E5%BB%93%E6%A3%80%E6%B5%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-list-text">2.10.1轮廓检测的基本概念</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-10-2%E8%BD%AE%E5%BB%93%E6%A3%80%E6%B5%8B%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-list-text">2.10.2轮廓检测常用函数</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-10-3-cv2-findContours"><span class="toc-list-text">2.10.3 cv2.findContours()</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-10-4-cv2-drawContours"><span class="toc-list-text">2.10.4 cv2.drawContours()</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-10-5-cv2-contourArea"><span class="toc-list-text">2.10.5 cv2.contourArea()</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-10-6-cv2-arcLength"><span class="toc-list-text">2.10.6 cv2.arcLength()</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-10-7-cv2-boundingRect"><span class="toc-list-text">2.10.7 cv2.boundingRect()</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-10-8-cv2-minAreaRect"><span class="toc-list-text">2.10.8 cv2.minAreaRect()</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-10-9-cv2-minEnclosingCircle"><span class="toc-list-text">2.10.9 cv2.minEnclosingCircle()</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-10-10-cv2-approxPolyDP"><span class="toc-list-text">2.10.10 cv2.approxPolyDP()</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-10-11%E8%BD%AE%E5%BB%93%E6%A3%80%E6%B5%8B%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-list-text">2.10.11轮廓检测的应用</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-11%E5%9B%BE%E5%83%8F%E7%9B%B4%E6%96%B9%E5%9B%BE"><span class="toc-list-text">2.11图像直方图</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-11-1%E4%BB%80%E4%B9%88%E6%98%AF%E5%9B%BE%E5%83%8F%E7%9B%B4%E6%96%B9%E5%9B%BE%EF%BC%9F"><span class="toc-list-text">2.11.1什么是图像直方图？</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-11-2OpenCV-%E4%B8%AD%E7%9A%84%E7%9B%B4%E6%96%B9%E5%9B%BE%E8%AE%A1%E7%AE%97%E5%87%BD%E6%95%B0"><span class="toc-list-text">2.11.2OpenCV 中的直方图计算函数</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-11-3%E7%9B%B4%E6%96%B9%E5%9B%BE%E5%9D%87%E8%A1%A1%E5%8C%96"><span class="toc-list-text">2.11.3直方图均衡化</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-11-4%E9%A2%9C%E8%89%B2%E7%9B%B4%E6%96%B9%E5%9B%BE"><span class="toc-list-text">2.11.4颜色直方图</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-12%E8%A7%86%E9%A2%91%E5%A4%84%E7%90%86"><span class="toc-list-text">2.12视频处理</span></a></li></ol></li></ol>
+  </div>
+</div>
+
+        
+      
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-OpenCv学习笔记" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        OpenCv学习笔记
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2025-05-11T16:00:00.000Z" itemprop="datePublished">2025-05-12</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+    未分类 
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            17k 词 
+          </div>
+        </div>
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenCv/" rel="tag">OpenCv</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li></ul>
+
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <h1 id="一、基础操作"><a href="#一、基础操作" class="headerlink" title="一、基础操作"></a>一、基础操作</h1><h2 id="读取显示图片"><a href="#读取显示图片" class="headerlink" title="读取显示图片"></a>读取显示图片</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 导入 OpenCV 库</span><br><span class="hljs-keyword">import</span> cv2<br><br><span class="hljs-comment"># 1. 读取图像</span><br><span class="hljs-comment"># 替换为实际的图像路径，这里是当前目录下的 &quot;bird.jpg&quot;</span><br>image_path = <span class="hljs-string">&quot;./bird.jpg&quot;</span><br>image = cv2.imread(image_path)<br><br><span class="hljs-comment"># 检查图像是否成功读取</span><br><span class="hljs-keyword">if</span> image <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;错误：无法加载图像，请检查路径是否正确。&quot;</span>)<br>    exit()<br><br><span class="hljs-comment"># 2. 显示图像</span><br><span class="hljs-comment"># 创建一个名为 &quot;Display Image&quot; 的窗口，并在其中显示图像</span><br>cv2.imshow(<span class="hljs-string">&quot;Display Image&quot;</span>, image)<br><br><span class="hljs-comment"># 3. 等待用户按键</span><br><span class="hljs-comment"># 参数 0 表示无限等待，直到用户按下任意键</span><br>key = cv2.waitKey(<span class="hljs-number">0</span>)<br><br><span class="hljs-comment"># 4. 根据用户按键执行操作</span><br><span class="hljs-keyword">if</span> key == <span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;s&#x27;</span>):  <span class="hljs-comment"># 如果按下 &#x27;s&#x27; 键</span><br>    <span class="hljs-comment"># 保存图像</span><br>    output_path = <span class="hljs-string">&quot;saved_image.jpg&quot;</span><br>    cv2.imwrite(output_path, image)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;图像已保存为 <span class="hljs-subst">&#123;output_path&#125;</span>&quot;</span>)<br><span class="hljs-keyword">else</span>:  <span class="hljs-comment"># 如果按下其他键</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;图像未保存。&quot;</span>)<br><br><span class="hljs-comment"># 5. 关闭所有窗口</span><br>cv2.destroyAllWindows()<br></code></pre></td></tr></table></figure>
+
+<p>读取图像：<code>cv2.imread(image_path)</code></p>
+<p>在窗口中显示图像：<code>cv2.imshow(&quot;Display Image&quot;, image)</code></p>
+<p>保存图像：<code>  cv2.imwrite(output_path, image)</code></p>
+<p>关闭窗口：<code>cv2.destroyAllWindows()</code></p>
+<h1 id="二、图像处理基础"><a href="#二、图像处理基础" class="headerlink" title="二、图像处理基础"></a>二、图像处理基础</h1><p><strong>图像的基本属性：</strong></p>
+<ul>
+<li><strong>图像的尺寸（Width, Height）</strong>：可以通过 <code>img.shape</code> 获取。</li>
+<li><strong>颜色通道（Channels）</strong>：通常为 RGB（三个通道），也可以是灰度图（单通道）。</li>
+<li><strong>数据类型（Data type）</strong>：常见的有 <code>uint8</code>（0-255 范围），也可以是 <code>float32</code> 或其他。</li>
+</ul>
+<p><strong>读取图像：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> <span class="hljs-type">cv2</span><br><span class="hljs-variable">img</span> <span class="hljs-operator">=</span> cv2.imread(<span class="hljs-string">&#x27;image.jpg&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>cv2.imread()</code> 读取图像文件，返回一个 NumPy 数组。</li>
+<li>如果图像路径错误或文件不存在，返回 <code>None</code>。</li>
+</ul>
+<p><strong>显示图像：</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># 显示图像</span><br><span class="hljs-attribute">cv2</span>.imshow(<span class="hljs-string">&quot;Display Window&quot;</span>, image)<br><br><span class="hljs-comment"># 等待按键输入</span><br><span class="hljs-attribute">cv2</span>.waitKey(<span class="hljs-number">0</span>)<br><br><span class="hljs-comment"># 关闭所有窗口</span><br><span class="hljs-attribute">cv2</span>.destroyAllWindows()<br></code></pre></td></tr></table></figure>
+
+<p><strong>cv2.imshow()</strong> 用于显示图像，<strong>cv2.waitKey(0)</strong> 等待按键事件，<strong>cv2.destroyAllWindows()</strong> 关闭所有窗口。</p>
+<p>保存图像：</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><span class="hljs-meta"># 保存图像</span><br>cv2.imwrite<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;output_image.jpg&quot;</span><span class="hljs-punctuation">,</span> image<span class="hljs-punctuation">)</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>cv2.imwrite()</strong> 将图像保存到指定路径。</p>
+<h2 id="2-1图像基本操作"><a href="#2-1图像基本操作" class="headerlink" title="2.1图像基本操作"></a>2.1图像基本操作</h2><p><strong>1、访问和修改像素值</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># 获取像素值 (BGR 格式)</span><br><span class="hljs-attribute">pixel_value</span> = image[<span class="hljs-number">100</span>, <span class="hljs-number">100</span>]  # 获取 (<span class="hljs-number">100</span>, <span class="hljs-number">100</span>) 处的像素值<br><br><span class="hljs-comment"># 修改像素值</span><br><span class="hljs-attribute">image</span>[<span class="hljs-number">100</span>, <span class="hljs-number">100</span>] =<span class="hljs-meta"> [255, 255, 255]  # 将 (100, 100) 处的像素设置为白色</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>2、图像 ROI（Region of Interest）</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># 获取 ROI</span><br><span class="hljs-attribute">roi</span> = image[<span class="hljs-number">50</span>:<span class="hljs-number">150</span>, <span class="hljs-number">50</span>:<span class="hljs-number">150</span>]  # 获取 (<span class="hljs-number">50</span>,<span class="hljs-number">50</span>) 到 (<span class="hljs-number">150</span>,<span class="hljs-number">150</span>) 的区域<br><br><span class="hljs-comment"># 修改 ROI</span><br><span class="hljs-attribute">image</span>[<span class="hljs-number">50</span>:<span class="hljs-number">150</span>, <span class="hljs-number">50</span>:<span class="hljs-number">150</span>] =<span class="hljs-meta"> [0, 255, 0]  # 将 ROI 区域设置为绿色</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>3、图像通道分离与合并</strong></p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver"><span class="hljs-comment"># 分离通道</span><br>b, g, r = cv2.<span class="hljs-built_in">split</span>(image)<br><br><span class="hljs-comment"># 合并通道</span><br>merged_image = cv2.<span class="hljs-built_in">merge</span>([b, g, r])<br></code></pre></td></tr></table></figure>
+
+<p><strong>4、图像缩放、旋转、平移、翻转</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 缩放</span><br>resized_image = cv2.resize(image, (new_width, new_height))<br><br><span class="hljs-comment"># 旋转</span><br>(h, w) = img.shape[:<span class="hljs-number">2</span>]<br>center = (w // <span class="hljs-number">2</span>, h // <span class="hljs-number">2</span>)<br>M = cv2.getRotationMatrix2D(center, <span class="hljs-number">45</span>, <span class="hljs-number">1.0</span>)  <span class="hljs-comment"># 旋转 45 度</span><br>rotated_img = cv2.warpAffine(img, M, (w, h))<br><br>rotation_matrix = cv2.getRotationMatrix2D((center_x, center_y), angle, scale)<br>rotated_image = cv2.warpAffine(image, rotation_matrix, (width, height))<br><br><span class="hljs-comment"># 平移</span><br>translation_matrix = np.float32([[<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, tx], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, ty]])  <span class="hljs-comment"># tx, ty 为平移距离</span><br>translated_image = cv2.warpAffine(image, translation_matrix, (width, height))<br><br><span class="hljs-comment"># 翻转</span><br>flipped_image = cv2.flip(image, flip_code)  <span class="hljs-comment"># flip_code: 0 (垂直翻转), 1 (水平翻转), -1 (双向翻转)</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="2-2图像算术运算"><a href="#2-2图像算术运算" class="headerlink" title="2.2图像算术运算"></a>2.2图像算术运算</h2><h3 id="2-2-1基础运算"><a href="#2-2-1基础运算" class="headerlink" title="2.2.1基础运算"></a>2.2.1基础运算</h3><p><strong>1、图像加法</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">result</span> = cv2.add(image1, image2)<br></code></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：如果像素值相加后超过 255，OpenCV 会自动将其截断为 255。</p>
+<p><strong>2、图像减法</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">result</span> = cv2.subtract(image1, image2)<br></code></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：如果像素值相减后小于 0，OpenCV 会自动将其截断为 0。</p>
+<p><strong>3、图像乘法</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">result</span> = cv2.multiply(img1, img2)<br></code></pre></td></tr></table></figure>
+
+<p>4.<strong>图像除法</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">result</span> = cv2.divide(img1, img2)<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-2-2图像位运算-AND-OR-NOT-XOR"><a href="#2-2-2图像位运算-AND-OR-NOT-XOR" class="headerlink" title="2.2.2图像位运算 (AND, OR, NOT, XOR)"></a>2.2.2图像位运算 (AND, OR, NOT, XOR)</h3><p>位运算是对图像的每个像素进行二进制位操作。</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">功能</th>
+<th align="left">应用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>cv2.bitwise_and()</code></td>
+<td align="left">按位与操作</td>
+<td align="left">掩码操作、图像分割</td>
+</tr>
+<tr>
+<td align="left"><code>cv2.bitwise_or()</code></td>
+<td align="left">按位或操作</td>
+<td align="left">图像叠加</td>
+</tr>
+<tr>
+<td align="left"><code>cv2.bitwise_not()</code></td>
+<td align="left">按位取反操作</td>
+<td align="left">图像反色</td>
+</tr>
+<tr>
+<td align="left"><code>cv2.bitwise_xor()</code></td>
+<td align="left">按位异或操作</td>
+<td align="left">图像差异检测</td>
+</tr>
+</tbody></table>
+<p><strong>1.位与运算 (AND)</strong></p>
+<p>位与运算是对两幅图像的每个像素进行按位与操作。</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">result</span> = cv2.bitwise_and(img1, img2)<br></code></pre></td></tr></table></figure>
+
+<p><strong>2.位或运算 (OR)</strong></p>
+<p>位或运算是对两幅图像的每个像素进行按位或操作。</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">result</span> = cv2.bitwise_or(img1, img2)<br></code></pre></td></tr></table></figure>
+
+<p><strong>3.位非运算 (NOT)</strong></p>
+<p>位非运算是对图像的每个像素进行按位取反操作。</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf"><span class="hljs-attribute">result</span> <span class="hljs-operator">=</span> cv2.bitwise_not(img1)<br></code></pre></td></tr></table></figure>
+
+<p><strong>4.位异或运算 (XOR)</strong></p>
+<p>位异或运算是对两幅图像的每个像素进行按位异或操作。</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">result</span> = cv2.bitwise_xor(img1, img2)<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-2-3图像混合"><a href="#2-2-3图像混合" class="headerlink" title="2.2.3图像混合"></a>2.2.3图像混合</h3><p>在 OpenCV 中，可以使用 <code>cv2.addWeighted()</code> 函数来实现图像混合。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 图像混合</span><br>alpha = <span class="hljs-number">0.7</span>  <span class="hljs-comment"># 第一幅图像的权重</span><br>beta = <span class="hljs-number">0.3</span>   <span class="hljs-comment"># 第二幅图像的权重</span><br>gamma = <span class="hljs-number">0</span>    <span class="hljs-comment"># 可选的标量值</span><br><br>result = cv2.addWeighted(img1, alpha, img2, beta, gamma)<br><br><span class="hljs-comment"># 显示结果</span><br>cv2.imshow(<span class="hljs-string">&#x27;Result&#x27;</span>, result)<br>cv2.waitKey(<span class="hljs-number">0</span>)<br>cv2.destroyAllWindows()<br></code></pre></td></tr></table></figure>
+
+<p><strong>参数说明</strong>：</p>
+<ul>
+<li><code>alpha</code>：第一幅图像的权重。</li>
+<li><code>beta</code>：第二幅图像的权重。</li>
+<li><code>gamma</code>：可选的标量值，通常设置为 0。</li>
+</ul>
+<p><strong>公式</strong>：</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gams">result = img1 * alpha + img2 * <span class="hljs-built_in">beta</span> + <span class="hljs-built_in">gamma</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="2-3图像阈值处理"><a href="#2-3图像阈值处理" class="headerlink" title="2.3图像阈值处理"></a>2.3图像阈值处理</h2><h3 id="2-3-1简单阈值处理"><a href="#2-3-1简单阈值处理" class="headerlink" title="2.3.1简单阈值处理"></a><strong>2.3.1简单阈值处理</strong></h3><p>OpenCV 提供了 <code>cv2.threshold()</code> 函数来实现这一功能。</p>
+<p><strong>函数原型</strong></p>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs elm"><span class="hljs-title">retval</span>, dst = cv2.threshold(src, thresh, maxval, <span class="hljs-keyword">type</span>)<br></code></pre></td></tr></table></figure>
+
+<p><strong>参数说明</strong></p>
+<ul>
+<li><p><code>src</code>: 输入图像，通常为灰度图像。</p>
+</li>
+<li><p><code>thresh</code>: 设定的阈值。</p>
+</li>
+<li><p><code>maxval</code>: 当像素值超过（或小于，根据类型）阈值时，赋予的新值。</p>
+</li>
+<li><p><code>type</code>  : 阈值处理的类型，常见的类型有：</p>
+<ul>
+<li><code>cv2.THRESH_BINARY</code>: 如果像素值大于阈值，则赋予 <code>maxval</code>，否则赋予 <code>0</code>。</li>
+<li><code>cv2.THRESH_BINARY_INV</code>: 与 <code>cv2.THRESH_BINARY</code> 相反，如果像素值大于阈值，则赋予 <code>0</code>，否则赋予 <code>maxval</code>。</li>
+<li><code>cv2.THRESH_TRUNC</code>: 如果像素值大于阈值，则赋予阈值，否则保持不变。</li>
+<li><code>cv2.THRESH_TOZERO</code>: 如果像素值大于阈值，则保持不变，否则赋予 <code>0</code>。</li>
+<li><code>cv2.THRESH_TOZERO_INV</code>: 与 <code>cv2.THRESH_TOZERO</code> 相反，如果像素值大于阈值，则赋予 <code>0</code>，否则保持不变。</li>
+</ul>
+</li>
+</ul>
+<p><strong>返回值</strong></p>
+<ul>
+<li><code>retval</code>: 实际使用的阈值（在某些情况下可能与设定的阈值不同）。</li>
+<li><code>dst</code>: 处理后的图像。</li>
+</ul>
+<h3 id="2-3-2自适应阈值处理"><a href="#2-3-2自适应阈值处理" class="headerlink" title="2.3.2自适应阈值处理"></a><strong>2.3.2自适应阈值处理</strong></h3><p>在某些情况下，图像的亮度分布不均匀，使用固定的阈值可能无法得到理想的效果。自适应阈值处理通过为图像的不同区域计算不同的阈值，从而更好地处理这种情况。</p>
+<p><strong>函数原型</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">dst</span> = cv2.adaptiveThreshold(src, maxValue, adaptiveMethod, thresholdType, blockSize, C)<br></code></pre></td></tr></table></figure>
+
+<p><strong>参数说明</strong></p>
+<ul>
+<li><p><code>src</code>: 输入图像，通常为灰度图像。</p>
+</li>
+<li><p><code>maxValue</code>: 当像素值超过（或小于，根据类型）阈值时，赋予的新值。</p>
+</li>
+<li><p><code>adaptiveMethod</code> : 自适应阈值计算方法，常见的类型有：</p>
+<ul>
+<li><code>cv2.ADAPTIVE_THRESH_MEAN_C</code>: 阈值是邻域的平均值减去常数 <code>C</code>。</li>
+<li><code>cv2.ADAPTIVE_THRESH_GAUSSIAN_C</code>: 阈值是邻域的加权平均值减去常数 <code>C</code>，权重由高斯函数确定。</li>
+</ul>
+</li>
+<li><p><code>thresholdType</code>: 阈值处理的类型，通常为 <code>cv2.THRESH_BINARY</code> 或 <code>cv2.THRESH_BINARY_INV</code>。</p>
+</li>
+<li><p><code>blockSize</code>: 计算阈值时使用的邻域大小，必须为奇数。</p>
+</li>
+<li><p><code>C</code>: 从平均值或加权平均值中减去的常数。</p>
+</li>
+</ul>
+<p><strong>返回值</strong></p>
+<ul>
+<li><code>dst</code>: 处理后的图像。</li>
+</ul>
+<h3 id="2-3-3Otsu’s-二值化"><a href="#2-3-3Otsu’s-二值化" class="headerlink" title="2.3.3Otsu’s 二值化"></a><strong>2.3.3Otsu’s 二值化</strong></h3><p>Otsu’s 二值化是一种自动确定阈值的方法。它通过最大化类间方差来找到最佳的全局阈值，适用于双峰图像（即图像直方图有两个明显的峰值）。</p>
+<p><strong>函数原型</strong></p>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs elm"><span class="hljs-title">retval</span>, dst = cv2.threshold(src, thresh, maxval, <span class="hljs-keyword">type</span>)<br></code></pre></td></tr></table></figure>
+
+<p><strong>参数说明</strong></p>
+<ul>
+<li><code>src</code>: 输入图像，通常为灰度图像。</li>
+<li><code>thresh</code>: 由于 Otsu’s 方法会自动确定阈值，因此该参数通常设置为 <code>0</code>。</li>
+<li><code>maxval</code>: 当像素值超过（或小于，根据类型）阈值时，赋予的新值。</li>
+<li><code>type</code>: 阈值处理的类型，通常为 <code>cv2.THRESH_BINARY</code> 或 <code>cv2.THRESH_BINARY_INV</code>，并加上 <code>cv2.THRESH_OTSU</code>。</li>
+</ul>
+<p><strong>返回值</strong></p>
+<ul>
+<li><code>retval</code>: 自动确定的阈值。</li>
+<li><code>dst</code>: 处理后的图像。</li>
+</ul>
+<h2 id="2-4图像平滑处理"><a href="#2-4图像平滑处理" class="headerlink" title="2.4图像平滑处理"></a>2.4图像平滑处理</h2><h3 id="2-4-1均值滤波"><a href="#2-4-1均值滤波" class="headerlink" title="2.4.1均值滤波"></a><strong>2.4.1均值滤波</strong></h3><p>均值滤波是最简单的平滑处理方法之一。</p>
+<p>均值滤波的原理是将图像中每个像素的值替换为其周围像素的平均值。</p>
+<p>均值滤波可以有效地去除噪声，但可能会导致图像变得模糊。</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">blurred_image</span> = cv2.blur(image, (kernel_size, kernel_size))<br></code></pre></td></tr></table></figure>
+
+<p><strong>cv2.blur(image, (5, 5)) 参数说明</strong>**</p>
+<ul>
+<li><p><code>image</code>: 输入的图像。</p>
+</li>
+<li><p><code>(kernel_size, kernel_size)</code>: 滤波核的大小，表示在水平和垂直方向上取平均值的范围。</p>
+<p>均值滤波适用于去除图像中的随机噪声，但可能会导致图像边缘变得模糊。</p>
+</li>
+</ul>
+<h3 id="2-4-2高斯滤波"><a href="#2-4-2高斯滤波" class="headerlink" title="2.4.2高斯滤波"></a><strong>2.4.2高斯滤波</strong></h3><p>高斯滤波是一种基于高斯函数的平滑处理方法。与均值滤波不同，高斯滤波在计算像素平均值时，会给中心像素赋予更高的权重，而给边缘像素赋予较低的权重。</p>
+<p>高斯滤波在去除噪声的同时，能够更好地保留图像的边缘信息。</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">blurred_image</span> = cv2.GaussianBlur(image, (kernel_size, kernel_size), sigmaX)<br></code></pre></td></tr></table></figure>
+
+<p><strong>cv2.GaussianBlur(image, (5, 5), 0) 参数说明</strong></p>
+<ul>
+<li><code>image</code>: 输入的图像。</li>
+<li><code>(5, 5)</code>: 滤波核的大小。</li>
+<li><code>0</code>: 高斯核的标准差，如果为0，则根据核大小自动计算。</li>
+</ul>
+<p>高斯滤波适用于去除图像中的高斯噪声，并且在保留图像边缘信息方面表现较好。</p>
+<h3 id="2-4-3中值滤波"><a href="#2-4-3中值滤波" class="headerlink" title="2.4.3中值滤波"></a><strong>2.4.3中值滤波</strong></h3><p>中值滤波是一种非线性平滑处理方法。它的原理是将图像中每个像素的值替换为其周围像素的中值。</p>
+<p>中值滤波在去除椒盐噪声（即图像中随机出现的黑白点）时非常有效。</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">blurred_image</span> = cv2.medianBlur(image, kernel_size)<br></code></pre></td></tr></table></figure>
+
+<p><strong>cv2.medianBlur(image, 5) 参数说明</strong></p>
+<ul>
+<li><code>image</code>: 输入的图像。</li>
+<li><code>5</code>: 滤波核的大小，必须是奇数。</li>
+</ul>
+<h3 id="2-4-4双边滤波"><a href="#2-4-4双边滤波" class="headerlink" title="2.4.4双边滤波"></a><strong>2.4.4双边滤波</strong></h3><p>双边滤波是一种非线性的平滑处理方法，它结合了空间邻近度和像素值相似度。</p>
+<p>与高斯滤波不同，双边滤波在平滑图像的同时，能够保留图像的边缘信息。这是因为双边滤波不仅考虑像素之间的空间距离，还考虑像素值之间的差异。</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">blurred_image</span> = cv2.bilateralFilter(image, d, sigmaColor, sigmaSpace)<br></code></pre></td></tr></table></figure>
+
+<p><strong>cv2.bilateralFilter(image, 9, 75, 75) 参数说明</strong></p>
+<ul>
+<li><code>image</code>: 输入的图像。</li>
+<li><code>9</code>: 滤波核的大小。</li>
+<li><code>75</code>: 颜色空间的标准差，控制像素值相似度的权重。</li>
+<li><code>75</code>: 坐标空间的标准差，控制空间距离的权重。</li>
+</ul>
+<h2 id="2-5图像的颜色空间与转换"><a href="#2-5图像的颜色空间与转换" class="headerlink" title="2.5图像的颜色空间与转换"></a>2.5图像的颜色空间与转换</h2><p>OpenCV 支持多种颜色空间的转换，如从 RGB 到灰度图、HSV 等。</p>
+<p>图像的颜色空间转换在许多图像处理任务中非常重要。</p>
+<p>从 RGB 转换为灰度图：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">gray_img</span> = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)<br></code></pre></td></tr></table></figure>
+
+<p>从 BGR 转换为 HSV：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">hsv_img</span> = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)<br></code></pre></td></tr></table></figure>
+
+<p>从 RGB 转换为 YUV：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">yuv_img</span> = cv2.cvtColor(img, cv2.COLOR_BGR2YUV)<br></code></pre></td></tr></table></figure>
+
+<p>颜色空间转换是图像处理中的基础操作，用于不同的算法和视觉效果。</p>
+<h2 id="2-6图像的大小调整与裁剪"><a href="#2-6图像的大小调整与裁剪" class="headerlink" title="2.6图像的大小调整与裁剪"></a>2.6图像的大小调整与裁剪</h2><p>OpenCV 提供了多种方式来调整图像大小和裁剪图像区域。</p>
+<p>调整图像大小：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">resized_img = cv2<span class="hljs-selector-class">.resize</span>(<span class="hljs-selector-tag">img</span>, (<span class="hljs-attribute">width</span>, height))<br></code></pre></td></tr></table></figure>
+
+<p>裁剪图像：</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-symbol">cropped_img</span> = img[y1:y2, <span class="hljs-built_in">x1</span>:<span class="hljs-built_in">x2</span>]<br></code></pre></td></tr></table></figure>
+
+<p>可以通过切片操作裁剪图像的特定区域。</p>
+<h2 id="2-7图像平滑与去噪（模糊处理）"><a href="#2-7图像平滑与去噪（模糊处理）" class="headerlink" title="2.7图像平滑与去噪（模糊处理）"></a>2.7图像平滑与去噪（模糊处理）</h2><p>图像平滑可以减少噪声，常用的模糊算法有高斯模糊、均值模糊等。</p>
+<p>高斯模糊：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">blurred_img</span> = cv2.GaussianBlur(img, (<span class="hljs-number">5</span>, <span class="hljs-number">5</span>), <span class="hljs-number">0</span>)<br></code></pre></td></tr></table></figure>
+
+<p>均值模糊：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">blurred_img</span> = cv2.blur(img, (<span class="hljs-number">5</span>, <span class="hljs-number">5</span>))<br></code></pre></td></tr></table></figure>
+
+<p>中值模糊：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">blurred_img</span> = cv2.medianBlur(img, <span class="hljs-number">5</span>)<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-8图像边缘检测"><a href="#2-8图像边缘检测" class="headerlink" title="2.8图像边缘检测"></a>2.8图像边缘检测</h2><p>边缘检测是一种常用的图像处理技术，用于检测图像中的边缘，最常用的方法是 Canny 边缘检测。</p>
+<table>
+<thead>
+<tr>
+<th align="left"><strong>函数</strong></th>
+<th align="left"><strong>算法</strong></th>
+<th align="left"><strong>说明</strong></th>
+<th align="left"><strong>适用场景</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>cv2.Canny()</code></strong></td>
+<td align="left">Canny 边缘检测</td>
+<td align="left">多阶段算法，检测效果较好，噪声抑制能力强。</td>
+<td align="left">通用边缘检测，适合大多数场景。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>cv2.Sobel()</code></strong></td>
+<td align="left">Sobel 算子</td>
+<td align="left">基于一阶导数的边缘检测，可以检测水平和垂直边缘。</td>
+<td align="left">检测水平和垂直边缘。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>cv2.Scharr()</code></strong></td>
+<td align="left">Scharr 算子</td>
+<td align="left">Sobel 算子的改进版本，对边缘的响应更强。</td>
+<td align="left">检测细微的边缘。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>cv2.Laplacian()</code></strong></td>
+<td align="left">Laplacian 算子</td>
+<td align="left">基于二阶导数的边缘检测，对噪声敏感。</td>
+<td align="left">检测边缘和角点。</td>
+</tr>
+</tbody></table>
+<h3 id="2-8-1-Canny-边缘检测"><a href="#2-8-1-Canny-边缘检测" class="headerlink" title="2.8.1.Canny 边缘检测"></a>2.8.1.<strong>Canny 边缘检测</strong></h3><h4 id="2-8-1-1-Canny-边缘检测的步骤"><a href="#2-8-1-1-Canny-边缘检测的步骤" class="headerlink" title="2.8.1.1 Canny 边缘检测的步骤"></a>2.8.1.1 Canny 边缘检测的步骤</h4><p>Canny 边缘检测算法主要包括以下几个步骤：</p>
+<ol>
+<li><strong>噪声抑制</strong>：使用高斯滤波器对图像进行平滑处理，以减少噪声的影响。</li>
+<li><strong>计算梯度</strong>：使用 Sobel 算子计算图像的梯度幅值和方向。</li>
+<li><strong>非极大值抑制</strong>：沿着梯度方向，保留局部梯度最大的像素点，抑制其他像素点。</li>
+<li><strong>双阈值检测</strong>：使用两个阈值（低阈值和高阈值）来确定真正的边缘。高于高阈值的像素点被认为是强边缘，低于低阈值的像素点被抑制，介于两者之间的像素点如果与强边缘相连则保留。</li>
+<li><strong>边缘连接</strong>：通过滞后阈值处理，将弱边缘与强边缘连接起来，形成完整的边缘。</li>
+</ol>
+<h4 id="2-8-1-2-使用-OpenCV-实现-Canny-边缘检测"><a href="#2-8-1-2-使用-OpenCV-实现-Canny-边缘检测" class="headerlink" title="2.8.1.2 使用 OpenCV 实现 Canny 边缘检测"></a>2.8.1.2 使用 OpenCV 实现 Canny 边缘检测</h4><p>在 OpenCV 中，可以使用 <code>cv2.Canny()</code> 函数来实现 Canny 边缘检测。</p>
+<p>该函数的原型如下：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">edges = cv2.Canny(image, threshold1, threshold2, <span class="hljs-attribute">apertureSize</span>=3, <span class="hljs-attribute">L2gradient</span>=<span class="hljs-literal">False</span>)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>image</code>：输入图像，必须是单通道的灰度图像。</li>
+<li><code>threshold1</code>：低阈值。</li>
+<li><code>threshold2</code>：高阈值。</li>
+<li><code>apertureSize</code>：Sobel 算子的孔径大小，默认为 3。</li>
+<li><code>L2gradient</code>：是否使用 L2 范数计算梯度幅值，默认为 False（使用 L1 范数）。</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs Py"><span class="hljs-keyword">import</span> cv2<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br><span class="hljs-comment"># 读取图像</span><br>image = cv2.imread(<span class="hljs-string">&#x27;image.jpg&#x27;</span>, cv2.IMREAD_GRAYSCALE)<br><br><span class="hljs-comment"># 应用 Canny 边缘检测</span><br>edges = cv2.Canny(image, <span class="hljs-number">100</span>, <span class="hljs-number">200</span>)<br><br><span class="hljs-comment"># 显示结果</span><br>cv2.imshow(<span class="hljs-string">&#x27;Canny Edges&#x27;</span>, edges)<br>cv2.waitKey(<span class="hljs-number">0</span>)<br>cv2.destroyAllWindows()<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-8-2Sobel-算子"><a href="#2-8-2Sobel-算子" class="headerlink" title="2.8.2Sobel 算子"></a>2.8.2Sobel 算子</h3><p>Sobel 算子是一种基于梯度的边缘检测算子，它通过计算图像在水平和垂直方向上的梯度来检测边缘。</p>
+<p>Sobel 算子结合了高斯平滑和微分操作，因此对噪声具有一定的抑制作用。</p>
+<h4 id="2-8-2-1-Sobel-算子的原理"><a href="#2-8-2-1-Sobel-算子的原理" class="headerlink" title="2.8.2.1 Sobel 算子的原理"></a>2.8.2.1 Sobel 算子的原理</h4><p>Sobel 算子使用两个 3x3 的卷积核分别计算图像在水平和垂直方向上的梯度：</p>
+<ul>
+<li><p>水平方向的卷积核：</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[-1, 0, 1]</span><br><span class="hljs-string">[-2, 0, 2]</span><br><span class="hljs-string">[-1, 0, 1]</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>垂直方向的卷积核：</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[-1, -2, -1]</span><br><span class="hljs-string">[ 0,  0,  0]</span><br><span class="hljs-string">[ 1,  2,  1]</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<p>通过这两个卷积核，可以分别得到图像在水平和垂直方向上的梯度 <code>Gx</code> 和 <code>Gy</code>。最终的梯度幅值可以通过以下公式计算：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">G</span> = sqrt(Gx^<span class="hljs-number">2</span> + Gy^<span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure>
+
+<h4 id="2-8-2-2-使用-OpenCV-实现-Sobel-算子"><a href="#2-8-2-2-使用-OpenCV-实现-Sobel-算子" class="headerlink" title="2.8.2.2 使用 OpenCV 实现 Sobel 算子"></a>2.8.2.2 使用 OpenCV 实现 Sobel 算子</h4><p>在 OpenCV 中，可以使用 <code>cv2.Sobel()</code> 函数来计算图像的梯度。该函数的原型如下：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">dst = cv2.Sobel(src, ddepth, dx, dy, <span class="hljs-attribute">ksize</span>=3, <span class="hljs-attribute">scale</span>=1, <span class="hljs-attribute">delta</span>=0, <span class="hljs-attribute">borderType</span>=cv2.BORDER_DEFAULT)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>src</code>：输入图像。</li>
+<li><code>ddepth</code>：输出图像的深度，通常使用 <code>cv2.CV_64F</code>。</li>
+<li><code>dx</code>：x 方向上的导数阶数。</li>
+<li><code>dy</code>：y 方向上的导数阶数。</li>
+<li><code>ksize</code>：Sobel 核的大小，默认为 3。</li>
+<li><code>scale</code>：缩放因子，默认为 1。</li>
+<li><code>delta</code>：可选的 delta 值，默认为 0。</li>
+<li><code>borderType</code>：边界填充类型，默认为 <code>cv2.BORDER_DEFAULT</code>。</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs Py"><span class="hljs-keyword">import</span> cv2<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br><span class="hljs-comment"># 读取图像</span><br>image = cv2.imread(<span class="hljs-string">&#x27;image.jpg&#x27;</span>, cv2.IMREAD_GRAYSCALE)<br><br><span class="hljs-comment"># 计算 x 方向的梯度</span><br>sobel_x = cv2.Sobel(image, cv2.CV_64F, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, ksize=<span class="hljs-number">3</span>)<br><br><span class="hljs-comment"># 计算 y 方向的梯度</span><br>sobel_y = cv2.Sobel(image, cv2.CV_64F, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, ksize=<span class="hljs-number">3</span>)<br><br><span class="hljs-comment"># 计算梯度幅值</span><br>sobel_combined = np.sqrt(sobel_x**<span class="hljs-number">2</span> + sobel_y**<span class="hljs-number">2</span>)<br><br><span class="hljs-comment"># 显示结果</span><br>cv2.imshow(<span class="hljs-string">&#x27;Sobel X&#x27;</span>, sobel_x)<br>cv2.imshow(<span class="hljs-string">&#x27;Sobel Y&#x27;</span>, sobel_y)<br>cv2.imshow(<span class="hljs-string">&#x27;Sobel Combined&#x27;</span>, sobel_combined)<br>cv2.waitKey(<span class="hljs-number">0</span>)<br>cv2.destroyAllWindows()<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-8-3-Laplacian-算子"><a href="#2-8-3-Laplacian-算子" class="headerlink" title="2.8.3 Laplacian 算子"></a>2.8.3 Laplacian 算子</h3><p>Laplacian 算子是一种二阶微分算子，它通过计算图像的二阶导数来检测边缘。Laplacian 算子对噪声比较敏感，因此通常在使用之前会对图像进行高斯平滑处理。</p>
+<h4 id="2-8-3-1-Laplacian-算子的原理"><a href="#2-8-3-1-Laplacian-算子的原理" class="headerlink" title="2.8.3.1 Laplacian 算子的原理"></a>2.8.3.1 Laplacian 算子的原理</h4><p>Laplacian 算子使用以下卷积核来计算图像的二阶导数：</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[ 0,  1,  0]</span><br><span class="hljs-string">[ 1, -4,  1]</span><br><span class="hljs-string">[ 0,  1,  0]</span><br></code></pre></td></tr></table></figure>
+
+<p>通过这个卷积核，可以得到图像的 Laplacian 值。Laplacian 值较大的区域通常对应于图像的边缘。</p>
+<h4 id="2-8-3-2-使用-OpenCV-实现-Laplacian-算子"><a href="#2-8-3-2-使用-OpenCV-实现-Laplacian-算子" class="headerlink" title="2.8.3.2 使用 OpenCV 实现 Laplacian 算子"></a>2.8.3.2 使用 OpenCV 实现 Laplacian 算子</h4><p>在 OpenCV 中，可以使用 <code>cv2.Laplacian()</code> 函数来计算图像的 Laplacian 值。</p>
+<p>该函数的原型如下：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">dst = cv2.Laplacian(src, ddepth, <span class="hljs-attribute">ksize</span>=1, <span class="hljs-attribute">scale</span>=1, <span class="hljs-attribute">delta</span>=0, <span class="hljs-attribute">borderType</span>=cv2.BORDER_DEFAULT)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>src</code>：输入图像。</li>
+<li><code>ddepth</code>：输出图像的深度，通常使用 <code>cv2.CV_64F</code>。</li>
+<li><code>ksize</code>：Laplacian 核的大小，默认为 1。</li>
+<li><code>scale</code>：缩放因子，默认为 1。</li>
+<li><code>delta</code>：可选的 delta 值，默认为 0。</li>
+<li><code>borderType</code>：边界填充类型，默认为 <code>cv2.BORDER_DEFAULT</code>。</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs Py"><span class="hljs-keyword">import</span> cv2<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br><span class="hljs-comment"># 读取图像</span><br>image = cv2.imread(<span class="hljs-string">&#x27;image.jpg&#x27;</span>, cv2.IMREAD_GRAYSCALE)<br><br><span class="hljs-comment"># 应用 Laplacian 算子</span><br>laplacian = cv2.Laplacian(image, cv2.CV_64F)<br><br><span class="hljs-comment"># 显示结果</span><br>cv2.imshow(<span class="hljs-string">&#x27;Laplacian&#x27;</span>, laplacian)<br>cv2.waitKey(<span class="hljs-number">0</span>)<br>cv2.destroyAllWindows()<br></code></pre></td></tr></table></figure>
+
+<h3 id="常用边缘检测函数对比"><a href="#常用边缘检测函数对比" class="headerlink" title="常用边缘检测函数对比"></a>常用边缘检测函数对比</h3><p>以下是 OpenCV 中常用边缘检测函数的对比：</p>
+<table>
+<thead>
+<tr>
+<th align="left"><strong>函数</strong></th>
+<th align="left"><strong>算法</strong></th>
+<th align="left"><strong>优点</strong></th>
+<th align="left"><strong>缺点</strong></th>
+<th align="left"><strong>适用场景</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>cv2.Canny()</code></strong></td>
+<td align="left">Canny 边缘检测</td>
+<td align="left">噪声抑制能力强，边缘检测效果好。</td>
+<td align="left">参数调节较为复杂。</td>
+<td align="left">通用边缘检测，适合大多数场景。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>cv2.Sobel()</code></strong></td>
+<td align="left">Sobel 算子</td>
+<td align="left">计算简单，适合检测水平和垂直边缘。</td>
+<td align="left">对噪声敏感，边缘检测效果一般。</td>
+<td align="left">检测水平和垂直边缘。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>cv2.Scharr()</code></strong></td>
+<td align="left">Scharr 算子</td>
+<td align="left">对边缘的响应更强，适合检测细微边缘。</td>
+<td align="left">对噪声敏感。</td>
+<td align="left">检测细微的边缘。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>cv2.Laplacian()</code></strong></td>
+<td align="left">Laplacian 算子</td>
+<td align="left">可以检测边缘和角点。</td>
+<td align="left">对噪声非常敏感。</td>
+<td align="left">检测边缘和角点</td>
+</tr>
+</tbody></table>
+<h2 id="2-9形态学操作"><a href="#2-9形态学操作" class="headerlink" title="2.9形态学操作"></a>2.9形态学操作</h2><table>
+<thead>
+<tr>
+<th align="left"><strong>操作</strong></th>
+<th align="left"><strong>函数</strong></th>
+<th align="left"><strong>说明</strong></th>
+<th align="left"><strong>应用场景</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>腐蚀</strong></td>
+<td align="left"><code>cv2.erode()</code></td>
+<td align="left">用结构元素扫描图像，如果结构元素覆盖的区域全是前景，则保留中心像素。</td>
+<td align="left">去除噪声、分离物体。</td>
+</tr>
+<tr>
+<td align="left"><strong>膨胀</strong></td>
+<td align="left"><code>cv2.dilate()</code></td>
+<td align="left">用结构元素扫描图像，如果结构元素覆盖的区域存在前景，则保留中心像素。</td>
+<td align="left">连接断裂的物体、填充空洞。</td>
+</tr>
+<tr>
+<td align="left"><strong>开运算</strong></td>
+<td align="left"><code>cv2.morphologyEx()</code></td>
+<td align="left">先腐蚀后膨胀。</td>
+<td align="left">去除小物体、平滑物体边界。</td>
+</tr>
+<tr>
+<td align="left"><strong>闭运算</strong></td>
+<td align="left"><code>cv2.morphologyEx()</code></td>
+<td align="left">先膨胀后腐蚀。</td>
+<td align="left">填充小孔洞、连接邻近物体。</td>
+</tr>
+<tr>
+<td align="left"><strong>形态学梯度</strong></td>
+<td align="left"><code>cv2.morphologyEx()</code></td>
+<td align="left">膨胀图减去腐蚀图。</td>
+<td align="left">提取物体边缘。</td>
+</tr>
+<tr>
+<td align="left"><strong>顶帽运算</strong></td>
+<td align="left"><code>cv2.morphologyEx()</code></td>
+<td align="left">原图减去开运算结果。</td>
+<td align="left">提取比背景亮的细小物体。</td>
+</tr>
+<tr>
+<td align="left"><strong>黑帽运算</strong></td>
+<td align="left"><code>cv2.morphologyEx()</code></td>
+<td align="left">闭运算结果减去原图。</td>
+<td align="left">提取比背景暗的细小物体。</td>
+</tr>
+</tbody></table>
+<h3 id="2-9-1腐蚀"><a href="#2-9-1腐蚀" class="headerlink" title="2.9.1腐蚀"></a>2.9.1腐蚀</h3><p>腐蚀操作是一种缩小图像中前景对象的过程。</p>
+<p>腐蚀操作通过将结构元素与图像进行卷积，只有当结构元素完全覆盖图像中的前景像素时，中心像素才会被保留，否则会被腐蚀掉。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">cv2.erode(src, kernel, <span class="hljs-attribute">iterations</span>=1)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>src</code>: 输入图像，通常是二值图像。</li>
+<li><code>kernel</code>: 结构元素，可以自定义或使用 <code>cv2.getStructuringElement()</code> 生成。</li>
+<li><code>iterations</code>: 腐蚀操作的次数，默认为1。</li>
+</ul>
+<p>腐蚀操作会使图像中的前景对象变小，边缘被腐蚀掉，常用于去除噪声或分离连接的对象。</p>
+<h3 id="2-9-2膨胀"><a href="#2-9-2膨胀" class="headerlink" title="2.9.2膨胀"></a>2.9.2膨胀</h3><p>膨胀操作与腐蚀相反，它是一种扩大图像中前景对象的过程。</p>
+<p>膨胀操作通过将结构元素与图像进行卷积，只要结构元素与图像中的前景像素有重叠，中心像素就会被保留。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">cv2.dilate(src, kernel, <span class="hljs-attribute">iterations</span>=1)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>src</code>: 输入图像，通常是二值图像。</li>
+<li><code>kernel</code>: 结构元素，可以自定义或使用 <code>cv2.getStructuringElement()</code> 生成。</li>
+<li><code>iterations</code>: 膨胀操作的次数，默认为1。</li>
+</ul>
+<p>膨胀操作会使图像中的前景对象变大，边缘被扩展，常用于填补前景对象中的空洞或连接断裂的对象。</p>
+<h3 id="2-9-3开运算"><a href="#2-9-3开运算" class="headerlink" title="2.9.3开运算"></a>2.9.3开运算</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">cv2<span class="hljs-selector-class">.morphologyEx</span>(<span class="hljs-attribute">src</span>, op, kernel)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>src</code>: 输入图像，通常是二值图像。</li>
+<li><code>op</code>: 形态学操作类型，开运算使用 <code>cv2.MORPH_OPEN</code>。</li>
+<li><code>kernel</code>: 结构元素，可以自定义或使用 <code>cv2.getStructuringElement()</code> 生成。</li>
+</ul>
+<p>开运算可以去除图像中的小噪声，同时保留图像中的主要前景对象。</p>
+<h3 id="2-9-4闭运算"><a href="#2-9-4闭运算" class="headerlink" title="2.9.4闭运算"></a>2.9.4闭运算</h3><p>闭运算是先膨胀后腐蚀的组合操作。</p>
+<p>闭运算主要用于填补前景对象中的小孔或连接断裂的对象。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">cv2<span class="hljs-selector-class">.morphologyEx</span>(<span class="hljs-attribute">src</span>, op, kernel)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>src</code>: 输入图像，通常是二值图像。</li>
+<li><code>op</code>: 形态学操作类型，闭运算使用 <code>cv2.MORPH_CLOSE</code>。</li>
+<li><code>kernel</code>: 结构元素，可以自定义或使用 <code>cv2.getStructuringElement()</code> 生成。</li>
+</ul>
+<p>闭运算可以填补前景对象中的小孔，同时保留图像中的主要前景对象。</p>
+<h3 id="2-9-5形态学梯度"><a href="#2-9-5形态学梯度" class="headerlink" title="2.9.5形态学梯度"></a>2.9.5形态学梯度</h3><p>形态学梯度是膨胀图像与腐蚀图像的差值。</p>
+<p>形态学梯度主要用于提取图像中前景对象的边缘。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">cv2<span class="hljs-selector-class">.morphologyEx</span>(<span class="hljs-attribute">src</span>, op, kernel)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>src</code>: 输入图像，通常是二值图像。</li>
+<li><code>op</code>: 形态学操作类型，形态学梯度使用 <code>cv2.MORPH_GRADIENT</code>。</li>
+<li><code>kernel</code>: 结构元素，可以自定义或使用 <code>cv2.getStructuringElement()</code> 生成。</li>
+</ul>
+<h2 id="2-10图像轮廓检测"><a href="#2-10图像轮廓检测" class="headerlink" title="2.10图像轮廓检测"></a>2.10图像轮廓检测</h2><h3 id="2-10-1轮廓检测的基本概念"><a href="#2-10-1轮廓检测的基本概念" class="headerlink" title="2.10.1轮廓检测的基本概念"></a>2.10.1轮廓检测的基本概念</h3><ul>
+<li><strong>轮廓:</strong> 图像中物体的边界，由一系列点组成。</li>
+<li><strong>轮廓层次结构:</strong> 轮廓之间的嵌套关系，例如一个轮廓是否包含另一个轮廓。</li>
+<li><strong>轮廓特征:</strong> 轮廓的面积、周长、边界矩形、最小外接矩形、最小外接圆等。</li>
+</ul>
+<h3 id="2-10-2轮廓检测常用函数"><a href="#2-10-2轮廓检测常用函数" class="headerlink" title="2.10.2轮廓检测常用函数"></a>2.10.2轮廓检测常用函数</h3><table>
+<thead>
+<tr>
+<th align="left">函数名称</th>
+<th align="left">功能描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>cv2.findContours()</code></td>
+<td align="left">查找图像中的轮廓</td>
+</tr>
+<tr>
+<td align="left"><code>cv2.drawContours()</code></td>
+<td align="left">在图像上绘制轮廓</td>
+</tr>
+<tr>
+<td align="left"><code>cv2.contourArea()</code></td>
+<td align="left">计算轮廓的面积</td>
+</tr>
+<tr>
+<td align="left"><code>cv2.arcLength()</code></td>
+<td align="left">计算轮廓的周长或弧长</td>
+</tr>
+<tr>
+<td align="left"><code>cv2.boundingRect()</code></td>
+<td align="left">计算轮廓的边界矩形</td>
+</tr>
+<tr>
+<td align="left"><code>cv2.minAreaRect()</code></td>
+<td align="left">计算轮廓的最小外接矩形</td>
+</tr>
+<tr>
+<td align="left"><code>cv2.minEnclosingCircle()</code></td>
+<td align="left">计算轮廓的最小外接圆</td>
+</tr>
+<tr>
+<td align="left"><code>cv2.approxPolyDP()</code></td>
+<td align="left">对轮廓进行多边形近似</td>
+</tr>
+</tbody></table>
+<h3 id="2-10-3-cv2-findContours"><a href="#2-10-3-cv2-findContours" class="headerlink" title="2.10.3 cv2.findContours()"></a>2.10.3 <code>cv2.findContours()</code></h3><p><strong>功能描述</strong>:<br>该函数用于在二值图像中查找轮廓。轮廓是图像中具有相同颜色或强度的连续点的曲线。</p>
+<p><strong>函数定义</strong>:</p>
+<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs oxygene">contours, hierarchy = cv2.findContours(image, mode, <span class="hljs-keyword">method</span>[, <span class="hljs-title function_">contours</span>[, <span class="hljs-title function_">hierarchy</span>[, <span class="hljs-title function_">offset</span>]]])<br></code></pre></td></tr></table></figure>
+
+<p><strong>参数说明</strong>:</p>
+<ul>
+<li><p><code>image</code>: 输入的二值图像（通常为经过阈值处理或边缘检测后的图像）。</p>
+</li>
+<li><p><code>mode</code>: 轮廓检索模式，常用的有：</p>
+<ul>
+<li><code>cv2.RETR_EXTERNAL</code>: 只检测最外层轮廓。</li>
+<li><code>cv2.RETR_LIST</code>: 检测所有轮廓，但不建立层次关系。</li>
+<li><code>cv2.RETR_TREE</code>: 检测所有轮廓，并建立完整的层次结构。</li>
+</ul>
+</li>
+<li><p><code>method</code>: 轮廓近似方法，常用的有：</p>
+<ul>
+<li><code>cv2.CHAIN_APPROX_NONE</code>: 存储所有的轮廓点。</li>
+<li><code>cv2.CHAIN_APPROX_SIMPLE</code>: 压缩水平、垂直和对角线段，只保留端点。</li>
+</ul>
+</li>
+<li><p><code>contours</code>: 输出的轮廓列表，每个轮廓是一个点集。</p>
+</li>
+<li><p><code>hierarchy</code>: 输出的层次结构信息。</p>
+</li>
+<li><p><code>offset</code>: 可选参数，轮廓点的偏移量。</p>
+</li>
+</ul>
+<p><strong>返回值</strong>:</p>
+<ul>
+<li><code>contours</code>: 检测到的轮廓列表。</li>
+<li><code>hierarchy</code>: 轮廓的层次结构信息。</li>
+</ul>
+<h3 id="2-10-4-cv2-drawContours"><a href="#2-10-4-cv2-drawContours" class="headerlink" title="2.10.4 cv2.drawContours()"></a>2.10.4 <code>cv2.drawContours()</code></h3><p><strong>功能描述</strong>:<br>该函数用于在图像上绘制检测到的轮廓。</p>
+<p><strong>函数定义</strong>:</p>
+<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs inform7">cv2.drawContours(image, contours, contourIdx, color<span class="hljs-comment">[, thickness<span class="hljs-comment">[, lineType<span class="hljs-comment">[, hierarchy<span class="hljs-comment">[, maxLevel<span class="hljs-comment">[, offset]</span>]</span>]</span>]</span>]</span>)<br></code></pre></td></tr></table></figure>
+
+<p><strong>参数说明</strong>:</p>
+<ul>
+<li><code>image</code>: 要绘制轮廓的图像。</li>
+<li><code>contours</code>: 轮廓列表。</li>
+<li><code>contourIdx</code>: 要绘制的轮廓索引，如果为负数，则绘制所有轮廓。</li>
+<li><code>color</code>: 轮廓的颜色。</li>
+<li><code>thickness</code>: 轮廓线的厚度，如果为负数，则填充轮廓内部。</li>
+<li><code>lineType</code>: 线型。</li>
+<li><code>hierarchy</code>: 轮廓的层次结构信息。</li>
+<li><code>maxLevel</code>: 绘制的最大层次深度。</li>
+<li><code>offset</code>: 轮廓点的偏移量。</li>
+</ul>
+<p><strong>返回值</strong>:<br>无返回值，直接在输入图像上绘制轮廓。</p>
+<h3 id="2-10-5-cv2-contourArea"><a href="#2-10-5-cv2-contourArea" class="headerlink" title="2.10.5 cv2.contourArea()"></a>2.10.5 <code>cv2.contourArea()</code></h3><p><strong>功能描述</strong>:<br>该函数用于计算轮廓的面积。</p>
+<p><strong>函数定义</strong>:</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">area</span> = cv2.contourArea(contour[, oriented])<br></code></pre></td></tr></table></figure>
+
+<p><strong>参数说明</strong>:</p>
+<ul>
+<li><code>contour</code>: 输入的轮廓点集。</li>
+<li><code>oriented</code>: 可选参数，如果为True，返回有符号的面积。</li>
+</ul>
+<p><strong>返回值</strong>:<br>轮廓的面积。</p>
+<h3 id="2-10-6-cv2-arcLength"><a href="#2-10-6-cv2-arcLength" class="headerlink" title="2.10.6 cv2.arcLength()"></a>2.10.6 <code>cv2.arcLength()</code></h3><p><strong>功能描述</strong>:<br>该函数用于计算轮廓的周长或弧长。</p>
+<p><strong>函数定义</strong>:</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">length</span> = cv2.arcLength(curve, closed)<br></code></pre></td></tr></table></figure>
+
+<p><strong>参数说明</strong>:</p>
+<ul>
+<li><code>curve</code>: 输入的轮廓点集。</li>
+<li><code>closed</code>: 布尔值，表示轮廓是否闭合。</li>
+</ul>
+<p><strong>返回值</strong>:<br>轮廓的周长或弧长。</p>
+<h3 id="2-10-7-cv2-boundingRect"><a href="#2-10-7-cv2-boundingRect" class="headerlink" title="2.10.7 cv2.boundingRect()"></a>2.10.7 <code>cv2.boundingRect()</code></h3><p><strong>功能描述</strong>:<br>该函数用于计算轮廓的边界矩形。</p>
+<p><strong>函数定义</strong>:</p>
+<figure class="highlight gml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gml"><span class="hljs-variable language_">x</span>, <span class="hljs-variable language_">y</span>, w, h = cv2.boundingRect(points)<br></code></pre></td></tr></table></figure>
+
+<p><strong>参数说明</strong>:</p>
+<ul>
+<li><code>points</code>: 输入的轮廓点集。</li>
+</ul>
+<p><strong>返回值</strong>:<br>边界矩形的左上角坐标 <code>(x, y)</code> 和宽度 <code>w</code>、高度 <code>h</code>。</p>
+<h3 id="2-10-8-cv2-minAreaRect"><a href="#2-10-8-cv2-minAreaRect" class="headerlink" title="2.10.8 cv2.minAreaRect()"></a>2.10.8 <code>cv2.minAreaRect()</code></h3><p><strong>功能描述</strong>:<br>该函数用于计算轮廓的最小外接矩形（旋转矩形）。</p>
+<p><strong>函数定义</strong>:</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf"><span class="hljs-attribute">rect</span> <span class="hljs-operator">=</span> cv2.minAreaRect(points)<br></code></pre></td></tr></table></figure>
+
+<p><strong>参数说明</strong>:</p>
+<ul>
+<li><code>points</code>: 输入的轮廓点集。</li>
+</ul>
+<p><strong>返回值</strong>:<br>返回一个旋转矩形，包含中心点 <code>(x, y)</code>、宽度、高度和旋转角度。</p>
+<h3 id="2-10-9-cv2-minEnclosingCircle"><a href="#2-10-9-cv2-minEnclosingCircle" class="headerlink" title="2.10.9 cv2.minEnclosingCircle()"></a>2.10.9 <code>cv2.minEnclosingCircle()</code></h3><p><strong>功能描述</strong>:<br>该函数用于计算轮廓的最小外接圆。</p>
+<p><strong>函数定义</strong>:</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs maxima">(<span class="hljs-built_in">center</span>, <span class="hljs-built_in">radius</span>) = cv2.minEnclosingCircle(<span class="hljs-built_in">points</span>)<br></code></pre></td></tr></table></figure>
+
+<p><strong>参数说明</strong>:</p>
+<ul>
+<li><code>points</code>: 输入的轮廓点集。</li>
+</ul>
+<p><strong>返回值</strong>:<br>返回圆心 <code>(x, y)</code> 和半径 <code>radius</code>。</p>
+<h3 id="2-10-10-cv2-approxPolyDP"><a href="#2-10-10-cv2-approxPolyDP" class="headerlink" title="2.10.10 cv2.approxPolyDP()"></a>2.10.10 <code>cv2.approxPolyDP()</code></h3><p><strong>功能描述</strong>:<br>该函数用于对轮廓进行多边形近似。</p>
+<p><strong>函数定义</strong>:</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">approx</span> = cv2.approxPolyDP(curve, epsilon, closed)<br></code></pre></td></tr></table></figure>
+
+<p><strong>参数说明</strong>:</p>
+<ul>
+<li><code>curve</code>: 输入的轮廓点集。</li>
+<li><code>epsilon</code>: 近似精度，值越小，近似越精确。</li>
+<li><code>closed</code>: 布尔值，表示轮廓是否闭合。</li>
+</ul>
+<p><strong>返回值</strong>:<br>返回近似后的多边形点集。</p>
+<h3 id="2-10-11轮廓检测的应用"><a href="#2-10-11轮廓检测的应用" class="headerlink" title="2.10.11轮廓检测的应用"></a>2.10.11轮廓检测的应用</h3><ul>
+<li>物体识别: 通过轮廓检测可以识别图像中的物体，例如检测圆形、矩形等。</li>
+<li>形状分析: 通过计算轮廓的特征（如面积、周长、边界矩形等），可以分析物体的形状。</li>
+<li>目标跟踪: 在视频中，可以通过轮廓检测跟踪运动的目标。</li>
+<li>图像分割: 通过轮廓检测可以将图像中的物体分割出来。</li>
+</ul>
+<p>OpenCV 提供了强大的轮廓检测功能，可以用于提取图像中物体的边界，并计算轮廓的特征。</p>
+<p>以下是轮廓检测的主要步骤和函数：</p>
+<table>
+<thead>
+<tr>
+<th align="left"><strong>步骤</strong></th>
+<th align="left"><strong>函数</strong></th>
+<th align="left"><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>图像预处理</strong></td>
+<td align="left"><code>cv2.cvtColor()</code></td>
+<td align="left">将图像转换为灰度图。</td>
+</tr>
+<tr>
+<td align="left"><strong>二值化处理</strong></td>
+<td align="left"><code>cv2.threshold()</code></td>
+<td align="left">将灰度图转换为二值图像。</td>
+</tr>
+<tr>
+<td align="left"><strong>查找轮廓</strong></td>
+<td align="left"><code>cv2.findContours()</code></td>
+<td align="left">查找图像中的轮廓。</td>
+</tr>
+<tr>
+<td align="left"><strong>绘制轮廓</strong></td>
+<td align="left"><code>cv2.drawContours()</code></td>
+<td align="left">绘制检测到的轮廓。</td>
+</tr>
+<tr>
+<td align="left"><strong>计算轮廓面积</strong></td>
+<td align="left"><code>cv2.contourArea()</code></td>
+<td align="left">计算轮廓的面积。</td>
+</tr>
+<tr>
+<td align="left"><strong>计算轮廓周长</strong></td>
+<td align="left"><code>cv2.arcLength()</code></td>
+<td align="left">计算轮廓的周长。</td>
+</tr>
+<tr>
+<td align="left"><strong>计算边界矩形</strong></td>
+<td align="left"><code>cv2.boundingRect()</code></td>
+<td align="left">计算轮廓的边界矩形。</td>
+</tr>
+<tr>
+<td align="left"><strong>计算最小外接矩形</strong></td>
+<td align="left"><code>cv2.minAreaRect()</code></td>
+<td align="left">计算轮廓的最小外接矩形。</td>
+</tr>
+<tr>
+<td align="left"><strong>计算最小外接圆</strong></td>
+<td align="left"><code>cv2.minEnclosingCircle()</code></td>
+<td align="left">计算轮廓的最小外接圆。</td>
+</tr>
+<tr>
+<td align="left"><strong>多边形逼近</strong></td>
+<td align="left"><code>cv2.approxPolyDP()</code></td>
+<td align="left">对轮廓进行多边形逼近。</td>
+</tr>
+</tbody></table>
+<p>以下是一个完整的轮廓检测示例代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> cv2<br><br><span class="hljs-comment"># 读取图像</span><br>image = cv2.imread(<span class="hljs-string">&quot;path/to/image&quot;</span>)<br><br><span class="hljs-comment"># 转换为灰度图</span><br>gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)<br><br><span class="hljs-comment"># 二值化处理</span><br>ret, binary = cv2.threshold(gray, <span class="hljs-number">127</span>, <span class="hljs-number">255</span>, cv2.THRESH_BINARY)<br><br><span class="hljs-comment"># 查找轮廓</span><br>contours, hierarchy = cv2.findContours(binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)<br><br><span class="hljs-comment"># 绘制轮廓</span><br>cv2.drawContours(image, contours, -<span class="hljs-number">1</span>, (<span class="hljs-number">0</span>, <span class="hljs-number">255</span>, <span class="hljs-number">0</span>), <span class="hljs-number">2</span>)<br><br><span class="hljs-comment"># 显示结果</span><br>cv2.imshow(<span class="hljs-string">&quot;Contours&quot;</span>, image)<br>cv2.waitKey(<span class="hljs-number">0</span>)<br>cv2.destroyAllWindows()<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-11图像直方图"><a href="#2-11图像直方图" class="headerlink" title="2.11图像直方图"></a>2.11图像直方图</h2><h3 id="2-11-1什么是图像直方图？"><a href="#2-11-1什么是图像直方图？" class="headerlink" title="2.11.1什么是图像直方图？"></a>2.11.1什么是图像直方图？</h3><p>图像直方图是图像像素强度分布的图形表示，对于灰度图像，直方图显示了每个灰度级（0到255）在图像中出现的频率，对于彩色图像，我们可以分别计算每个通道（如R、G、B）的直方图。</p>
+<p>直方图可以帮助我们了解图像的亮度、对比度等信息。例如，如果直方图集中在低灰度区域，说明图像偏暗；如果直方图分布均匀，说明图像对比度较好。</p>
+<ul>
+<li><strong>直方图:</strong> 表示图像中像素强度的分布情况，横轴表示像素强度值，纵轴表示该强度值的像素数量。</li>
+<li><strong>灰度直方图:</strong> 针对灰度图像的直方图，表示每个灰度级的像素数量。</li>
+<li><strong>颜色直方图:</strong> 针对彩色图像的直方图，分别表示每个颜色通道（如 BGR）的像素强度分布。</li>
+</ul>
+<p>OpenCV 提供了丰富的直方图计算和操作函数：</p>
+<table>
+<thead>
+<tr>
+<th align="left"><strong>功能</strong></th>
+<th align="left"><strong>函数</strong></th>
+<th align="left"><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>计算直方图</strong></td>
+<td align="left"><code>cv2.calcHist()</code></td>
+<td align="left">计算图像的直方图。</td>
+</tr>
+<tr>
+<td align="left"><strong>直方图均衡化</strong></td>
+<td align="left"><code>cv2.equalizeHist()</code></td>
+<td align="left">增强图像的对比度。</td>
+</tr>
+<tr>
+<td align="left"><strong>直方图比较</strong></td>
+<td align="left"><code>cv2.compareHist()</code></td>
+<td align="left">比较两个直方图的相似度。</td>
+</tr>
+<tr>
+<td align="left"><strong>绘制直方图</strong></td>
+<td align="left"><code>matplotlib.pyplot.plot()</code></td>
+<td align="left">使用 Matplotlib 绘制直方图。</td>
+</tr>
+</tbody></table>
+<h3 id="2-11-2OpenCV-中的直方图计算函数"><a href="#2-11-2OpenCV-中的直方图计算函数" class="headerlink" title="2.11.2OpenCV 中的直方图计算函数"></a>2.11.2OpenCV 中的直方图计算函数</h3><p>在 OpenCV 中，我们可以使用 <code>cv2.calcHist()</code> 函数来计算图像的直方图。</p>
+<p><strong><code>cv2.calcHist()</code> 函数语法</strong></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">cv2<span class="hljs-selector-class">.calcHist</span>(images, channels, <span class="hljs-selector-tag">mask</span>, histSize, ranges<span class="hljs-selector-attr">[, hist[, accumulate]</span>])<br></code></pre></td></tr></table></figure>
+
+<p><strong>参数说明</strong></p>
+<ul>
+<li><strong>images</strong>: 输入的图像列表，通常是一个包含单通道或多通道图像的列表。例如 <code>[img]</code>。</li>
+<li><strong>channels</strong>: 需要计算直方图的通道索引。对于灰度图像，使用 <code>[0]</code>；对于彩色图像，可以使用 <code>[0]</code>、<code>[1]</code>、<code>[2]</code> 分别计算蓝色、绿色和红色通道的直方图。</li>
+<li><strong>mask</strong>: 掩码图像。如果指定了掩码，则只计算掩码区域内的像素。如果不需要掩码，可以传入 <code>None</code>。</li>
+<li><strong>histSize</strong>: 直方图的 bin 数量。对于灰度图像，通常设置为 <code>[256]</code>，表示将灰度级分为 256 个 bin。</li>
+<li><strong>ranges</strong>: 像素值的范围。对于灰度图像，通常设置为 <code>[0, 256]</code>，表示像素值的范围是 0 到 255。</li>
+<li><strong>hist</strong>: 输出的直方图数组。</li>
+<li><strong>accumulate</strong>: 是否累积直方图。如果设置为 <code>True</code>，则直方图不会被清零，而是在每次调用时累积。</li>
+</ul>
+<p>假设我们有一张灰度图像 <code>img</code>，我们可以使用以下代码计算其直方图：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> cv2<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><br><span class="hljs-comment"># 读取图像</span><br>img = cv2.imread(<span class="hljs-string">&#x27;image.jpg&#x27;</span>, cv2.IMREAD_GRAYSCALE)<br><br><span class="hljs-comment"># 计算直方图</span><br>hist = cv2.calcHist([img], [<span class="hljs-number">0</span>], <span class="hljs-literal">None</span>, [<span class="hljs-number">256</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">256</span>])<br><br><span class="hljs-comment"># 绘制直方图</span><br>plt.plot(hist)<br>plt.title(<span class="hljs-string">&#x27;Grayscale Histogram&#x27;</span>)<br>plt.xlabel(<span class="hljs-string">&#x27;Pixel Value&#x27;</span>)<br>plt.ylabel(<span class="hljs-string">&#x27;Frequency&#x27;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-11-3直方图均衡化"><a href="#2-11-3直方图均衡化" class="headerlink" title="2.11.3直方图均衡化"></a>2.11.3直方图均衡化</h3><p>直方图均衡化是一种增强图像对比度的方法，通过重新分配像素强度值，使直方图更加均匀。</p>
+<p>语法:</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">equalized_image</span> = cv2.equalizeHist(image)<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 直方图均衡化</span><br>equalized_image = cv2.equalizeHist(image)<br><br><span class="hljs-comment"># 显示结果</span><br>cv2.imshow(<span class="hljs-string">&quot;Equalized Image&quot;</span>, equalized_image)<br>cv2.waitKey(<span class="hljs-number">0</span>)<br>cv2.destroyAllWindows()<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-11-4颜色直方图"><a href="#2-11-4颜色直方图" class="headerlink" title="2.11.4颜色直方图"></a>2.11.4颜色直方图</h3><p><strong>计算颜色直方图</strong></p>
+<p>对于彩色图像，可以分别计算每个颜色通道的直方图。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 读取彩色图像</span><br>image = cv2.imread(<span class="hljs-string">&quot;path/to/image&quot;</span>)<br><br><span class="hljs-comment"># 计算 BGR 各通道的直方图</span><br>colors = (<span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;g&#x27;</span>, <span class="hljs-string">&#x27;r&#x27;</span>)<br><span class="hljs-keyword">for</span> i, color <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(colors):<br>    hist = cv2.calcHist([image], [i], <span class="hljs-literal">None</span>, [<span class="hljs-number">256</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">256</span>])<br>    plt.plot(hist, color=color)<br><br><span class="hljs-comment"># 绘制直方图</span><br>plt.title(<span class="hljs-string">&quot;Color Histogram&quot;</span>)<br>plt.xlabel(<span class="hljs-string">&quot;Pixel Intensity&quot;</span>)<br>plt.ylabel(<span class="hljs-string">&quot;Pixel Count&quot;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
+
+<p><strong>颜色直方图均衡化</strong></p>
+<p>对于彩色图像，可以对每个通道分别进行直方图均衡化。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 分离通道</span><br>b, g, r = cv2.split(image)<br><br><span class="hljs-comment"># 对每个通道进行直方图均衡化</span><br>b_eq = cv2.equalizeHist(b)<br>g_eq = cv2.equalizeHist(g)<br>r_eq = cv2.equalizeHist(r)<br><br><span class="hljs-comment"># 合并通道</span><br>equalized_image = cv2.merge([b_eq, g_eq, r_eq])<br><br><span class="hljs-comment"># 显示结果</span><br>cv2.imshow(<span class="hljs-string">&quot;Equalized Color Image&quot;</span>, equalized_image)<br>cv2.waitKey(<span class="hljs-number">0</span>)<br>cv2.destroyAllWindows()<br></code></pre></td></tr></table></figure>
+
+<p><strong>直方图比较</strong></p>
+<p>OpenCV 提供了 cv2.compareHist() 函数，用于比较两个直方图的相似度。</p>
+<p>语法:</p>
+<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs oxygene">similarity = cv2.compareHist(hist1, hist2, <span class="hljs-keyword">method</span>)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>hist1</code>: 第一个直方图。</li>
+<li><code>hist2</code>: 第二个直方图。</li>
+<li><code>method</code>: 比较方法，例如 <code>cv2.HISTCMP_CORREL</code>（相关性比较）。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 计算两个图像的直方图</span><br>hist1 = cv2.calcHist([image1], [<span class="hljs-number">0</span>], <span class="hljs-literal">None</span>, [<span class="hljs-number">256</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">256</span>])<br>hist2 = cv2.calcHist([image2], [<span class="hljs-number">0</span>], <span class="hljs-literal">None</span>, [<span class="hljs-number">256</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">256</span>])<br><br><span class="hljs-comment"># 比较直方图</span><br>similarity = cv2.compareHist(hist1, hist2, cv2.HISTCMP_CORREL)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Histogram Similarity:&quot;</span>, similarity)<br></code></pre></td></tr></table></figure>
+
+<p><strong>直方图的应用</strong></p>
+<ul>
+<li>图像增强: 通过直方图均衡化，可以增强图像的对比度，使细节更加清晰。</li>
+<li>图像分割: 过分析直方图，可以确定阈值，用于图像分割。</li>
+<li>图像匹配: 通过比较直方图，可以判断两幅图像的相似度，用于图像匹配和检索。</li>
+<li>颜色分析: 通过颜色直方图，可以分析图像的颜色分布，用于颜色校正和风格化处理。</li>
+</ul>
+<p>以下是一个完整的直方图计算和均衡化示例代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> cv2<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><br><span class="hljs-comment"># 读取灰度图像</span><br>image = cv2.imread(<span class="hljs-string">&quot;path/to/image&quot;</span>, cv2.IMREAD_GRAYSCALE)<br><br><span class="hljs-comment"># 计算灰度直方图</span><br>hist = cv2.calcHist([image], [<span class="hljs-number">0</span>], <span class="hljs-literal">None</span>, [<span class="hljs-number">256</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">256</span>])<br><br><span class="hljs-comment"># 绘制直方图</span><br>plt.plot(hist)<br>plt.title(<span class="hljs-string">&quot;Grayscale Histogram&quot;</span>)<br>plt.xlabel(<span class="hljs-string">&quot;Pixel Intensity&quot;</span>)<br>plt.ylabel(<span class="hljs-string">&quot;Pixel Count&quot;</span>)<br>plt.show()<br><br><span class="hljs-comment"># 直方图均衡化</span><br>equalized_image = cv2.equalizeHist(image)<br><br><span class="hljs-comment"># 显示结果</span><br>cv2.imshow(<span class="hljs-string">&quot;Equalized Image&quot;</span>, equalized_image)<br>cv2.waitKey(<span class="hljs-number">0</span>)<br>cv2.destroyAllWindows()<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-12视频处理"><a href="#2-12视频处理" class="headerlink" title="2.12视频处理"></a>2.12视频处理</h2><p>OpenCV 也支持视频的处理，可以读取视频文件、捕捉视频流并进行实时处理。</p>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left "
+    
+      href="/2025/05/12/Python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E8%BF%90%E7%AE%97%E7%AC%A6(%E4%BA%8C)/"
+      title="Python学习笔记-运算符（二）"
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+      
+        Python学习笔记-运算符（二）
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2025/05/01/%E8%A5%BF%E9%97%A8%E5%AD%90%E6%9D%AF-%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E8%B5%84%E6%96%99/"
+      title="西门子杯-工程实践资料"
+     >
+
+    <p class="title-text">
+      
+        西门子杯-工程实践资料
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+
+  <div id="comment-card" class="comment-card">
+    <div class="main-title-bar">
+      <div class="main-title-dot"></div>
+      <div class="main-title">留言 </div>
+    </div>
+    <div id="giscus-container"></div>
+  </div>
+  <script src="https://giscus.app/client.js"
+    data-repo="chaoxiaohan/myblog"
+    data-repo-id="R_kgDOPe4zOQ"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOPe4zOc4CuRDG"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="noborder_light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async>
+  </script>
+  
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2025 超小韓<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+  <script src="/js/toc.js"></script>
+  <script src="/js/test-audio.js"></script>
+  <script src="/js/music-player.js"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/code-copy.js"></script>
+  <script src="/js/mobile-warning.js"></script>
+</body>
+</html>
