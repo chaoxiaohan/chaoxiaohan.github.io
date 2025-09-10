@@ -42,7 +42,7 @@
 <meta property="og:description" content="本文整理了西门子杯工程实践相关的安装教程、软件资源、3D打印模型、示例程序及虚拟机解决方案，适合初学者和参赛同学快速上手。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-04-30T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-08-22T13:41:43.166Z">
+<meta property="article:modified_time" content="2025-09-10T13:53:26.748Z">
 <meta property="article:author" content="超小韓">
 <meta property="article:tag" content="西门子杯">
 <meta property="article:tag" content="工程实践">
@@ -312,7 +312,7 @@
           <div class="toc-widget">
   <h3 class="toc-title">目录</h3>
   <div class="toc-content">
-    <ol class="toc-list"><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E5%85%A5%E9%97%A8%E8%AF%BE%E7%A8%8B"><span class="toc-list-text">入门课程</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E7%89%A9%E5%9D%973D%E6%89%93%E5%8D%B0%E6%A8%A1%E5%9E%8B"><span class="toc-list-text">物块3D打印模型</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E5%8D%9A%E5%9B%BEV18%E5%AE%89%E8%A3%85%E5%8C%85%EF%BC%88%E8%A7%86%E9%A2%91%E5%90%8C%E6%AC%BE%EF%BC%89"><span class="toc-list-text">博图V18安装包（视频同款）</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E7%A4%BA%E4%BE%8B%E7%A8%8B%E5%BA%8F%EF%BC%885%E7%AB%99%EF%BC%89"><span class="toc-list-text">工程实践示例程序（5站）</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#VMware%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%95%99%E7%A8%8B"><span class="toc-list-text">VMware虚拟机教程</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#VMware%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%88%E5%B7%B2%E5%AE%89%E8%A3%85%E5%A5%BD%E5%8D%9A%E5%9B%BE%E8%BD%AF%E4%BB%B6%EF%BC%8CWindows-10%E7%B3%BB%E7%BB%9F%EF%BC%8C%E6%88%91%E8%87%AA%E5%B7%B1%E5%B0%81%E8%A3%85%E7%9A%84%EF%BC%8C%E5%BC%80%E7%AE%B1%E5%8D%B3%E7%94%A8%EF%BC%89"><span class="toc-list-text">VMware虚拟机（已安装好博图软件，Windows 10系统，我自己封装的，开箱即用）</span></a></li></ol>
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-list-text">前言</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E5%85%A5%E9%97%A8%E8%AF%BE%E7%A8%8B"><span class="toc-list-text">入门课程</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E7%89%A9%E5%9D%973D%E6%89%93%E5%8D%B0%E6%A8%A1%E5%9E%8B"><span class="toc-list-text">物块3D打印模型</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E5%8D%9A%E5%9B%BEV18%E5%AE%89%E8%A3%85%E5%8C%85%EF%BC%88%E8%A7%86%E9%A2%91%E5%90%8C%E6%AC%BE%EF%BC%89"><span class="toc-list-text">博图V18安装包（视频同款）</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E7%A4%BA%E4%BE%8B%E7%A8%8B%E5%BA%8F%EF%BC%885%E7%AB%99%EF%BC%89"><span class="toc-list-text">工程实践示例程序（5站）</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E5%BE%80%E5%B9%B4%E6%AF%94%E8%B5%9B%E8%AF%95%E9%A2%98%E9%83%BD%E5%8F%AF%E5%89%8D%E5%BE%80%E8%A5%BF%E9%97%A8%E5%AD%90%E6%9D%AF%E5%AE%98%E7%BD%91%E8%8E%B7%E5%8F%96"><span class="toc-list-text">往年比赛试题都可前往西门子杯官网获取</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#VMware%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%95%99%E7%A8%8B"><span class="toc-list-text">VMware虚拟机教程</span></a></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#VMware%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%88%E5%B7%B2%E5%AE%89%E8%A3%85%E5%A5%BD%E5%8D%9A%E5%9B%BE%E8%BD%AF%E4%BB%B6%EF%BC%8CWindows-10%E7%B3%BB%E7%BB%9F%EF%BC%8C%E6%88%91%E8%87%AA%E5%B7%B1%E5%B0%81%E8%A3%85%E7%9A%84%EF%BC%8C%E5%BC%80%E7%AE%B1%E5%8D%B3%E7%94%A8%EF%BC%89"><span class="toc-list-text">VMware虚拟机（已安装好博图软件，Windows 10系统，我自己封装的，开箱即用）</span></a></li></ol>
   </div>
 </div>
 
@@ -358,7 +358,7 @@
   
           </div>
           <div class="wordcount need-seperator meta-info">
-            803 词 
+            838 词 
           </div>
         </div>
         
@@ -376,6 +376,7 @@
 <h1 id="物块3D打印模型"><a href="#物块3D打印模型" class="headerlink" title="物块3D打印模型"></a>物块3D打印模型</h1><p>通过网盘分享的文件：工程实践物料块<br>链接: <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1QUhybubLbyaedKfj8NZ-4w?pwd=4t8d">https://pan.baidu.com/s/1QUhybubLbyaedKfj8NZ-4w?pwd=4t8d</a> 提取码: 4t8d</p>
 <h1 id="博图V18安装包（视频同款）"><a href="#博图V18安装包（视频同款）" class="headerlink" title="博图V18安装包（视频同款）"></a>博图V18安装包（视频同款）</h1><p>通过网盘分享的文件：TIA Portal V18<br>链接: <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1UkRAUrc3QIUx738eeumdQA?pwd=bygn">https://pan.baidu.com/s/1UkRAUrc3QIUx738eeumdQA?pwd=bygn</a> 提取码: bygn</p>
 <h1 id="工程实践示例程序（5站）"><a href="#工程实践示例程序（5站）" class="headerlink" title="工程实践示例程序（5站）"></a>工程实践示例程序（5站）</h1><p>通过网盘分享的文件：决赛程序（wincc）(1).zip<br>链接: <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1QaKupu6jiLXLSUHFt8bDFg?pwd=hhss">https://pan.baidu.com/s/1QaKupu6jiLXLSUHFt8bDFg?pwd=hhss</a> 提取码: hhss</p>
+<h1 id="往年比赛试题都可前往西门子杯官网获取"><a href="#往年比赛试题都可前往西门子杯官网获取" class="headerlink" title="往年比赛试题都可前往西门子杯官网获取"></a>往年比赛试题都可前往西门子杯官网获取</h1><p><a target="_blank" rel="noopener" href="http://www.siemenscup-cimc.org.cn/">“西门子杯”中国智能制造挑战赛官网</a></p>
 <h1 id="VMware虚拟机教程"><a href="#VMware虚拟机教程" class="headerlink" title="VMware虚拟机教程"></a>VMware虚拟机教程</h1><p>如果能装上博图软件，则不需要虚拟机教程。若需要，请参考以下教程：</p>
 <ol>
 <li>下载并安装 VMware Workstation。</li>
