@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+
+
+<html theme="light" showBanner="true" hasBanner="true" > 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+<!-- Gaug.es Analytics -->
+<script>
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', 'true');
+    t.setAttribute('data-track-path', 'https://track.gaug.es/track.gif');
+    t.src = 'https://d36ee2fcip1434.cloudfront.net/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+<!-- End Gaug.es Analytics -->
+
+
+  
+  <title>笔记本新机「开荒」指南 | 超小韓の个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="本章介绍新笔记本电脑从收货到开箱，从系统首次配置到软件注意事项的完整流程。通过阅读本章，你将能找到这些问题的答案（来自《你缺失的那门计算机课》）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="笔记本新机「开荒」指南">
+<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2025/09/27/newcomputer_guide/index.html">
+<meta property="og:site_name" content="超小韓の个人博客">
+<meta property="og:description" content="本章介绍新笔记本电脑从收货到开箱，从系统首次配置到软件注意事项的完整流程。通过阅读本章，你将能找到这些问题的答案（来自《你缺失的那门计算机课》）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://static.criwits.top/images/new-laptop-setup/Unboxing.png#center">
+<meta property="og:image" content="https://static.criwits.top/images/new-laptop-setup/Checking_label.png#center">
+<meta property="og:image" content="https://static.criwits.top/images/new-laptop-setup/Checking_info.png#center">
+<meta property="og:image" content="https://static.criwits.top/images/new-laptop-setup/Windows_11_no_skip_internet.png#center">
+<meta property="og:image" content="https://static.criwits.top/images/new-laptop-setup/Paint.png#center">
+<meta property="og:image" content="https://static.criwits.top/images/new-laptop-setup/One_partition.png#center">
+<meta property="og:image" content="https://static.criwits.top/images/new-laptop-setup/Computer_management.png#center">
+<meta property="og:image" content="https://static.criwits.top/images/new-laptop-setup/Compress_volume.png#center">
+<meta property="og:image" content="https://static.criwits.top/images/new-laptop-setup/Setting_size.png#center">
+<meta property="og:image" content="https://static.criwits.top/images/new-laptop-setup/Create_new_volume.png#center">
+<meta property="og:image" content="https://static.criwits.top/images/new-laptop-setup/Setting_label.png#center">
+<meta property="og:image" content="https://static.criwits.top/images/new-laptop-setup/Two_partitions.png#center">
+<meta property="article:published_time" content="2025-09-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-09-27T07:25:46.894Z">
+<meta property="article:author" content="超小韓">
+<meta property="article:tag" content="learn">
+<meta property="article:tag" content="computer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://static.criwits.top/images/new-laptop-setup/Unboxing.png#center">
+  
+    <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+<link rel="stylesheet" href="/css/search.css">
+
+  
+<link rel="stylesheet" href="/css/toc-fix.css">
+
+  
+<link rel="stylesheet" href="/css/code-copy.css">
+
+  
+<link rel="stylesheet" href="/css/mobile-warning.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/banner.jpg" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>超小韓の个人博客 </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">主页</a>
+    
+      <a class="main-nav-link" href="/archives">文章</a>
+    
+      <a class="main-nav-link" href="/resources">资料</a>
+    
+      <a class="main-nav-link" href="/about">关于我的</a>
+    
+  </nav>
+  <nav id="search-nav">
+    <div id="search-container">
+      <select id="search-mode-selector" name="search-mode">
+        <option value="exact">精确</option>
+        <option value="fuzzy">模糊</option>
+      </select>
+      <input type="text" id="search-input" placeholder="搜索文章..." autocomplete="off">
+      <div id="search-results" class="hidden">
+        <div id="search-results-content"></div>
+      </div>
+    </div>
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">主页</a>
+    
+      <a class="nav-dropdown-link" href="/archives">文章</a>
+    
+      <a class="nav-dropdown-link" href="/resources">资料</a>
+    
+      <a class="nav-dropdown-link" href="/about">关于我的</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/head.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">超小韓 </div>
+      <div class="dot"></div>
+      <div class="subtitle">生活明朗，万物可爱！ </div>
+      <div class="link-list">
+        
+          <a class="link-btn" href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2537037482&website=www.oicqzone.com" title="QQ"><i class="fa-brands fa-qq"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/353687950" title="哔哩哔哩"><i class="fa-brands fa-bilibili"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/chaoxiaohan/" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        
+          <a class="link-btn" href="mailto:chaoxiaohan@chaoxiaohan.cyou" title="Email"><i class="fa-solid fa-envelope"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+    
+
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">标签</h3>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Compose/" rel="tag">Compose</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CubeMx/" rel="tag">CubeMx</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCv/" rel="tag">OpenCv</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/computer/" rel="tag">computer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/resourse/" rel="tag">resourse</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/teach/" rel="tag">teach</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%8D%9A%E5%9B%BE/" rel="tag">博图</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" rel="tag">工程实践</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%A5%BF%E9%97%A8%E5%AD%90%E6%9D%AF/" rel="tag">西门子杯</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">归档</h3>
+      
+      
+        <a class="archive-link" href="/archives/2025/09 ">
+          九月 2025 
+          <div class="archive-count">3 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/08 ">
+          八月 2025 
+          <div class="archive-count">1 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/07 ">
+          七月 2025 
+          <div class="archive-count">3 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/05 ">
+          五月 2025 
+          <div class="archive-count">3 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/04 ">
+          四月 2025 
+          <div class="archive-count">1 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2025/03 ">
+          三月 2025 
+          <div class="archive-count">2 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2024/10 ">
+          十月 2024 
+          <div class="archive-count">2 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2024/09 ">
+          九月 2024 
+          <div class="archive-count">4 </div>
+        </a>
+      
+        <a class="archive-link" href="/archives/2023/08 ">
+          八月 2023 
+          <div class="archive-count">1 </div>
+        </a>
+      
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">最新文章</h3>
+      <ul>
+        
+          <a class="recent-link" href="/2025/09/27/newcomputer_guide/" title="笔记本新机「开荒」指南" >
+            <div class="recent-link-text">
+              笔记本新机「开荒」指南
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/09/15/computer_text_C/" title="计算机二级—C语言" >
+            <div class="recent-link-text">
+              计算机二级—C语言
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/09/13/learning-path-share/" title="学习路线分享" >
+            <div class="recent-link-text">
+              学习路线分享
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/08/04/AndroidDevNote/" title="安卓原生开发学习笔记-Kotlin、Compose（一）" >
+            <div class="recent-link-text">
+              安卓原生开发学习笔记-Kotlin、Compose（一）
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/07/22/c-language-guide/" title="C语言入门指南" >
+            <div class="recent-link-text">
+              C语言入门指南
+            </div>
+          </a>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+  <div class="sticky">
+    
+      
+        
+          <div class="toc-widget">
+  <h3 class="toc-title">目录</h3>
+  <div class="toc-content">
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E7%AC%94%E8%AE%B0%E6%9C%AC%E6%96%B0%E6%9C%BA%E3%80%8C%E5%BC%80%E8%8D%92%E3%80%8D%E6%8C%87%E5%8D%97"><span class="toc-list-text">笔记本新机「开荒」指南</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9C%A8%E6%8B%86%E5%B0%81%E4%B9%8B%E5%89%8D"><span class="toc-list-text">在拆封之前 </span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E6%A3%80%E6%9F%A5%E5%B0%81%E6%9D%A1"><span class="toc-list-text">检查封条 </span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E6%A3%80%E6%9F%A5%E4%BA%A7%E5%93%81%E4%BF%A1%E6%81%AF"><span class="toc-list-text">检查产品信息 </span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9C%A8%E5%BC%80%E6%9C%BA%E4%B9%8B%E5%89%8D"><span class="toc-list-text">在开机之前 </span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E6%A3%80%E6%9F%A5%E7%94%B5%E8%84%91%E7%9A%84%E5%A4%96%E8%A7%82%E7%91%95%E7%96%B5"><span class="toc-list-text">检查电脑的外观瑕疵 </span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E9%A6%96%E6%AC%A1%E6%8F%92%E7%94%B5%E5%89%8D%E2%80%A6%E2%80%A6-https-www-criwits-top-missing-new-laptop-setup-html-%E9%A6%96%E6%AC%A1%E6%8F%92%E7%94%B5%E5%89%8D"><span class="toc-list-text">首次插电前…… [](https:&#x2F;&#x2F;www.criwits.top&#x2F;missing&#x2F;new-laptop-setup.html#首次插电前</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%96%AD%E7%BD%91%E5%BC%80%E6%9C%BA"><span class="toc-list-text">断网开机 </span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E9%85%8D%E7%BD%AE%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF"><span class="toc-list-text">配置用户信息 </span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%AE%80%E5%8D%95%E9%AA%8C%E6%9C%BA"><span class="toc-list-text">简单验机 </span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E6%A3%80%E6%9F%A5%E6%9C%BA%E5%99%A8%E5%AE%9E%E9%99%85%E9%85%8D%E7%BD%AE%E6%98%AF%E5%90%A6%E4%B8%8E%E8%B4%AD%E4%B9%B0%E7%9A%84%E7%9B%B8%E5%90%8C"><span class="toc-list-text">检查机器实际配置是否与购买的相同 </span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E6%A3%80%E6%9F%A5%E5%B1%8F%E5%B9%95%E6%9C%89%E6%97%A0%E5%9D%8F%E7%82%B9%E3%80%81%E4%BA%AE%E6%96%91%E5%92%8C%E8%83%8C%E5%85%89%E4%B8%8D%E5%9D%87"><span class="toc-list-text">检查屏幕有无坏点、亮斑和背光不均 </span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E6%A3%80%E6%9F%A5%E6%9C%BA%E5%99%A8%E6%80%A7%E8%83%BD%E8%A1%A8%E7%8E%B0"><span class="toc-list-text">检查机器性能表现 * </span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%88%92%E5%88%86%E6%96%B0%E7%9A%84%E5%88%86%E5%8C%BA"><span class="toc-list-text">划分新的分区 </span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%99%BB%E5%BD%95%E5%BE%AE%E8%BD%AF%E8%B4%A6%E5%8F%B7"><span class="toc-list-text">登录微软账号 </span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%BF%80%E6%B4%BB-Office"><span class="toc-list-text">激活 Office * </span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6%EF%BC%8C%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8%E5%90%A7%EF%BC%81"><span class="toc-list-text">安装软件，开始使用吧！ </span></a></li></ol></li></ol>
+  </div>
+</div>
+
+        
+      
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-newcomputer_guide" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        笔记本新机「开荒」指南
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2025-09-26T16:00:00.000Z" itemprop="datePublished">2025-09-27</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+    未分类 
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            5.7k 词 
+          </div>
+        </div>
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/computer/" rel="tag">computer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li></ul>
+
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <h1 id="笔记本新机「开荒」指南"><a href="#笔记本新机「开荒」指南" class="headerlink" title="笔记本新机「开荒」指南"></a>笔记本新机「开荒」指南</h1><blockquote>
+<p>本文来源：<a target="_blank" rel="noopener" href="https://www.criwits.top/missing/">首页 | 你缺失的那门计算机课 | 计算机技术学习札记</a></p>
+</blockquote>
+<blockquote>
+<p>本章介绍新笔记本电脑从收货到开箱，从系统首次配置到软件注意事项的完整流程。通过阅读本章，你将能找到这些问题的答案：</p>
+<ul>
+<li>我选择自己在京东等平台购买了电脑，在收到电脑后有哪些注意事项？</li>
+<li>为什么有人推荐我，第一次开机要断网？那怎么断网呢？又有什么影响呢？</li>
+<li>网上频频看到各品牌「翻车」视频和帖子，这电脑厂商还能信吗？</li>
+<li>首次开机要注意什么？</li>
+<li>新电脑应该先安装哪些软件？</li>
+</ul>
+</blockquote>
+<p>如果你是在电脑城以及品牌专卖店这样的线下渠道购买的电脑，那么店铺的工作人员或许会为你完成一系列的「开荒操作」；但是，如果你是从网上（品牌官网或者官方商城）购买的电脑，那么这些事将完全由你自己完成。这个过程虽然不难，但为了维护我们自己的权益，防止购到水货和二手货，同时也为了让我们日后使用电脑更加舒适，在「开荒」路上依然有许多需要注意的地方。</p>
+<h2 id="在拆封之前"><a href="#在拆封之前" class="headerlink" title="在拆封之前 #"></a>在拆封之前 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/new-laptop-setup.html#%E5%9C%A8%E6%8B%86%E5%B0%81%E4%B9%8B%E5%89%8D">#</a></h2><p>在网上购买的新电脑，一定是躺在八角尖尖的包装箱里送到我们手中的。拆去在包装箱外另外套的一层快递运输箱（部分商家没有单独使用运输箱，直接用笔记本的包装箱贴快递标签运输），我们就能看到电脑的包装箱。</p>
+<p><img src="https://static.criwits.top/images/new-laptop-setup/Unboxing.png#center" alt="包装箱"></p>
+<h3 id="检查封条"><a href="#检查封条" class="headerlink" title="检查封条 #"></a>检查封条 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/new-laptop-setup.html#%E6%A3%80%E6%9F%A5%E5%B0%81%E6%9D%A1">#</a></h3><p>为了防止箱内的产品在运输途中被恶意取出、调换，厂商一般都会在包装箱的开口处贴一个印有厂商标志的「封条」。这个封条很难无损取下，因而若是封条损坏或有打开痕迹，则大概率意味着这台机器事先被其他人开过箱。<strong>在打开包装箱之前，请务必检查此封条是否完整</strong>！</p>
+<p>不过，若你的电脑不是在品牌官方店铺，而是在第三方店铺购买的，且第三方店铺为你加装了额外配置，那么寄到手中的包装箱有可能没有封条，毕竟第三方自行加装硬件免不了需要拆机。换句话说，在第三方购买，有封条最好，没封条拉倒。</p>
+<p><img src="https://static.criwits.top/images/new-laptop-setup/Checking_label.png#center" alt="检查包装封条"></p>
+<h3 id="检查产品信息"><a href="#检查产品信息" class="headerlink" title="检查产品信息 #"></a>检查产品信息 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/new-laptop-setup.html#%E6%A3%80%E6%9F%A5%E4%BA%A7%E5%93%81%E4%BF%A1%E6%81%AF">#</a></h3><p>包装箱的侧面一般会贴有一张写有机器信息的贴纸。<strong>请务必关注此贴纸上的型号、配置、机器颜色等信息是否与你所购买的机器一致</strong>，建议拍下此贴纸以备不时之需。特别注意：此贴纸上含有许多非常重要的机器信息，如机器的序列号、微软正版软件的注册码等，因此请不要把贴纸的照片随意发给他人。</p>
+<p><img src="https://static.criwits.top/images/new-laptop-setup/Checking_info.png#center" alt="查看机器信息贴纸"></p>
+<p>在检查完以上内容并确认无误后，我们便可以打开包装箱，取出我们的机器了。</p>
+<h2 id="在开机之前"><a href="#在开机之前" class="headerlink" title="在开机之前 #"></a>在开机之前 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/new-laptop-setup.html#%E5%9C%A8%E5%BC%80%E6%9C%BA%E4%B9%8B%E5%89%8D">#</a></h2><p>从包装箱中取出电脑后，我们应当按捺住激动的心情，在插电开机之前对电脑进行一些简单的检查。这样既能保护我们自己的消费者权益，又可以最大程度避免不必要的纠纷。</p>
+<h3 id="检查电脑的外观瑕疵"><a href="#检查电脑的外观瑕疵" class="headerlink" title="检查电脑的外观瑕疵 #"></a>检查电脑的外观瑕疵 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/new-laptop-setup.html#%E6%A3%80%E6%9F%A5%E7%94%B5%E8%84%91%E7%9A%84%E5%A4%96%E8%A7%82%E7%91%95%E7%96%B5">#</a></h3><p>作为工业产品的笔记本电脑，受限于品牌和机器本身的定位，以及生产厂商的加工制造水平，在外观上不可避免地会有一定的瑕疵或者缺陷。这些瑕疵和缺陷大都不影响功能，故很难作为正常渠道退换货的理由。但若在开机前的确发现了难以忍受的外观缺陷，我们依然可以尝试使用「无理由退货」渠道退换。</p>
+<p>常见的外观瑕疵有：屏轴两侧缝隙不对称、触控板两侧高矮不一致、合盖后屏幕和键盘缝隙偏大等。这些外观瑕疵不影响电脑的功能，并且符合厂商的质量要求。换言之，这些瑕疵并不影响它成为合格品，厂商有权拒绝以上述原因作为理由的退换货需求。<strong>我们建议大家在开机前仔细检查外观瑕疵，这是因为在此时我们可以直接使用电商平台「无理由退货」功能进行退货（开机联网后就不能了），从而避免一些不必要的纠纷</strong>。</p>
+<h3 id="首次插电前……-https-www-criwits-top-missing-new-laptop-setup-html-首次插电前"><a href="#首次插电前……-https-www-criwits-top-missing-new-laptop-setup-html-首次插电前" class="headerlink" title="首次插电前…… [](https://www.criwits.top/missing/new-laptop-setup.html#首次插电前"></a>首次插电前…… [](<a target="_blank" rel="noopener" href="https://www.criwits.top/missing/new-laptop-setup.html#%E9%A6%96%E6%AC%A1%E6%8F%92%E7%94%B5%E5%89%8D">https://www.criwits.top/missing/new-laptop-setup.html#首次插电前</a></h3><p>一些品牌的笔记本电脑（如联想、惠普的大部分产品）在出厂时会被设置为「运输模式」。在这种模式下，新购的笔记本不插电源时，无法使用电池开机。只要插过一次电源（即使只是插了一下就拔出），运输模式就会解除。</p>
+<p>因此，对于拥有运输模式的笔记本电脑，可以在<strong>拆封后先不插电源，直接按电源按钮尝试开机。如果不能正常开机，则说明正常</strong>；如果能够正常开机，说明这台机器在出厂后被他人开启过，进而说明机器可能并非原装。</p>
+<blockquote>
+<p>如果你的电脑型号&#x2F;厂商并没有做这样的「运输模式」，或者你购买的是「定制机」，那么这种判断方法对你没有意义。</p>
+</blockquote>
+<p>如果你购买的电脑的运输模式完好，那么我们就可以插上电源，按下开机按钮，开始第一次开机配置了。</p>
+<h2 id="断网开机"><a href="#断网开机" class="headerlink" title="断网开机 #"></a>断网开机 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/new-laptop-setup.html#%E6%96%AD%E7%BD%91%E5%BC%80%E6%9C%BA">#</a></h2><p>新电脑第一次开机时，系统会启动名为「开箱体验」（Out of Box Experience，简称 OOBE）的流程，引导我们对电脑进行一系列初始设置，例如设置语言、连接网络（Wi-Fi）和设置用户密码。这里的「断网开机」指的是，在 OOBE 流程中跳过联网步骤。</p>
+<p>但为什么要断网开机呢？从概率的角度来说，新电脑出现瑕疵是不可避免的，买到有故障的机器也是有可能的。可惜，<strong>很多故障只有在启动电脑进入系统之后才会显现</strong>——例如，屏幕有严重的偏色、亮斑、坏点，以及硬件性能表现远远不及预期。此时，比起普通退货，我们<strong>使用正规电商平台提供的「无理由退货」通道，可以省去和商家沟通的成本，有时会更加方便</strong>。</p>
+<p>可是，几乎所有电商平台都规定：对于电脑产品来说，<strong>使用「无理由退货」必须保证电脑中的 Windows 系统（以及其他正版软件）没有激活</strong>。然而，预装在笔记本电脑里的正版 Windows 系统，<strong>一旦连接到网络，就会自动激活</strong>。</p>
+<p>因此，不难发现：如果我们希望更深入地验机，以保障我们在发现电脑存在故障时能够及时、顺利退货，我们最好在第一次使用电脑时不连接网络，这能够最大限度地保障我们的权益。不同的系统，断网开机的方法也不同：</p>
+<p>Windows 11</p>
+<p>如果你的电脑预装的是 Windows 11，那么你会发现，<strong>在联网步骤没有「跳过」按钮</strong>，如下图：</p>
+<p><img src="https://static.criwits.top/images/new-laptop-setup/Windows_11_no_skip_internet.png#center" alt="Windows 11 无法直接跳过联网步骤"></p>
+<p>这是 Windows 11 的一个离谱要求——它要求我们必须联网才能完成 OOBE。<del>（辣鸡微软，断我后路。）</del> 为了避免联网激活造成「无理由退货」失效，我们就需要用一些「特殊方法」来强行跳过联网步骤。请依次尝试以下方法，跳过联网步骤：</p>
+<ul>
+<li><p>方法一：</p>
+<ol>
+<li>在这个界面尝试按 <code>Shift</code> + <code>F10</code>，如果没有效果，请再按 <code>Fn</code> + <code>Shift</code> + <code>F10</code>。</li>
+<li>输入 <code>oobe\bypassnro.cmd</code>，然后按回车。正常情况下，电脑会重启。如果提示错误，请尝试方法二。</li>
+<li>再次来到联网界面，点击右下方【我没有 Internet 连接】。</li>
+</ol>
+</li>
+<li><p>方法二：</p>
+<ol>
+<li>在这个界面尝试按 <code>Shift</code> + <code>F10</code>，如果没有效果，请再按 <code>Fn</code> + <code>Shift</code> + <code>F10</code>。</li>
+<li>输入 <code>start ms-cxh:localonly</code>，然后按回车。</li>
+<li>你将直接进入配置用户信息的界面，请见本章「配置用户信息」一节，设置你的用户名和密码。如果没有弹出配置用户信息的界面，请尝试方法三。</li>
+</ol>
+</li>
+<li><p>方法三：</p>
+<ol>
+<li>在这个界面尝试按 <code>Shift</code> + <code>F10</code>，如果没有效果，请再按 <code>Fn</code> + <code>Shift</code> + <code>F10</code>。</li>
+<li>输入如下命令，然后按回车：</li>
+</ol>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bat">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE /v BypassNRO /t REG_DWORD /d <span class="hljs-number">1</span> /f<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>输入 <code>shutdown /r /t 0</code>，然后按回车。电脑会重启。</li>
+<li>再次来到联网界面，点击右下方【我没有 Internet 连接】。</li>
+</ol>
+</li>
+</ul>
+<p><strong>若你发现上述方法都不能跳过连接网络，请向我们提出反馈（发送邮件至 <a href="mailto:missing@criwits.top">missing@criwits.top</a>）</strong>。在这种极端情况下，你只能选择连接到网络。</p>
+<p>Windows 10</p>
+<h2 id="配置用户信息"><a href="#配置用户信息" class="headerlink" title="配置用户信息 #"></a>配置用户信息 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/new-laptop-setup.html#%E9%85%8D%E7%BD%AE%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF">#</a></h2><blockquote>
+<p>如果你在上一步没能成功跳过联网，那么这一节你将需要登录或创建一个新的微软账号。有关微软账号的细节，请参考 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/user-and-ms-account.html">用户与微软账号</a>。</p>
+</blockquote>
+<p>如果你成功地跳过了联网步骤，那么你将很快来到配置用户信息的环节。如果你对「用户」这个概念不甚了解，请参阅 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/user-and-ms-account.html">用户与微软账号</a> 。</p>
+<p>在「谁将使用这台电脑」步骤，系统会要求你提供一个用户名。尽管这个用户名可以包含有中文和特殊字符，但我们依然建议<strong>选择一个简短的英文用户名</strong>。这是因为许多软件（例如 SketchUp）在系统用户名包含中文时，会出现各种各样的问题甚至完全无法工作。（关于这个问题，可见 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/characters-and-encodings.html#%E6%8B%AF%E6%95%91%E4%B9%B1%E7%A0%81%E6%9B%B4%E8%A6%81%E9%A2%84%E9%98%B2%E4%B9%B1%E7%A0%81">万言皆数：字符与编码规则</a>。）</p>
+<p>而至于什么是「简短的英文用户名」，尽管没有明确规定，但我们建议用户名最好在 10 个字母以内，不包含除了横杠 <code>-</code> 和下划线 <code>_</code> 之外的符号，不要包含空格。例如，<code>hanswan</code>、 <code>Windy_D</code> 和 <code>Saoirse</code> 都是不错的选择。</p>
+<h2 id="简单验机"><a href="#简单验机" class="headerlink" title="简单验机 #"></a>简单验机 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/new-laptop-setup.html#%E7%AE%80%E5%8D%95%E9%AA%8C%E6%9C%BA">#</a></h2><p>按提示完成剩余的系统配置步骤并稍作等待，你就能进入新电脑的桌面了。这时我们<strong>千万不要联网</strong>（不然前功尽弃，前面花了不少劲来跳过联网步骤呢），而应该在系统内进行一些简单的验机。</p>
+<h3 id="检查机器实际配置是否与购买的相同"><a href="#检查机器实际配置是否与购买的相同" class="headerlink" title="检查机器实际配置是否与购买的相同 #"></a>检查机器实际配置是否与购买的相同 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/new-laptop-setup.html#%E6%A3%80%E6%9F%A5%E6%9C%BA%E5%99%A8%E5%AE%9E%E9%99%85%E9%85%8D%E7%BD%AE%E6%98%AF%E5%90%A6%E4%B8%8E%E8%B4%AD%E4%B9%B0%E7%9A%84%E7%9B%B8%E5%90%8C">#</a></h3><p>打开任务管理器（按 <code>Ctrl</code> + <code>Shift</code> + <code>Esc</code>），切换到【性能】选项卡，你就能看到包括处理器、内存、磁盘和显卡在内的一些硬件的基本信息。</p>
+<ul>
+<li><p>处理器：请关注处理器系列和型号（例如 i5-1135G7 或是 Ryzen 7 5850U）是否和你购买的型号，即包装箱上写明的型号一致。</p>
+</li>
+<li><p>内存：请关注容量（例如 16 GB）、速度（例如 3200 MHz）这两项信息。这些在购买电脑的「商品详情页」会有介绍。</p>
+</li>
+<li><p>硬盘：请关注容量（例如 512 GB 机型的实际可用空间是 477 GB）。</p>
+<blockquote>
+<p>你也可以关注一下硬盘的厂商（例如 SAMSUNG）和具体型号。许多品牌的笔记本厂商，会在同一型号的机器上混用不同品牌的硬盘——而不同品牌的硬盘在表现上可能各有不同。</p>
+</blockquote>
+</li>
+<li><p>显卡：请关注列出的显卡数量。集成显卡机型只会显示 1 个，带有独立显卡的机器一般会显示 2 个——一个是独立显卡，另一个是集成显卡。如果开启了「独显直连」功能，那么带有独立显卡的机器也只会显示 1 块显卡。对于独立显卡，还请关注它的显存（专用 GPU 内存）信息。</p>
+</li>
+</ul>
+<p>一旦上述信息不符，请立即拍照保留证据，并联系卖家进行退换。</p>
+<h3 id="检查屏幕有无坏点、亮斑和背光不均"><a href="#检查屏幕有无坏点、亮斑和背光不均" class="headerlink" title="检查屏幕有无坏点、亮斑和背光不均 #"></a>检查屏幕有无坏点、亮斑和背光不均 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/new-laptop-setup.html#%E6%A3%80%E6%9F%A5%E5%B1%8F%E5%B9%95%E6%9C%89%E6%97%A0%E5%9D%8F%E7%82%B9%E4%BA%AE%E6%96%91%E5%92%8C%E8%83%8C%E5%85%89%E4%B8%8D%E5%9D%87">#</a></h3><p>为了检查屏幕是否存在问题，我们可以在开始菜单中打开「画图」，使用「油漆桶」工具，对画布依次填充几种不同的颜色（例如，红、蓝、绿、黄、纯白等）。每填充一次颜色，都按一次 <code>F11</code> 来全屏以检查屏幕（如果按 <code>F11</code> 没用，请按 <code>Fn</code> + <code>F11</code>，或点击【查看】→【全屏】）。如下图所示。</p>
+<p><img src="https://static.criwits.top/images/new-laptop-setup/Paint.png#center" alt="用「画图」简单检查屏幕"></p>
+<blockquote>
+<p>如果你发现全屏后屏幕不能基本被填满，可以按 <code>Ctrl</code> + <code>E</code>，然后将【图像大小】设置电脑的屏幕分辨率。</p>
+</blockquote>
+<p>屏幕容易出现的问题有：</p>
+<ul>
+<li>坏点：即某个像素点因损坏而无法显示与正常像素点一样的颜色。坏点可能是黑点（不亮），也可能固定只能亮某一种颜色。</li>
+<li>亮斑：即屏幕某处有泛白发亮，与屏幕正常部位相比非常突兀。</li>
+<li>背光不均：让屏幕显示一种亮色，然后远看屏幕，屏幕的不同部位的亮度不均衡，像是有很多大的亮斑一样。</li>
+</ul>
+<blockquote>
+<p>注意 TN 屏因可视角度的变化造成的泛白等问题并不是屏幕问题。详见 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/screens-and-their-secrets.html">显示器的二三事</a>。</p>
+</blockquote>
+<p>在正常退换渠道的标准下，坏点、亮斑一般需要 3 个以上才能进行退换。不过，由于此时我们没有联网，如果出现这些问题，我们可以直接用「无理由退货」渠道来退货。</p>
+<h3 id="检查机器性能表现"><a href="#检查机器性能表现" class="headerlink" title="检查机器性能表现 * #"></a>检查机器性能表现 * <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/new-laptop-setup.html#%E6%A3%80%E6%9F%A5%E6%9C%BA%E5%99%A8%E6%80%A7%E8%83%BD%E8%A1%A8%E7%8E%B0-">#</a></h3><p>我们还可以在此时简单测试一下机器的性能。使用另一台电脑下载诸如「鲁大师」「Fritz Chess Benchmark」「Cinebench」「3D Mark」等软件并拷贝到 U 盘中，再插上我们的机器，利用这些软件对电脑的 CPU、显卡、内存等部件进行各方面的压力测试，从而评判机器的性能表现。此部分内容我们不多介绍，有兴趣的读者请自行上网查找。</p>
+<h2 id="划分新的分区"><a href="#划分新的分区" class="headerlink" title="划分新的分区 #"></a>划分新的分区 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/new-laptop-setup.html#%E5%88%92%E5%88%86%E6%96%B0%E7%9A%84%E5%88%86%E5%8C%BA">#</a></h2><p>一些品牌的笔记本电脑出厂不会为用户划分更多的分区——这意味着你买到手的电脑有可能只有一个「盘」，而这个盘的大小就是整个硬盘可用空间。为了帮助我们更好地管理文件，我们可以手动为新电脑划分新的分区。有关管理文件的基本原则和方法，可以参见 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/file-and-file-management.html">文件与文件管理</a> 一章。</p>
+<p>首先明确，我们能够无损地从一个已有分区的尾部切出一个新的分区，前提是已有分区的剩余空间足够大。因此，如果你的新电脑的分区结构像这样（只有一个 C 盘）：</p>
+<p><img src="https://static.criwits.top/images/new-laptop-setup/One_partition.png#center" alt="一个分区"></p>
+<p>我们可以在它的尾部划分一个新的分区（D 盘）。操作流程如下：</p>
+<ul>
+<li><p>按 <code>Windows</code> + <code>S</code>，输入「计算机管理」，打开【计算机管理】。</p>
+<p><img src="https://static.criwits.top/images/new-laptop-setup/Computer_management.png#center" alt="计算机管理"></p>
+</li>
+<li><p>点击左侧的【磁盘管理】。在右侧，我们可以看到电脑的分区情况（C 盘前后的没有盘符的分区是系统工作需要的隐藏分区，不可操作）。右击我们需要「切」的分区（C 盘），选择【压缩卷】。</p>
+<p><img src="https://static.criwits.top/images/new-laptop-setup/Compress_volume.png#center" alt="压缩卷"></p>
+</li>
+<li><p>稍等片刻，然后，在这个对话框中【输入压缩空间量】处输入你需要「切」出的大小。你可以按 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/file-and-file-management.html#%E5%88%86%E5%8C%BA%E7%9A%84%E9%80%89%E6%8B%A9">文件与文件管理</a> 一章中我们建议的方案进行分区。<strong>注意此处填写的容量单位是 MB</strong>，例如我们想切出 300 GB 的 D 盘，则输入 300×1024&#x3D;307200300×1024&#x3D;307200 ，如下图。</p>
+<p><img src="https://static.criwits.top/images/new-laptop-setup/Setting_size.png#center" alt="设置压缩大小"></p>
+</li>
+<li><p>点击【压缩】。稍等片刻，我们就可以看到在 C 盘的后方多出了一段「未分配」空间。右击它，选择【新建简单卷】。</p>
+<p><img src="https://static.criwits.top/images/new-laptop-setup/Create_new_volume.png#center" alt="新建简单卷"></p>
+</li>
+<li><p>点击三次【下一页】。其中，你可以在「格式化分区」这一步为新分区指定一个有意义的卷标。如果你不更改，它默认是「新加卷」。</p>
+<p><img src="https://static.criwits.top/images/new-laptop-setup/Setting_label.png#center" alt="设置卷标"></p>
+</li>
+<li><p>完成向导，你将得到一个新的分区。</p>
+<p><img src="https://static.criwits.top/images/new-laptop-setup/Two_partitions.png#center" alt="得到了两个分区"></p>
+</li>
+</ul>
+<p>但是磁盘管理工具只能在各分区末尾进行操作，如果你有其他需求，可以参看 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/manage-storage.html">成为空间管理大师</a> 一章。</p>
+<h2 id="登录微软账号"><a href="#登录微软账号" class="headerlink" title="登录微软账号 #"></a>登录微软账号 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/new-laptop-setup.html#%E7%99%BB%E5%BD%95%E5%BE%AE%E8%BD%AF%E8%B4%A6%E5%8F%B7">#</a></h2><p>到此，如果一切检查无误，我们就可以将新电脑连接到网络了。</p>
+<p>在 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/user-and-ms-account.html">用户与微软账号</a> 一章，我们介绍了「微软账号」的作用。由于我们选择了断网开机，因此现在电脑目前的用户是「本地帐户」。为了享受更多的功能（例如，设置同步 <del>（尽管它功能十分有限）</del>、短密码和 Windows Hello）和更高的安全性，我们可以在连接网络后，把这个「本地帐户」绑定到一个微软账号。</p>
+<p>首先打开系统设置，选择【帐户】，然后点击【改用 Microsoft 帐户登录】，按提示注册或登录微软账号即可。</p>
+<h2 id="激活-Office"><a href="#激活-Office" class="headerlink" title="激活 Office * #"></a>激活 Office * <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/new-laptop-setup.html#%E6%BF%80%E6%B4%BB-office-">#</a></h2><p>如果你的电脑出厂预装了正版 Office，那么它也需要联网进行激活才能使用。Office 的正版激活信息是要与微软账号绑定的，因此我们同样需要为 Office 登录我们的微软账号。</p>
+<p>在联网条件下，打开电脑上预装的任意一款正版 Office 组件（例如，Word 或者 Excel），然后按提示操作。</p>
+<h2 id="安装软件，开始使用吧！"><a href="#安装软件，开始使用吧！" class="headerlink" title="安装软件，开始使用吧！ #"></a>安装软件，开始使用吧！ <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/new-laptop-setup.html#%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8%E5%90%A7">#</a></h2><p>按照自己的喜好安装各种软件，并享受新电脑吧！更多细节，不妨参阅 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/software-installation.html">软件的寻找与安装</a>，以及 <a target="_blank" rel="noopener" href="https://www.criwits.top/missing/browsers-and-how-to-choose.html">浏览器——网上冲浪必备</a>、<a target="_blank" rel="noopener" href="https://www.criwits.top/missing/archive-formats-and-tools.html">压缩文件与压缩工具</a>、<a target="_blank" rel="noopener" href="https://www.criwits.top/missing/tools-software.html">工具类软件推荐</a> 等「软件篇」的章节。此外，你还可以看看这篇《<a target="_blank" rel="noopener" href="https://blog.zhilu.cyou/2024/new-laptop-guide">给电脑新手的笔记本开荒指南导读</a>》，其中提到了许多本章未提及的细节和技巧。</p>
+<p>感谢您阅读《你缺计课》！<br>版本日期：2025 年 9 月 26 日</p>
+<p><a target="_blank" rel="noopener" href="https://www.criwits.top/">计算机技术学习札记</a> · <a target="_blank" rel="noopener" href="https://www.criwits.top/terms">使用条款</a><br><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">粤ICP备2022104373号-1</a><br><a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030502009325">粤公网安备44030502009325号</a></p>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left  disabled "
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2025/09/15/computer_text_C/"
+      title="计算机二级—C语言"
+     >
+
+    <p class="title-text">
+      
+        计算机二级—C语言
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+
+  <div id="comment-card" class="comment-card">
+    <div class="main-title-bar">
+      <div class="main-title-dot"></div>
+      <div class="main-title">留言 </div>
+    </div>
+    <div id="giscus-container"></div>
+  </div>
+  <script src="https://giscus.app/client.js"
+    data-repo="chaoxiaohan/myblog"
+    data-repo-id="R_kgDOPe4zOQ"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOPe4zOc4CuRDG"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="noborder_light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async>
+  </script>
+  
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2025 超小韓<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+  <script src="/js/toc.js"></script>
+  
+  <script src="/js/search.js"></script>
+  <script src="/js/code-copy.js"></script>
+  <script src="/js/mobile-warning.js"></script>
+</body>
+</html>
