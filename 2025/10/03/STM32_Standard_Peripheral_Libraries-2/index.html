@@ -78,7 +78,7 @@
 <meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251003184349410.png">
 <meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251003184334418.png">
 <meta property="article:published_time" content="2025-10-02T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-10-04T03:16:36.872Z">
+<meta property="article:modified_time" content="2025-10-05T10:16:14.604Z">
 <meta property="article:author" content="超小韓">
 <meta property="article:tag" content="C">
 <meta property="article:tag" content="STM32">
@@ -116,6 +116,9 @@
 
   
 <link rel="stylesheet" href="/css/image-viewer.css">
+
+  
+<link rel="stylesheet" href="/css/context-menu.css">
 
 <meta name="generator" content="Hexo 7.3.0"></head>
 
@@ -259,7 +262,7 @@
       
         <a class="archive-link" href="/archives/2025/10 ">
           十月 2025 
-          <div class="archive-count">2 </div>
+          <div class="archive-count">4 </div>
         </a>
       
         <a class="archive-link" href="/archives/2025/09 ">
@@ -318,6 +321,18 @@
       <h3 class="widget-title">最新文章</h3>
       <ul>
         
+          <a class="recent-link" href="/2025/10/06/STM32_Standard_Peripheral_Libraries-4/" title="STM32标准库笔记（四）-BKP、RTC、PWR、WDG、FLASH" >
+            <div class="recent-link-text">
+              STM32标准库笔记（四）-BKP、RTC、PWR、WDG、FLASH
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/10/05/STM32_Standard_Peripheral_Libraries-3/" title="STM32标准库笔记（三）-USART、I2C、SPI" >
+            <div class="recent-link-text">
+              STM32标准库笔记（三）-USART、I2C、SPI
+            </div>
+          </a>
+        
           <a class="recent-link" href="/2025/10/03/STM32_Standard_Peripheral_Libraries-2/" title="STM32标准库笔记（二）-PWM、ADC、DMA" >
             <div class="recent-link-text">
               STM32标准库笔记（二）-PWM、ADC、DMA
@@ -333,18 +348,6 @@
           <a class="recent-link" href="/2025/09/27/VOLOV5-lite_train/" title="使用YOLOV5-Lite训练模型" >
             <div class="recent-link-text">
               使用YOLOV5-Lite训练模型
-            </div>
-          </a>
-        
-          <a class="recent-link" href="/2025/09/27/newcomputer_guide/" title="笔记本新机「开荒」指南" >
-            <div class="recent-link-text">
-              笔记本新机「开荒」指南
-            </div>
-          </a>
-        
-          <a class="recent-link" href="/2025/09/15/computer_text_C/" title="计算机二级—C语言" >
-            <div class="recent-link-text">
-              计算机二级—C语言
             </div>
           </a>
         
@@ -653,10 +656,11 @@
 <p>那么如何知道通道输入的电压是多少呢？通过比较器进行逐次的比较，即从高位到低位依次判断是1还是0的过程。（8位判断8次，12位判断12次，具体可以参考C51教程）一遍遍的比较至<strong>近似相等</strong>。</p>
 <p><strong>VREF参考电压：</strong>用于DAC输出电压比较值，也可以说是整个ADC的参考电压。一般情况下ADC的输入范围和供电是一致的。（不一样的，比如音频的ADC）</p>
 <h3 id="2-2-2-ADC框图"><a href="#2-2-2-ADC框图" class="headerlink" title="2.2.2 ADC框图"></a>2.2.2 ADC框图</h3><p>非常重要，反复观看。</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251003184106803.png" alt="image"></p>
 <table>
 <thead>
 <tr>
-<th><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251003184106803.png" alt="image"></th>
+<th></th>
 <th><strong>内部18个通道：</strong>16个IO口+1个温度传感器+VREFINT内部参考电压进入到<strong>模拟多路开关</strong>再进入到<strong>模数转换器</strong>，即逐次比较的过程。转换的<strong>12位</strong>数据结果会放置到<strong>16位数据寄存器</strong>里，<strong>读取即可获得转换值。</strong>注意转换可以<strong>多通道进行</strong>，并且分成了<strong>规则&#x2F;注入两个通道组</strong>。ps:主要是讨论规则组使用，注入组自行查看手册。</th>
 </tr>
 </thead>
@@ -687,10 +691,11 @@
 <p>本芯片没有ADC3。</p>
 <h3 id="2-2-4-规则组的四种转换模式"><a href="#2-2-4-规则组的四种转换模式" class="headerlink" title="2.2.4 规则组的四种转换模式"></a>2.2.4 规则组的四种转换模式</h3><p>参数：单次&#x2F;连续、扫描&#x2F;非扫描</p>
 <p><strong>【单次转换，非扫描模式】</strong></p>
+<p>![image (1)](<a target="_blank" rel="noopener" href="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image">https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image</a> (1).png)</p>
 <table>
 <thead>
 <tr>
-<th>![image (1)](<a target="_blank" rel="noopener" href="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image">https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image</a> (1).png)</th>
+<th></th>
 <th>再非扫描模式下，<strong>只有序列1的位置有效，</strong>这时候同时选中一组的方式就简化为选中一个的方式。但这<strong>一个位置可以选择不同的通道</strong>，然后触发转换一次。EOC标志位置1，整个转换过程结束。如果想再次转换，只能再次触发。如果想换通道，那就触发转换之前将其通道更改。<strong>（<strong><strong>没有用到菜单列表</strong></strong>）</strong></th>
 </tr>
 </thead>
@@ -700,10 +705,11 @@
 </tr>
 </tbody></table>
 <p><strong>【连续转换，非扫描模式】</strong></p>
+<p>![image (2)](<a target="_blank" rel="noopener" href="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image">https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image</a> (3).png)</p>
 <table>
 <thead>
 <tr>
-<th>![image (2)](<a target="_blank" rel="noopener" href="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image">https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image</a> (3).png)</th>
+<th></th>
 <th>仍然是非扫描模式，菜单列表<strong>只用第一个</strong>。区别是一次转换完成标志位置1结束后，还会继续触发转换（<strong>不需要等待时间</strong>），一旦开始，一直持续。想要数据就一直从寄存器去就是了。（但有可能功耗会上升）</th>
 </tr>
 </thead>
@@ -713,10 +719,11 @@
 </tr>
 </tbody></table>
 <p><strong>【单次转换，扫描模式】</strong></p>
+<p>![image (3)](<a target="_blank" rel="noopener" href="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image">https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image</a> (2).png)</p>
 <table>
 <thead>
 <tr>
-<th>![image (3)](<a target="_blank" rel="noopener" href="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image">https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image</a> (2).png)</th>
+<th></th>
 <th>到这里，就很好理解这些参数了。<strong>扫描模式</strong>，每触发一次，转换结束后就会停下来。不过会把菜单列表的通道都转换了。（<strong>列表通道可以任意指定，可以重复指定</strong>）因此，还需要有一个<strong>通道数目</strong>参数。对指定数目进行一次转换，存放到数据寄存器中（<strong>为了防止数据被覆盖，需要及时使用DMA将数据搬运走</strong>）。</th>
 </tr>
 </thead>
@@ -731,10 +738,11 @@
 <p>③这个问题要能理解，我觉得是需要规则&#x2F;注入组+通道+转换模式+扫描模式+中断+DMA这些概念结合寄存器说明，一起来看才好理解。<strong>都要求一个视频里一下子讲完是听不下去的。先把主要的<strong><strong>数据覆盖问题</strong></strong>抓好了，往后这个EOC出现问题就不难理解了</strong>。因为记得CubeMx里面还有一个End Of Conversion Selection（转换结束选择），就是用来配置选择 每个通道&#x2F;整个序列 的。实践细究下去问题多得是，但那是我们的问题了。</p>
 <p><strong>“知识不全是线性的，大部分是网状的，知识点之间不一定有绝对的先后关系；前面内容看不懂，跳过去，并不影响学后面的；后面的学会了，有时候更容易看懂前面的。”——雷军</strong></p>
 <p><strong>【连续转换，扫描模式】</strong></p>
+<p>![image (4)](<a target="_blank" rel="noopener" href="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image">https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image</a> (4).png)</p>
 <table>
 <thead>
 <tr>
-<th>![image (4)](<a target="_blank" rel="noopener" href="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image">https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image</a> (4).png)</th>
+<th></th>
 <th>同样的，连续扫描模式，一旦开始，不会停止转换，全部通道扫描。</th>
 </tr>
 </thead>
@@ -942,10 +950,15 @@
   
     
 <nav id="article-nav">
-  <a class="article-nav-btn left  disabled "
+  <a class="article-nav-btn left "
+    
+      href="/2025/10/05/STM32_Standard_Peripheral_Libraries-3/"
+      title="STM32标准库笔记（三）-USART、I2C、SPI"
      >
     <i class="fa-solid fa-angle-left"></i>
     <p class="title-text">
+      
+        STM32标准库笔记（三）-USART、I2C、SPI
         
     </p>
   </a>
@@ -1040,5 +1053,6 @@
   <script src="/js/code-copy.js"></script>
   <script src="/js/mobile-warning.js"></script>
   <script src="/js/image-viewer.js"></script>
+  <script src="/js/context-menu.js"></script>
 </body>
 </html>
