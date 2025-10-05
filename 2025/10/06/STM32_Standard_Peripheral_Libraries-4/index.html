@@ -69,7 +69,7 @@
 <meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/1713841804034-c49a9b51-f304-464b-b9f5-f1f05593ce7b.png">
 <meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/1713840552235-f96c4adc-a7d2-40b8-a00a-78069949ca88.png">
 <meta property="article:published_time" content="2025-10-05T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-10-05T10:18:27.456Z">
+<meta property="article:modified_time" content="2025-10-05T10:52:25.794Z">
 <meta property="article:author" content="超小韓">
 <meta property="article:tag" content="C">
 <meta property="article:tag" content="STM32">
@@ -253,7 +253,7 @@
       
         <a class="archive-link" href="/archives/2025/10 ">
           十月 2025 
-          <div class="archive-count">4 </div>
+          <div class="archive-count">8 </div>
         </a>
       
         <a class="archive-link" href="/archives/2025/09 ">
@@ -312,33 +312,33 @@
       <h3 class="widget-title">最新文章</h3>
       <ul>
         
+          <a class="recent-link" href="/2025/10/07/STM32Cube_HAL-1/" title="STM32Cube_HAL库笔记（一）-GPIO、中断" >
+            <div class="recent-link-text">
+              STM32Cube_HAL库笔记（一）-GPIO、中断
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/10/07/STM32Cube_HAL-4/" title="STM32Cube_HAL库笔记（四）" >
+            <div class="recent-link-text">
+              STM32Cube_HAL库笔记（四）
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/10/07/STM32Cube_HAL-3/" title="STM32Cube_HAL库笔记（三）" >
+            <div class="recent-link-text">
+              STM32Cube_HAL库笔记（三）
+            </div>
+          </a>
+        
+          <a class="recent-link" href="/2025/10/07/STM32Cube_HAL-2/" title="STM32Cube_HAL库笔记（二）" >
+            <div class="recent-link-text">
+              STM32Cube_HAL库笔记（二）
+            </div>
+          </a>
+        
           <a class="recent-link" href="/2025/10/06/STM32_Standard_Peripheral_Libraries-4/" title="STM32标准库笔记（四）-BKP、RTC、PWR、WDG、FLASH" >
             <div class="recent-link-text">
               STM32标准库笔记（四）-BKP、RTC、PWR、WDG、FLASH
-            </div>
-          </a>
-        
-          <a class="recent-link" href="/2025/10/05/STM32_Standard_Peripheral_Libraries-3/" title="STM32标准库笔记（三）-USART、I2C、SPI" >
-            <div class="recent-link-text">
-              STM32标准库笔记（三）-USART、I2C、SPI
-            </div>
-          </a>
-        
-          <a class="recent-link" href="/2025/10/03/STM32_Standard_Peripheral_Libraries-2/" title="STM32标准库笔记（二）-PWM、ADC、DMA" >
-            <div class="recent-link-text">
-              STM32标准库笔记（二）-PWM、ADC、DMA
-            </div>
-          </a>
-        
-          <a class="recent-link" href="/2025/10/01/STM32_Standard_Peripheral_Libraries-1/" title="STM32标准库笔记（一）-准备、GPIO、中断" >
-            <div class="recent-link-text">
-              STM32标准库笔记（一）-准备、GPIO、中断
-            </div>
-          </a>
-        
-          <a class="recent-link" href="/2025/09/27/VOLOV5-lite_train/" title="使用YOLOV5-Lite训练模型" >
-            <div class="recent-link-text">
-              使用YOLOV5-Lite训练模型
             </div>
           </a>
         
@@ -400,7 +400,7 @@
   
           </div>
           <div class="wordcount need-seperator meta-info">
-            28k 词 
+            29k 词 
           </div>
         </div>
         
@@ -825,6 +825,15 @@
 
 <p>② 主函数使用示例：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br>    <span class="hljs-type">uint16_t</span> device_id;<br>    <span class="hljs-type">uint8_t</span> unique_id[<span class="hljs-number">8</span>];<br>    <br>    <span class="hljs-comment">// 读取设备ID（如STM32F103C8T6的设备ID为0x0410）</span><br>    device_id = Get_DeviceID();<br>    <br>    <span class="hljs-comment">// 读取唯一ID（64位）</span><br>    Get_UniqueID(unique_id);<br>    <br>    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;<br>        <span class="hljs-comment">// 可通过串口等外设输出ID</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p> STM32标准库系列文章</p>
+<p> <a href="https://blog.chaoxiaohan.cyou/2025/10/01/STM32_Standard_Peripheral_Libraries-1/">STM32标准库笔记（一）-准备、GPIO、中断 | 超小韓の个人博客</a></p>
+<p> <a href="https://blog.chaoxiaohan.cyou/2025/10/01/STM32_Standard_Peripheral_Libraries-2/">STM32标准库笔记（二）-PWM、ADC、DMA | 超小韓の个人博客</a></p>
+<p> <a href="https://blog.chaoxiaohan.cyou/2025/10/05/STM32_Standard_Peripheral_Libraries-3/">STM32标准库笔记（三）-USART、I2C、SPI | 超小韓の个人博客</a></p>
+<p> <a href="https://blog.chaoxiaohan.cyou/2025/10/06/STM32_Standard_Peripheral_Libraries-4/">STM32标准库笔记（四）-BKP、RTC、PWR、WDG、FLASH | 超小韓の个人博客</a></p>
+</blockquote>
+
         
       </div>
 
@@ -836,10 +845,15 @@
   
     
 <nav id="article-nav">
-  <a class="article-nav-btn left  disabled "
+  <a class="article-nav-btn left "
+    
+      href="/2025/10/07/STM32Cube_HAL-2/"
+      title="STM32Cube_HAL库笔记（二）"
      >
     <i class="fa-solid fa-angle-left"></i>
     <p class="title-text">
+      
+        STM32Cube_HAL库笔记（二）
         
     </p>
   </a>
