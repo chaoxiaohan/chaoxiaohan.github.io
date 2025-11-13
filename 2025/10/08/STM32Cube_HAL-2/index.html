@@ -28,23 +28,44 @@
 
 
   
-  <title>STM32Cube_HAL库笔记（二） | 超小韓の个人博客</title>
+  <title>STM32Cube_HAL库笔记（二）-PWM | 超小韓の个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
   <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
 
-  <meta name="description" content="正在施工ing...">
+  <meta name="description" content="介绍STM32 HAL库中PWM功能的详细使用，包括定时器配置、呼吸灯实现、舵机控制、蜂鸣器驱动和直流电机控制等应用实例。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="STM32Cube_HAL库笔记（二）">
+<meta property="og:title" content="STM32Cube_HAL库笔记（二）-PWM">
 <meta property="og:url" content="https://blog.chaoxiaohan.cyou/2025/10/08/STM32Cube_HAL-2/index.html">
 <meta property="og:site_name" content="超小韓の个人博客">
-<meta property="og:description" content="正在施工ing...">
+<meta property="og:description" content="介绍STM32 HAL库中PWM功能的详细使用，包括定时器配置、呼吸灯实现、舵机控制、蜂鸣器驱动和直流电机控制等应用实例。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/e08f22ab7da1e0253eaf9d708d07cdd2.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E9%85%8D%E7%BD%AE%E6%97%B6%E9%92%9F%E6%BA%90-d967a2e4219ddd58666f730a79f7def4-1763047197510-22.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE-347ae32e413ed44e85f705a744e42478-1763047196325-19.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/401f5dac2c4c27b475e4f94f64e9054b.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/40ae1752a552913e9c7449e2b3b5850e.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E9%85%8D%E7%BD%AE%E6%97%B6%E9%92%9F%E6%BA%90-d967a2e4219ddd58666f730a79f7def4-1763047190179-10.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/b27beedd2847b3470efa18974d77475b.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E9%85%8D%E7%BD%AE%E6%97%B6%E9%92%9F%E6%BA%90-d967a2e4219ddd58666f730a79f7def4-1763047193620-16.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE-347ae32e413ed44e85f705a744e42478-1763047188119-7.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E9%85%8D%E7%BD%AE%E6%97%B6%E9%92%9F%E6%BA%90-d967a2e4219ddd58666f730a79f7def4-1763047185613-4.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/bf0e28a8a45652d24d1ffca5648346f5-1763047199029-25.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE-347ae32e413ed44e85f705a744e42478-1763047192279-13.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE-347ae32e413ed44e85f705a744e42478-1763047182986-1.png">
 <meta property="article:published_time" content="2025-10-07T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-10-06T10:17:19.619Z">
+<meta property="article:modified_time" content="2025-11-13T15:42:16.351Z">
 <meta property="article:author" content="超小韓">
+<meta property="article:tag" content="STM32">
+<meta property="article:tag" content="HAL">
+<meta property="article:tag" content="PWM">
+<meta property="article:tag" content="Timer">
+<meta property="article:tag" content="Motor">
+<meta property="article:tag" content="Servo">
+<meta property="article:tag" content="Buzzer">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/e08f22ab7da1e0253eaf9d708d07cdd2.png">
   
     <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
   
@@ -208,7 +229,7 @@
   <div class="widget-wrap">
     <div class="widget">
       <h3 class="widget-title">标签</h3>
-      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Compose/" rel="tag">Compose</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CubeMx/" rel="tag">CubeMx</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCV/" rel="tag">OpenCV</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCv/" rel="tag">OpenCv</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Pytorch/" rel="tag">Pytorch</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Standard/" rel="tag">Standard</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/YOLOV5/" rel="tag">YOLOV5</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/computer/" rel="tag">computer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/resourse/" rel="tag">resourse</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/teach/" rel="tag">teach</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%8D%9A%E5%9B%BE/" rel="tag">博图</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" rel="tag">工程实践</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%A5%BF%E9%97%A8%E5%AD%90%E6%9D%AF/" rel="tag">西门子杯</a></li></ul>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/ADC/" rel="tag">ADC</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Buzzer/" rel="tag">Buzzer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Compose/" rel="tag">Compose</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CubeMx/" rel="tag">CubeMx</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/DMA/" rel="tag">DMA</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Interrupt/" rel="tag">Interrupt</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Motor/" rel="tag">Motor</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCV/" rel="tag">OpenCV</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCv/" rel="tag">OpenCv</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/PWM/" rel="tag">PWM</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Pytorch/" rel="tag">Pytorch</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Serial/" rel="tag">Serial</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Servo/" rel="tag">Servo</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Standard/" rel="tag">Standard</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Timer/" rel="tag">Timer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/UART/" rel="tag">UART</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/YOLOV5/" rel="tag">YOLOV5</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/computer/" rel="tag">computer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/resourse/" rel="tag">resourse</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/teach/" rel="tag">teach</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%8D%9A%E5%9B%BE/" rel="tag">博图</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" rel="tag">工程实践</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%A5%BF%E9%97%A8%E5%AD%90%E6%9D%AF/" rel="tag">西门子杯</a></li></ul>
     </div>
   </div>
 
@@ -220,9 +241,14 @@
       <h3 class="widget-title">归档</h3>
       
       
+        <a class="archive-link" href="/archives/2025/11 ">
+          十一月 2025 
+          <div class="archive-count">1 </div>
+        </a>
+      
         <a class="archive-link" href="/archives/2025/10 ">
           十月 2025 
-          <div class="archive-count">8 </div>
+          <div class="archive-count">7 </div>
         </a>
       
         <a class="archive-link" href="/archives/2025/09 ">
@@ -257,7 +283,7 @@
       
         <a class="archive-link" href="/archives/2024/10 ">
           十月 2024 
-          <div class="archive-count">2 </div>
+          <div class="archive-count">7 </div>
         </a>
       
         <a class="archive-link" href="/archives/2024/09 ">
@@ -281,21 +307,21 @@
       <h3 class="widget-title">最新文章</h3>
       <ul>
         
-          <a class="recent-link" href="/2025/10/10/STM32Cube_HAL-4/" title="STM32Cube_HAL库笔记（四）" >
+          <a class="recent-link" href="/2025/11/13/STM32Cube_HAL-4/" title="STM32Cube_HAL库笔记（四）-ADC" >
             <div class="recent-link-text">
-              STM32Cube_HAL库笔记（四）
+              STM32Cube_HAL库笔记（四）-ADC
             </div>
           </a>
         
-          <a class="recent-link" href="/2025/10/09/STM32Cube_HAL-3/" title="STM32Cube_HAL库笔记（三）" >
+          <a class="recent-link" href="/2025/10/09/STM32Cube_HAL-3/" title="STM32Cube_HAL库笔记（三）-DMA" >
             <div class="recent-link-text">
-              STM32Cube_HAL库笔记（三）
+              STM32Cube_HAL库笔记（三）-DMA
             </div>
           </a>
         
-          <a class="recent-link" href="/2025/10/08/STM32Cube_HAL-2/" title="STM32Cube_HAL库笔记（二）" >
+          <a class="recent-link" href="/2025/10/08/STM32Cube_HAL-2/" title="STM32Cube_HAL库笔记（二）-PWM" >
             <div class="recent-link-text">
-              STM32Cube_HAL库笔记（二）
+              STM32Cube_HAL库笔记（二）-PWM
             </div>
           </a>
         
@@ -323,7 +349,7 @@
           <div class="toc-widget">
   <h3 class="toc-title">目录</h3>
   <div class="toc-content">
-    
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E5%B7%A5%E7%A8%8B%E5%88%9B%E5%BB%BA"><span class="toc-list-text">工程创建</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1%E8%AE%BE%E7%BD%AERCC"><span class="toc-list-text">1设置RCC</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2%E8%AE%BE%E7%BD%AE%E5%AE%9A%E6%97%B6%E5%99%A8"><span class="toc-list-text">2设置定时器</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3%E6%97%B6%E9%92%9F%E6%BA%90%E8%AE%BE%E7%BD%AE"><span class="toc-list-text">3时钟源设置</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%91%BC%E5%90%B8%E7%81%AF"><span class="toc-list-text">呼吸灯</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1%E3%80%81%E5%B7%A5%E7%A8%8B%E9%85%8D%E7%BD%AE"><span class="toc-list-text">1、工程配置</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2%E3%80%81%E4%BB%A3%E7%A0%81"><span class="toc-list-text">2、代码</span></a></li></ol></li></ol></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E8%88%B5%E6%9C%BA%E6%8E%A7%E5%88%B6"><span class="toc-list-text">舵机控制</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#SG-90-%E8%88%B5%E6%9C%BA%E7%AE%80%E4%BB%8B"><span class="toc-list-text">SG-90 舵机简介</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1%E3%80%81%E5%B7%A5%E7%A8%8B%E9%85%8D%E7%BD%AE-1"><span class="toc-list-text">1、工程配置</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2%E3%80%81%E4%BB%A3%E7%A0%81-1"><span class="toc-list-text">2、代码</span></a></li></ol></li></ol></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E3%80%90PWM%E3%80%91%E6%97%A0%E6%BA%90%E8%9C%82%E9%B8%A3%E5%99%A8"><span class="toc-list-text">【PWM】无源蜂鸣器</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1%E3%80%81%E5%B7%A5%E7%A8%8B%E9%85%8D%E7%BD%AE-2"><span class="toc-list-text">1、工程配置</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2%E3%80%81%E4%BB%A3%E7%A0%81-2"><span class="toc-list-text">2、代码</span></a></li></ol></li></ol></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E7%9B%B4%E6%B5%81%E7%94%B5%E6%9C%BA%EF%BC%88DRV8833-%E7%94%B5%E6%9C%BA%EF%BC%89"><span class="toc-list-text">直流电机（DRV8833 电机）</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1%E3%80%81%E5%B7%A5%E7%A8%8B%E9%85%8D%E7%BD%AE-3"><span class="toc-list-text">1、工程配置</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2%E3%80%81%E4%BB%A3%E7%A0%81-3"><span class="toc-list-text">2、代码</span></a></li></ol></li></ol></li></ol>
   </div>
 </div>
 
@@ -350,7 +376,7 @@
   
     
       <h1 class="p-name article-title" itemprop="headline name">
-        STM32Cube_HAL库笔记（二）
+        STM32Cube_HAL库笔记（二）-PWM
       </h1>
     
   
@@ -369,16 +395,250 @@
   
           </div>
           <div class="wordcount need-seperator meta-info">
-            69 词 
+            7.1k 词 
           </div>
         </div>
         
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Buzzer/" rel="tag">Buzzer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Motor/" rel="tag">Motor</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PWM/" rel="tag">PWM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Servo/" rel="tag">Servo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Timer/" rel="tag">Timer</a></li></ul>
+
       </header>
       <div class="e-content article-entry" itemprop="articleBody">
         
           <blockquote>
 <p>本系列主要讲解STM32CubeHAL的使用，详细的安装部署教程请见<a target="_blank" rel="noopener" href="https://blog.csdn.net/as480133937/article/details/98885316">【STM32】STM32 CubeMx使用教程一–安装教程-CSDN博客</a></p>
 </blockquote>
+<p>PWM原理详情请见标准库笔记</p>
+<h1 id="工程创建"><a href="#工程创建" class="headerlink" title="工程创建"></a>工程创建</h1><h3 id="1设置RCC"><a href="#1设置RCC" class="headerlink" title="1设置RCC"></a>1设置RCC</h3><p><strong>设置高速外部时钟HSE 选择外部时钟源</strong></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/e08f22ab7da1e0253eaf9d708d07cdd2.png" alt="img"></p>
+<h3 id="2设置定时器"><a href="#2设置定时器" class="headerlink" title="2设置定时器"></a>2设置定时器</h3><p> <img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E9%85%8D%E7%BD%AE%E6%97%B6%E9%92%9F%E6%BA%90-d967a2e4219ddd58666f730a79f7def4-1763047197510-22.png" alt="img"></p>
+<ul>
+<li><strong>1.选择TIM3</strong> </li>
+<li><strong>2.设置定时器时钟源为内部时钟源</strong></li>
+<li><strong>设置定时器CH1为PWM模式</strong></li>
+<li><strong>3.对应管脚自动设置为复用模式</strong></li>
+<li><strong>4.可自行选择是否开启定时器中断</strong></li>
+</ul>
+<p>Channel1~4 就是设置定时器通道的功能   (<strong>输入捕获、输出比较、PWM输出、单脉冲模式</strong>)</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE-347ae32e413ed44e85f705a744e42478-1763047196325-19.png" alt="img"></p>
+<ul>
+<li><strong>Mode</strong>  选择PWM模式1</li>
+<li><strong>Pulse(占空比值)</strong> 先给0</li>
+<li><strong>Fast Mode</strong>  PWM脉冲快速模式  ： 和我们配置无关，不使能</li>
+<li><strong>PWM 极性：</strong>  设置为低电平    PS: <strong>由于LED是低电平点亮，所以我们把极性设置为low</strong></li>
+</ul>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/401f5dac2c4c27b475e4f94f64e9054b.png" alt="img"></p>
+<p>在 Parameter Settings 页配置预分频系数为 71，计数周期(自动加载值)为 499，定时器溢出频率，即PWM的周期，就是 72MHz&#x2F;(71+1)&#x2F;(499+1) &#x3D; 2kHz</p>
+<p><strong>PWM频率：</strong></p>
+<p><strong>Fpwm &#x3D;Tclk &#x2F; ((arr+1)*(psc+1))(单位：Hz)</strong></p>
+<ul>
+<li>arr 是计数器值</li>
+<li>psc 是预分频值</li>
+</ul>
+<p><strong>占空比：</strong></p>
+<ul>
+<li><strong>duty circle &#x3D; TIM3-&gt;CCR1 &#x2F; arr(单位：%)</strong></li>
+<li>TIM3-&gt;CCR1 用户设定值</li>
+</ul>
+<p>比如 定时器频率<strong>Tclk</strong> &#x3D; 72Mhz arr&#x3D;499  psc&#x3D;71   那么PWM频率就是720000&#x2F;500&#x2F;72&#x3D; 2000Hz，即2KHz</p>
+<p>arr&#x3D;499,TIM3-&gt;CCR1&#x3D;250   则pwm的占空比为50% </p>
+<p><strong>改CCR1可以修改占空比，修改arr可以修改频率</strong></p>
+<h3 id="3时钟源设置"><a href="#3时钟源设置" class="headerlink" title="3时钟源设置"></a>3时钟源设置</h3><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/40ae1752a552913e9c7449e2b3b5850e.png" alt="img"></p>
+<ul>
+<li>1选择外部时钟HSE 8MHz  </li>
+<li>2PLL锁相环倍频72倍</li>
+<li>3系统时钟来源选择为PLL</li>
+<li>4设置APB1分频器为 &#x2F;2</li>
+</ul>
+<h2 id="呼吸灯"><a href="#呼吸灯" class="headerlink" title="呼吸灯"></a>呼吸灯</h2><h3 id="1、工程配置"><a href="#1、工程配置" class="headerlink" title="1、工程配置"></a>1、工程配置</h3><ul>
+<li><strong>开启外部晶振</strong>：在Pinout&amp;Configuration -&gt; System Core -&gt; RCC 页面，将 High Speed Clock (HSE) 配置为 Crystal&#x2F;Ceramic Resonator</li>
+</ul>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E9%85%8D%E7%BD%AE%E6%97%B6%E9%92%9F%E6%BA%90-d967a2e4219ddd58666f730a79f7def4-1763047190179-10.png" alt="配置时钟源"></p>
+<ul>
+<li><strong>配置时钟频率</strong>：在Clock Configuration 页面，将PLL Source 选择为 HSE，将System Clock Mux 选择为 PLLCLK，然后在HCLK (MHz) 输入72并回车，将HCLK频率配置为 72 MHz</li>
+</ul>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/b27beedd2847b3470efa18974d77475b.png" alt="时钟配置"></p>
+<ul>
+<li><p><strong>分配引脚</strong>：在Pinout&amp;Configuration页面，将PA6、PA7、PB0分别配置为TIM3_CH1、TIM3_CH2、TIM3_CH3</p>
+</li>
+<li><p><strong>配置TIM3</strong>：在Pinout&amp;Configuration -&gt; Timers -&gt; TIM3</p>
+<ul>
+<li><p>勾选 Internal Clock，开启 TIM3 的内部时钟源</p>
+</li>
+<li><p>Configuration -&gt; Mode，将 Channel1、Channel2、Channel3 分别配置为 PWM Generation CH1、2、3</p>
+</li>
+<li><p>Configuration -&gt; Parameter Settings -&gt; Counter Settings，将 Prescaler 配置为 72-1，将 Counter Period 配置为 100-1，使PWM频率为10kHz</p>
+<blockquote>
+<p>PWM频率 &#x3D; 72MHz ÷ 72 ÷ 100 &#x3D; 10 kHz</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2、代码"><a href="#2、代码" class="headerlink" title="2、代码"></a>2、代码</h3><ul>
+<li><p><strong>启动PWM输出</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//启动3个通道的PWM输出</span><br>HAL_TIM_PWM_Start(&amp;htim3, TIM_CHANNEL_1);<br>HAL_TIM_PWM_Start(&amp;htim3, TIM_CHANNEL_2);<br>HAL_TIM_PWM_Start(&amp;htim3, TIM_CHANNEL_3);<br></code></pre></td></tr></table></figure>
+
+
+</li>
+<li><p><strong>在while循环中逐渐改变占空比</strong></p>
+<ul>
+<li><p><code>__HAL_TIM_SET_COMPARE</code> 可以设置PWM的占空比，<strong>范围 0 - 99</strong></p>
+<blockquote>
+<p>注意：占空比<strong>必须小于</strong>前面配置的<strong>Counter Period</strong>，例程中配置为100-1，即占空比<strong>可调范围是 0 - 99</strong></p>
+</blockquote>
+</li>
+<li><p>先从0逐渐增加到99，亮度逐渐提高</p>
+</li>
+<li><p>再从99逐渐减小到0，亮度逐渐降低</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;<br>    <span class="hljs-comment">// PWM通道CH1-3分别对应三个颜色，下面示例三个颜色一起呼吸灯</span><br>    <span class="hljs-comment">// 0-99为占空比，0为最小亮度，99为最大亮度</span><br>    <span class="hljs-comment">// 每7ms调整一次占空比，从0逐渐增加到99</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> period = <span class="hljs-number">0</span>; period &lt; <span class="hljs-number">100</span>; period++) &#123;<br>        __HAL_TIM_SET_COMPARE(&amp;htim3, TIM_CHANNEL_1, period);<br>        __HAL_TIM_SET_COMPARE(&amp;htim3, TIM_CHANNEL_2, period);<br>        __HAL_TIM_SET_COMPARE(&amp;htim3, TIM_CHANNEL_3, period);<br>        HAL_Delay(<span class="hljs-number">7</span>);<br>    &#125;<br>    <span class="hljs-comment">// 从99逐渐减小到0</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> period = <span class="hljs-number">99</span>; period &gt;= <span class="hljs-number">0</span>; period--) &#123;<br>        __HAL_TIM_SET_COMPARE(&amp;htim3, TIM_CHANNEL_1, period);<br>        __HAL_TIM_SET_COMPARE(&amp;htim3, TIM_CHANNEL_2, period);<br>        __HAL_TIM_SET_COMPARE(&amp;htim3, TIM_CHANNEL_3, period);<br>        HAL_Delay(<span class="hljs-number">7</span>);<br>    &#125;<br>    HAL_Delay(<span class="hljs-number">100</span>); <br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="舵机控制"><a href="#舵机控制" class="headerlink" title="舵机控制"></a>舵机控制</h1><h3 id="SG-90-舵机简介"><a href="#SG-90-舵机简介" class="headerlink" title="SG-90 舵机简介"></a>SG-90 舵机简介</h3><ul>
+<li><p>舵机最早是应用于<strong>遥控模型</strong>的小型执行器，因此也称为RC舵机。它有一个输出轴，可以连接摇臂，通过输入信号就能<strong>控制摇臂的运动</strong>。</p>
+</li>
+<li><p>与电机不同的是，它可以准确的控制摇臂旋转到某一个<strong>指定位置</strong>，并且自动抵抗外力，维持位置。</p>
+</li>
+<li><p>除了RC模型，舵机可以用于双足机器人、机械臂、自动化执行器（阀门、门窗等等）</p>
+<blockquote>
+<p>注意：舵机内部是塑料减速齿轮，不可大力掰摇臂，避免损坏齿轮</p>
+</blockquote>
+</li>
+<li><p>舵机的输入信号为 <strong>50Hz</strong> 的PWM波，其占空比范围 **2.5%<del>12.5%**，分别对应 **0°</del>180°**位置。因此，调整PWM占空比即可控制舵机的角度。</p>
+</li>
+</ul>
+<h3 id="1、工程配置-1"><a href="#1、工程配置-1" class="headerlink" title="1、工程配置"></a>1、工程配置</h3><ul>
+<li><strong>开启外部晶振</strong>：在Pinout&amp;Configuration -&gt; System Core -&gt; RCC 页面，将 High Speed Clock (HSE) 配置为 Crystal&#x2F;Ceramic Resonator</li>
+</ul>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E9%85%8D%E7%BD%AE%E6%97%B6%E9%92%9F%E6%BA%90-d967a2e4219ddd58666f730a79f7def4-1763047193620-16.png" alt="配置时钟源"></p>
+<ul>
+<li><strong>配置时钟频率</strong>：在Clock Configuration 页面，将PLL Source 选择为 HSE，将System Clock Mux 选择为 PLLCLK，然后在HCLK (MHz) 输入72并回车，将HCLK频率配置为 72 MHz</li>
+</ul>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE-347ae32e413ed44e85f705a744e42478-1763047188119-7.png" alt="时钟配置"></p>
+<ul>
+<li><p><strong>分配引脚</strong>：在Pinout&amp;Configuration页面，将PB8配置为TIM4_CH3</p>
+</li>
+<li><p><strong>配置TIM4</strong>：在Pinout&amp;Configuration -&gt; Timers -&gt; TIM4</p>
+<ul>
+<li><p>Configuration -&gt; Mode，勾选Internal Clock，开启 TIM4 的内部时钟源</p>
+</li>
+<li><p>Configuration -&gt; Mode，将 Channel3 配置为 PWM Generation CH3</p>
+</li>
+<li><p>Configuration -&gt; Parameter Settings -&gt; Counter Settings，将 Prescaler 配置为 720-1，将Counter Period 配置为 2000-1，此时PWM频率为 50 Hz</p>
+<blockquote>
+<p>PWM频率 &#x3D; 72 MHz ÷ 720 ÷ 2000 &#x3D; 50 Hz</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2、代码-1"><a href="#2、代码-1" class="headerlink" title="2、代码"></a>2、代码</h3><ul>
+<li><p><strong>启动PWM输出</strong>：<code>HAL_TIM_PWM_Start(&amp;htim4, TIM_CHANNEL_3)</code> 启动PWM输出</p>
+</li>
+<li><p><strong>舵机控制</strong>：</p>
+<ul>
+<li><p>舵机角度受占空比控制，占空比 2.5%<del>12.5% 代表 0°</del>180°</p>
+</li>
+<li><p>占空比通过<code>__HAL_TIM_SET_COMPARE</code> 调节，参数范围 50~250</p>
+<blockquote>
+<p>占空比 &#x3D; Compare寄存器值 ÷ Counter Period计数周期</p>
+<p>因此，<code>__HAL_TIM_SET_COMPARE</code> 填入的值 &#x3D; 占空比 * Counter Period</p>
+<p>例如，设置占空比为2.5%、12.5%时，2.5% * 2000 &#x3D; 50，2.5% * 2000 &#x3D; 250</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)<br>&#123;<br>    <span class="hljs-comment">// 舵机控制占空比范围2.5% ~ 12.5%</span><br>    <span class="hljs-comment">// Counter Period设置的是2000，因此占空比设置范围是50 ~ 250</span><br><br>    <span class="hljs-comment">// 中点，占空比7.5%，即2000 * 7.5% = 150</span><br>    __HAL_TIM_SET_COMPARE(&amp;htim4, TIM_CHANNEL_3, <span class="hljs-number">150</span>);<br>    HAL_Delay(<span class="hljs-number">1000</span>);<br><br>    <span class="hljs-comment">// 向左转，占空比2.5%，即2000 * 2.5% = 50</span><br>    __HAL_TIM_SET_COMPARE(&amp;htim4, TIM_CHANNEL_3, <span class="hljs-number">50</span>);<br>    HAL_Delay(<span class="hljs-number">1000</span>);<br><br>    <span class="hljs-comment">// 向右转，占空比12.5%，即2000 * 12.5% = 250</span><br>    __HAL_TIM_SET_COMPARE(&amp;htim4, TIM_CHANNEL_3, <span class="hljs-number">250</span>);<br>    HAL_Delay(<span class="hljs-number">1000</span>);<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="【PWM】无源蜂鸣器"><a href="#【PWM】无源蜂鸣器" class="headerlink" title="【PWM】无源蜂鸣器"></a>【PWM】无源蜂鸣器</h1><h3 id="1、工程配置-2"><a href="#1、工程配置-2" class="headerlink" title="1、工程配置"></a>1、工程配置</h3><ul>
+<li><strong>开启外部晶振</strong>：在Pinout&amp;Configuration -&gt; System Core -&gt; RCC 页面，将 High Speed Clock (HSE) 配置为 Crystal&#x2F;Ceramic Resonator</li>
+</ul>
+<p>  <img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E9%85%8D%E7%BD%AE%E6%97%B6%E9%92%9F%E6%BA%90-d967a2e4219ddd58666f730a79f7def4-1763047185613-4.png" alt="配置时钟源"></p>
+<ul>
+<li><strong>配置时钟频率</strong>：在Clock Configuration 页面，将PLL Source 选择为 HSE，将System Clock Mux 选择为 PLLCLK，然后在HCLK (MHz) 输入72并回车，将HCLK频率配置为 72 MHz</li>
+</ul>
+<p>  <img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/bf0e28a8a45652d24d1ffca5648346f5-1763047199029-25.png" alt="时钟配置"></p>
+<ul>
+<li><strong>分配引脚</strong>：在Pinout&amp;Configuration页面，配置如下引脚<ul>
+<li>将PB9配置为TIM4_CH4，</li>
+<li>将PB12、PB13设置为GPIO_Input，并分别设置User Label为KEY1、KEY2</li>
+</ul>
+</li>
+<li><strong>配置GPIO</strong>：在Pinout&amp;Configuration -&gt; GPIO，将PB13的GPIO Pull-up&#x2F;Pull-down配置为Pull-up</li>
+<li><strong>配置TIM4</strong>：在Pinout&amp;Configuration -&gt; Timers -&gt; TIM4<ul>
+<li>勾选 Internal Clock，开启 TIM4 的内部时钟源</li>
+<li>Configuration -&gt; Mode，将 Channel4 配置为 PWM Generation CH4</li>
+<li>Configuration -&gt; Parameter Settings -&gt; Counter Settings，将 Prescaler 配置为 72-1</li>
+</ul>
+</li>
+</ul>
+<h3 id="2、代码-2"><a href="#2、代码-2" class="headerlink" title="2、代码"></a>2、代码</h3><ul>
+<li><p><strong>启动PWM输出</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">HAL_TIM_PWM_Start(&amp;htim4, TIM_CHANNEL_4);<br></code></pre></td></tr></table></figure>
+
+
+</li>
+<li><p><strong>在while循环中检测按键并输出相应的频率</strong></p>
+<ul>
+<li><p><code>htim4.Instance-&gt;ARR = 500</code> 可以将 TIM4 的 Counter Period 设置为 500</p>
+<blockquote>
+<p>此时，<strong>PWM频率</strong> &#x3D; 72 MHz ÷ 72 ÷ 500 &#x3D; 2 kHz</p>
+</blockquote>
+</li>
+<li><p><code>__HAL_TIM_SET_COMPARE</code> 可以设置PWM的占空比，将占空比设为 20%，可以确保声音清脆明亮</p>
+<blockquote>
+<p>注意：占空比<strong>必须小于</strong>前面配置的<strong>Counter Period</strong>，例程中配置为100-1，即占空比<strong>可调范围是 0 - 99</strong></p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)<br>&#123;<br>    <span class="hljs-comment">// KEY1按下: 输出2kHz声波</span><br>    <span class="hljs-keyword">if</span> (!HAL_GPIO_ReadPin(KEY1_GPIO_Port, KEY1_Pin))<br>    &#123;<br>        htim4.Instance-&gt;ARR = <span class="hljs-number">500</span>; <span class="hljs-comment">// 2kHz = 72MHz / 72 / 500</span><br>        __HAL_TIM_SET_COMPARE(&amp;htim4, TIM_CHANNEL_4, htim4.Instance-&gt;ARR / <span class="hljs-number">5</span>); <span class="hljs-comment">// 20%占空比</span><br>    &#125;<br>    <span class="hljs-comment">// KEY2按下: 输出3kHz声波</span><br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!HAL_GPIO_ReadPin(KEY2_GPIO_Port, KEY2_Pin))<br>    &#123;<br>        htim4.Instance-&gt;ARR = <span class="hljs-number">334</span>; <span class="hljs-comment">// 3kHz = 72MHz / 72 / 334</span><br>        __HAL_TIM_SET_COMPARE(&amp;htim4, TIM_CHANNEL_4, htim4.Instance-&gt;ARR / <span class="hljs-number">5</span>); <span class="hljs-comment">// 20%占空比</span><br>    &#125;<br>    <span class="hljs-comment">// 否则: 关闭声波输出</span><br>    <span class="hljs-keyword">else</span><br>    &#123;<br>        __HAL_TIM_SET_COMPARE(&amp;htim4, TIM_CHANNEL_4, <span class="hljs-number">0</span>);<br>    &#125;<br>    HAL_Delay(<span class="hljs-number">100</span>);<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="直流电机（DRV8833-电机）"><a href="#直流电机（DRV8833-电机）" class="headerlink" title="直流电机（DRV8833 电机）"></a>直流电机（DRV8833 电机）</h1><h3 id="1、工程配置-3"><a href="#1、工程配置-3" class="headerlink" title="1、工程配置"></a>1、工程配置</h3><ul>
+<li><strong>开启外部晶振</strong>：在Pinout&amp;Configuration -&gt; System Core -&gt; RCC 页面，将 High Speed Clock (HSE) 配置为 Crystal&#x2F;Ceramic Resonator</li>
+</ul>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE-347ae32e413ed44e85f705a744e42478-1763047192279-13.png" alt="配置时钟源"></p>
+<ul>
+<li><strong>配置时钟频率</strong>：在Clock Configuration 页面，将PLL Source 选择为 HSE，将System Clock Mux 选择为 PLLCLK，然后在HCLK (MHz) 输入72并回车，将HCLK频率配置为 72 MHz</li>
+</ul>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE-347ae32e413ed44e85f705a744e42478-1763047182986-1.png" alt="时钟配置"></p>
+<ul>
+<li><strong>分配引脚</strong>：在Pinout&amp;Configuration页面，配置如下引脚<ul>
+<li>将PA0、PA1分别配置为TIM2_CH1、TIM2_CH2</li>
+<li>将PB12、PB13设置为GPIO_Input，并分别设置User Label为KEY1、KEY2</li>
+</ul>
+</li>
+<li><strong>配置GPIO</strong>：在Pinout&amp;Configuration -&gt; GPIO，将PB13的GPIO Pull-up&#x2F;Pull-down配置为Pull-up</li>
+<li><strong>配置TIM2</strong>：在Pinout&amp;Configuration -&gt; Timers -&gt; TIM2<ul>
+<li>Configuration -&gt; Mode -&gt; Clock Source 选择 Internal Clock，开启 TIM2 的内部时钟源</li>
+<li>Configuration -&gt; Mode，将 Channel1、Channel2 分别配置为 PWM Generation CH1、2</li>
+<li>Configuration -&gt; Parameter Settings -&gt; Counter Settings，将 Prescaler 配置为 72-1，将Counter Period 配置为 100-1，此时PWM频率为 10 kHz</li>
+</ul>
+</li>
+</ul>
+<h3 id="2、代码-3"><a href="#2、代码-3" class="headerlink" title="2、代码"></a>2、代码</h3><ul>
+<li><p><strong>逻辑功能</strong>：在while循环中检测按键并输出相应的占空比：</p>
+<ul>
+<li>按下KEY1，启动PWM输出，占空比配置为99%，风扇高速运转</li>
+<li>按下KEY2，启动PWM输出，占空比配置为85%，风扇中速运转</li>
+<li>没有按键按下，关闭PWM输出，风扇停止</li>
+</ul>
+</li>
+<li><p><strong>转速控制</strong>：</p>
+<ul>
+<li><code>__HAL_TIM_SET_COMPARE(&amp;htim2, TIM_CHANNEL_1, 99)</code> 设置PWM的<strong>占空比越高，转速越快</strong></li>
+</ul>
+<p>注意</p>
+<p><strong>占空比过低时，电机可能无法启动</strong>。建议先从 99 占空比开始测试。</p>
+<p>提示</p>
+<p>由于我们配置的 Counter Period 为 100-1，因此占空比最高可以设置为 99，而非 100</p>
+</li>
+<li><p><strong>正&#x2F;反方向控制</strong>：</p>
+<ul>
+<li>配置了CH1、CH2两路PWM输出，但每次只需要启动1路PWM输出，这代表了不同的旋转方向。</li>
+<li>例如，<code>HAL_TIM_PWM_Start(&amp;htim2, TIM_CHANNEL_1)</code> 启动TIM2_CH1，电机正转；如果启动CH2，则电机反转</li>
+<li>当需要转换方向，或者需要停止时，可以调用<code>HAL_TIM_PWM_Stop(&amp;htim2, TIM_CHANNEL_1)</code> 停止PWM输出</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)<br>&#123;<br>    <span class="hljs-comment">// KEY1按下：占空比99% 高速正转</span><br>    <span class="hljs-keyword">if</span> (HAL_GPIO_ReadPin(KEY1_GPIO_Port, KEY1_Pin) == GPIO_PIN_RESET)<br>    &#123;<br>        <span class="hljs-comment">// 启动PWM通道1输出（只能同时启动1个通道，两个通道对应正/反转）</span><br>        HAL_TIM_PWM_Start(&amp;htim2, TIM_CHANNEL_1);<br>        <span class="hljs-comment">// 配置通道1的占空比，影响电机转速（占空比过低可能导致电机无法启动）</span><br>        __HAL_TIM_SET_COMPARE(&amp;htim2, TIM_CHANNEL_1, <span class="hljs-number">99</span>);<br>    &#125;<br>    <span class="hljs-comment">// KEY2按下：占空比85% 中速正转</span><br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (HAL_GPIO_ReadPin(KEY2_GPIO_Port, KEY2_Pin) == GPIO_PIN_RESET)<br>    &#123;<br>        <span class="hljs-comment">// 启动PWM通道1输出（只能同时启动1个通道，两个通道对应正/反转）</span><br>        HAL_TIM_PWM_Start(&amp;htim2, TIM_CHANNEL_1);<br>        <span class="hljs-comment">// 配置通道1的占空比，影响电机转速（占空比过低可能导致电机无法启动）</span><br>        __HAL_TIM_SET_COMPARE(&amp;htim2, TIM_CHANNEL_1, <span class="hljs-number">85</span>);<br>    &#125;<br>    <span class="hljs-keyword">else</span><br>    &#123;<br>        <span class="hljs-comment">// 停止PWM通道1输出</span><br>        HAL_TIM_PWM_Stop(&amp;htim2, TIM_CHANNEL_1);<br>    &#125;<br>    HAL_Delay(<span class="hljs-number">100</span>);<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
 
         
       </div>
@@ -394,12 +654,12 @@
   <a class="article-nav-btn left "
     
       href="/2025/10/09/STM32Cube_HAL-3/"
-      title="STM32Cube_HAL库笔记（三）"
+      title="STM32Cube_HAL库笔记（三）-DMA"
      >
     <i class="fa-solid fa-angle-left"></i>
     <p class="title-text">
       
-        STM32Cube_HAL库笔记（三）
+        STM32Cube_HAL库笔记（三）-DMA
         
     </p>
   </a>

@@ -28,23 +28,36 @@
 
 
   
-  <title>STM32Cube_HAL库笔记（三） | 超小韓の个人博客</title>
+  <title>STM32Cube_HAL库笔记（三）-DMA | 超小韓の个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
   <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
 
-  <meta name="description" content="正在施工ing...">
+  <meta name="description" content="详细讲解STM32 HAL库中DMA的使用方法，包括串口DMA数据传输、IDLE空闲中断接收等高级功能实现。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="STM32Cube_HAL库笔记（三）">
+<meta property="og:title" content="STM32Cube_HAL库笔记（三）-DMA">
 <meta property="og:url" content="https://blog.chaoxiaohan.cyou/2025/10/09/STM32Cube_HAL-3/index.html">
 <meta property="og:site_name" content="超小韓の个人博客">
-<meta property="og:description" content="正在施工ing...">
+<meta property="og:description" content="详细讲解STM32 HAL库中DMA的使用方法，包括串口DMA数据传输、IDLE空闲中断接收等高级功能实现。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113220402805.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113215654280.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113215547522.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/72aa08f192b98af8ce9407d3f221984f.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/7dc8739d883460ec47d484b4f5ad7a89.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113215853242.png">
 <meta property="article:published_time" content="2025-10-08T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-10-06T10:41:29.245Z">
+<meta property="article:modified_time" content="2025-11-13T15:41:17.204Z">
 <meta property="article:author" content="超小韓">
+<meta property="article:tag" content="STM32">
+<meta property="article:tag" content="HAL">
+<meta property="article:tag" content="DMA">
+<meta property="article:tag" content="UART">
+<meta property="article:tag" content="Serial">
+<meta property="article:tag" content="Interrupt">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113220402805.png">
   
     <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
   
@@ -208,7 +221,7 @@
   <div class="widget-wrap">
     <div class="widget">
       <h3 class="widget-title">标签</h3>
-      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Compose/" rel="tag">Compose</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CubeMx/" rel="tag">CubeMx</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCV/" rel="tag">OpenCV</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCv/" rel="tag">OpenCv</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Pytorch/" rel="tag">Pytorch</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Standard/" rel="tag">Standard</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/YOLOV5/" rel="tag">YOLOV5</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/computer/" rel="tag">computer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/resourse/" rel="tag">resourse</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/teach/" rel="tag">teach</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%8D%9A%E5%9B%BE/" rel="tag">博图</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" rel="tag">工程实践</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%A5%BF%E9%97%A8%E5%AD%90%E6%9D%AF/" rel="tag">西门子杯</a></li></ul>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/ADC/" rel="tag">ADC</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Buzzer/" rel="tag">Buzzer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Compose/" rel="tag">Compose</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CubeMx/" rel="tag">CubeMx</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/DMA/" rel="tag">DMA</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Interrupt/" rel="tag">Interrupt</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Motor/" rel="tag">Motor</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCV/" rel="tag">OpenCV</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCv/" rel="tag">OpenCv</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/PWM/" rel="tag">PWM</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Pytorch/" rel="tag">Pytorch</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Serial/" rel="tag">Serial</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Servo/" rel="tag">Servo</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Standard/" rel="tag">Standard</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Timer/" rel="tag">Timer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/UART/" rel="tag">UART</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/YOLOV5/" rel="tag">YOLOV5</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/computer/" rel="tag">computer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/resourse/" rel="tag">resourse</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/teach/" rel="tag">teach</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%8D%9A%E5%9B%BE/" rel="tag">博图</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" rel="tag">工程实践</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%A5%BF%E9%97%A8%E5%AD%90%E6%9D%AF/" rel="tag">西门子杯</a></li></ul>
     </div>
   </div>
 
@@ -220,9 +233,14 @@
       <h3 class="widget-title">归档</h3>
       
       
+        <a class="archive-link" href="/archives/2025/11 ">
+          十一月 2025 
+          <div class="archive-count">1 </div>
+        </a>
+      
         <a class="archive-link" href="/archives/2025/10 ">
           十月 2025 
-          <div class="archive-count">8 </div>
+          <div class="archive-count">7 </div>
         </a>
       
         <a class="archive-link" href="/archives/2025/09 ">
@@ -257,7 +275,7 @@
       
         <a class="archive-link" href="/archives/2024/10 ">
           十月 2024 
-          <div class="archive-count">2 </div>
+          <div class="archive-count">7 </div>
         </a>
       
         <a class="archive-link" href="/archives/2024/09 ">
@@ -281,21 +299,21 @@
       <h3 class="widget-title">最新文章</h3>
       <ul>
         
-          <a class="recent-link" href="/2025/10/10/STM32Cube_HAL-4/" title="STM32Cube_HAL库笔记（四）" >
+          <a class="recent-link" href="/2025/11/13/STM32Cube_HAL-4/" title="STM32Cube_HAL库笔记（四）-ADC" >
             <div class="recent-link-text">
-              STM32Cube_HAL库笔记（四）
+              STM32Cube_HAL库笔记（四）-ADC
             </div>
           </a>
         
-          <a class="recent-link" href="/2025/10/09/STM32Cube_HAL-3/" title="STM32Cube_HAL库笔记（三）" >
+          <a class="recent-link" href="/2025/10/09/STM32Cube_HAL-3/" title="STM32Cube_HAL库笔记（三）-DMA" >
             <div class="recent-link-text">
-              STM32Cube_HAL库笔记（三）
+              STM32Cube_HAL库笔记（三）-DMA
             </div>
           </a>
         
-          <a class="recent-link" href="/2025/10/08/STM32Cube_HAL-2/" title="STM32Cube_HAL库笔记（二）" >
+          <a class="recent-link" href="/2025/10/08/STM32Cube_HAL-2/" title="STM32Cube_HAL库笔记（二）-PWM" >
             <div class="recent-link-text">
-              STM32Cube_HAL库笔记（二）
+              STM32Cube_HAL库笔记（二）-PWM
             </div>
           </a>
         
@@ -323,7 +341,7 @@
           <div class="toc-widget">
   <h3 class="toc-title">目录</h3>
   <div class="toc-content">
-    
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E5%B7%A5%E7%A8%8B%E9%85%8D%E7%BD%AE"><span class="toc-list-text">工程配置</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1%E8%AE%BE%E7%BD%AERCC"><span class="toc-list-text">1设置RCC</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2%E8%AE%BE%E7%BD%AE%E4%B8%B2%E5%8F%A3"><span class="toc-list-text">2设置串口</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3DMA%E8%AE%BE%E7%BD%AE"><span class="toc-list-text">3DMA设置</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#1DMA%E5%9F%BA%E7%A1%80%E8%AE%BE%E7%BD%AE"><span class="toc-list-text">1DMA基础设置</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#2DMA%E4%BC%A0%E8%BE%93%E6%A8%A1%E5%BC%8F"><span class="toc-list-text">2DMA传输模式</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#3DMA%E6%8C%87%E9%92%88%E9%80%92%E5%A2%9E%E8%AE%BE%E7%BD%AE"><span class="toc-list-text">3DMA指针递增设置</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4%E6%97%B6%E9%92%9F%E6%BA%90%E8%AE%BE%E7%BD%AE"><span class="toc-list-text">4时钟源设置</span></a></li></ol></li></ol></li><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E4%BB%A3%E7%A0%81"><span class="toc-list-text">代码</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%B2%E5%8F%A3%E4%BD%BF%E7%94%A8DMA%E5%8F%91%E9%80%81%E6%95%B0%E6%8D%AE"><span class="toc-list-text">串口使用DMA发送数据</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#STM32-IDLE-%E6%8E%A5%E6%94%B6%E7%A9%BA%E9%97%B2%E4%B8%AD%E6%96%AD"><span class="toc-list-text">STM32 IDLE 接收空闲中断</span></a></li></ol></li></ol>
   </div>
 </div>
 
@@ -350,7 +368,7 @@
   
     
       <h1 class="p-name article-title" itemprop="headline name">
-        STM32Cube_HAL库笔记（三）
+        STM32Cube_HAL库笔记（三）-DMA
       </h1>
     
   
@@ -369,17 +387,117 @@
   
           </div>
           <div class="wordcount need-seperator meta-info">
-            69 词 
+            5.6k 词 
           </div>
         </div>
         
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DMA/" rel="tag">DMA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Interrupt/" rel="tag">Interrupt</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Serial/" rel="tag">Serial</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/UART/" rel="tag">UART</a></li></ul>
+
       </header>
       <div class="e-content article-entry" itemprop="articleBody">
         
           <blockquote>
 <p>本系列主要讲解STM32CubeHAL的使用，详细的安装部署教程请见<a target="_blank" rel="noopener" href="https://blog.csdn.net/as480133937/article/details/98885316">【STM32】STM32 CubeMx使用教程一–安装教程-CSDN博客</a></p>
 </blockquote>
+<h1 id="工程配置"><a href="#工程配置" class="headerlink" title="工程配置"></a>工程配置</h1><h3 id="1设置RCC"><a href="#1设置RCC" class="headerlink" title="1设置RCC"></a>1设置RCC</h3><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113220402805.png" alt="image-20251113215547522"></p>
+<p>设置高速外部时钟HSE 选择外部时钟源</p>
+<h3 id="2设置串口"><a href="#2设置串口" class="headerlink" title="2设置串口"></a>2设置串口</h3><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113215654280.png" alt="image-20251113215654280"></p>
+<p>1点击USATR1<br>2设置MODE为异步通信(Asynchronous)<br>3基础参数：波特率为115200 Bits&#x2F;s。传输数据长度为8 Bit。奇偶检验无，停止位1 接收和发送都使能<br>4GPIO引脚自动设置 USART1_RX&#x2F;USART_TX<br>5 NVIC Settings 一栏使能接收中断</p>
+<h3 id="3DMA设置"><a href="#3DMA设置" class="headerlink" title="3DMA设置"></a>3DMA设置</h3><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113215547522.png" alt="image-20251113215853242"></p>
+<p>根据DMA通道预览可以知道，我们用的USART1 的TX RX 分别对应DMA1 的通道4和通道5</p>
+<p>点击DMASettings 点击 Add 添加通道<br>选择USART_RX USART_TX 传输速率设置为中速<br>DMA传输模式为正常模式<br>DMA内存地址自增，每次增加一个Byte(字节)</p>
+<h4 id="1DMA基础设置"><a href="#1DMA基础设置" class="headerlink" title="1DMA基础设置"></a>1DMA基础设置</h4><p>右侧点击System Core 点击DMA</p>
+<p><strong>DMA Request</strong> ： <strong>DMA传输的对应外设</strong></p>
+<p>注意： 如果你是在DMA设置界面添加DMA 而没有开启对应外设的话 ，默认为MENTOMEN</p>
+<p><strong>Channel</strong> <strong>DMA传输通道设置</strong><br>DMA1 : DMA1 Channel 0<del>DMA1 Channel 7<br>DMA2: DMA2 Channel 1</del>DMA1 Channel 5</p>
+<p><strong>Dirction ： DMA传输方向</strong><br>四种传输方向：</p>
+<ul>
+<li>外设到内存 <strong>Peripheral To Memory</strong></li>
+<li>内存到外设 <strong>Memory To Peripheral</strong></li>
+<li>内存到内存 <strong>Memory To Memory</strong></li>
+<li>外设到外设 <strong>Peripheral To Peripheral</strong></li>
+</ul>
+<p><strong>Priority： 传输速度</strong></p>
+<ul>
+<li>最高优先级 <strong>Very Hight</strong></li>
+<li>高优先级 <strong>Hight</strong></li>
+<li>中等优先级 <strong>Medium</strong></li>
+<li>低优先级；<strong>Low</strong></li>
+</ul>
+<h4 id="2DMA传输模式"><a href="#2DMA传输模式" class="headerlink" title="2DMA传输模式"></a>2DMA传输模式</h4><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/72aa08f192b98af8ce9407d3f221984f.png" alt="在这里插入图片描述"></p>
+<p><strong>Normal：正常模式</strong><br>当一次DMA数据传输完后，停止DMA传送 ，也就是只传输一次</p>
+<p><strong>Circular： 循环模式</strong></p>
+<p>传输完成后又重新开始继续传输，不断循环永不停止</p>
+<h4 id="3DMA指针递增设置"><a href="#3DMA指针递增设置" class="headerlink" title="3DMA指针递增设置"></a>3DMA指针递增设置</h4><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/7dc8739d883460ec47d484b4f5ad7a89.png" alt="在这里插入图片描述"></p>
+<p><strong>Increment Address：地址指针递增。</strong></p>
+<p>左侧Src Memory 表示外设地址寄存器</p>
+<p>功能：<strong>设置传输数据的时候外设地址是不变还是递增。如果设置 为递增，那么下一次传输的时候地址加 Data Width个字节，</strong></p>
+<p>右侧Dst Memory 表示内存地址寄存器</p>
+<p>功能：<strong>设置传输数据时候内存地址是否递增。如果设置 为递增，那么下一次传输的时候地址加 Data Width个字节，</strong></p>
+<p>这个Src Memory一样，只不过针对的是内存。</p>
+<p>串口发送数据是将数据不断存进固定外设地址串口的发送数据寄存器(USARTx_TDR)。所以外设的地址是不递增。</p>
+<p>而内存储器存储的是要发送的数据，所以地址指针要递增，保证数据<strong>依次被发出</strong></p>
+<p><strong>串口数据发送寄存器只能存储8bit,每次发送一个字节，所以数据长度选择Byte。</strong></p>
+<p>就是要注意DMA的传输方向别弄错了，到底是PERIPHERIAL到MEMORY还是MEMORY到PERIPHERIAL或者说是Memory到Memory要配置正确。尤其是在用CubeMx配置时，这里有个默认配置是PERIPHERIAL到MEMORY。如果说你的真实意图根本不是从PERIPHERIAL到MEMORY，而你无意中使用了这个默认配置，结果可想而知，DMA传输根本没法正常运行。</p>
+<h3 id="4时钟源设置"><a href="#4时钟源设置" class="headerlink" title="4时钟源设置"></a>4时钟源设置</h3><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113215853242.png" alt="image-20251113220402805"></p>
+<p>我的是 外部晶振为8MHz</p>
+<ul>
+<li>1选择外部时钟HSE 8MHz</li>
+<li>2PLL锁相环倍频9倍</li>
+<li>3系统时钟来源选择为PLL</li>
+<li>4设置APB1分频器为 &#x2F;2</li>
+<li>5 使能CSS监视时钟</li>
+</ul>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><h2 id="串口使用DMA发送数据"><a href="#串口使用DMA发送数据" class="headerlink" title="串口使用DMA发送数据"></a>串口使用DMA发送数据</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/* USER CODE BEGIN Init */</span><br><span class="hljs-type">uint8_t</span> Senbuff[] = <span class="hljs-string">&quot;\r\n**** Serial Output Message by DMA ***\r\n   UART DMA Test \r\n   Zxiaoxuan&quot;</span>;  <span class="hljs-comment">//定义数据发送数组</span><br> <span class="hljs-comment">/* USER CODE END Init */</span><br><br></code></pre></td></tr></table></figure>
 
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)<br>&#123;<br>  <span class="hljs-comment">/* USER CODE END WHILE */</span><br>	HAL_UART_Transmit_DMA(&amp;huart1, (<span class="hljs-type">uint8_t</span> *)Senbuff, <span class="hljs-keyword">sizeof</span>(Senbuff));<br>       HAL_Delay(<span class="hljs-number">1000</span>);<br>  <span class="hljs-comment">/* USER CODE BEGIN 3 */</span><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p><strong>注意：如果不开启串口中断，则程序只能发送一次数据,程序不能判断DMA传输是否完成，USART一直处于busy状态。</strong></p>
+<p><strong>HAL库UARTDMA函数库介绍</strong></p>
+<p>1、串口发送&#x2F;接收函数</p>
+<ul>
+<li><strong>HAL_UART_Transmit()</strong>;串口发送数据，使用超时管理机制</li>
+<li><strong>HAL_UART_Receive()</strong>;串口接收数据，使用超时管理机制</li>
+<li><strong>HAL_UART_Transmit_IT()</strong>;串口中断模式发送</li>
+<li><strong>HAL_UART_Receive_IT()</strong>;串口中断模式接收</li>
+<li><strong>HAL_UART_Transmit_DMA()</strong>;串口DMA模式发送</li>
+<li><strong>HAL_UART_Transmit_DMA()</strong>;串口DMA模式接收</li>
+<li><strong>HAL_UART_DMAPause()</strong> 暂停串口DMA</li>
+<li><strong>HAL_UART_DMAResume()</strong>; 恢复串口DMA</li>
+<li><strong>HAL_UART_DMAStop()</strong>; 结束串口DMA</li>
+</ul>
+<p><strong>串口DMA发送数据</strong>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C">HAL_UART_Transmit_DMA(UART_HandleTypeDef *huart, <span class="hljs-type">uint8_t</span> *pData, <span class="hljs-type">uint16_t</span> Size)<br><br></code></pre></td></tr></table></figure>
+
+<p>功能：串口通过DMA发送指定长度的数据。</p>
+<p>参数：</p>
+<ul>
+<li>UART_HandleTypeDef *huart UATR的别名 如 : UART_HandleTypeDef huart1; 别名就是huart1</li>
+<li>*pData 需要发送的数据</li>
+<li>Size 发送的字节数</li>
+</ul>
+<p><strong>串口DMA接收数据</strong>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">HAL_UART_Receive_DMA(UART_HandleTypeDef *huart, <span class="hljs-type">uint8_t</span> *pData, <span class="hljs-type">uint16_t</span> Size)<br></code></pre></td></tr></table></figure>
+
+<p>功能：串口通过DMA接受指定长度的数据。</p>
+<p>参数：</p>
+<ul>
+<li>UART_HandleTypeDef *huart UATR的别名 如 : UART_HandleTypeDef huart1; 别名就是huart1</li>
+<li>*pData 需要存放接收数据的数组</li>
+<li>Size 接受的字节数</li>
+</ul>
+<h2 id="STM32-IDLE-接收空闲中断"><a href="#STM32-IDLE-接收空闲中断" class="headerlink" title="STM32 IDLE 接收空闲中断"></a>STM32 IDLE 接收空闲中断</h2><p>STM32的IDLE的中断产生条件：在串口无数据接收的情况下，不会产生，当清除IDLE标志位后，必须有接收到第一个数据后，才开始触发，一但接收的数据断流，没有接收到数据，即产生IDLE中断</p>
+<p><strong>uart.c</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">volatile</span> <span class="hljs-type">uint8_t</span> rx_len = <span class="hljs-number">0</span>;  <span class="hljs-comment">//接收一帧数据的长度</span><br><span class="hljs-keyword">volatile</span> <span class="hljs-type">uint8_t</span> recv_end_flag = <span class="hljs-number">0</span>; <span class="hljs-comment">//一帧数据接收完成标志</span><br><span class="hljs-type">uint8_t</span> rx_buffer[<span class="hljs-number">100</span>]=&#123;<span class="hljs-number">0</span>&#125;;  <span class="hljs-comment">//接收数据缓存数组</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">MX_USART1_UART_Init</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br><br>  huart1.Instance = USART1;<br>  huart1.Init.BaudRate = <span class="hljs-number">115200</span>;<br>  huart1.Init.WordLength = UART_WORDLENGTH_8B;<br>  huart1.Init.StopBits = UART_STOPBITS_1;<br>  huart1.Init.Parity = UART_PARITY_NONE;<br>  huart1.Init.Mode = UART_MODE_TX_RX;<br>  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;<br>  huart1.Init.OverSampling = UART_OVERSAMPLING_16;<br>  <span class="hljs-keyword">if</span> (HAL_UART_Init(&amp;huart1) != HAL_OK)<br>  &#123;<br>    Error_Handler();<br>  &#125;<br><span class="hljs-comment">//下方为自己添加的代码</span><br>	__HAL_UART_ENABLE_IT(&amp;huart1, UART_IT_IDLE); <span class="hljs-comment">//使能IDLE中断</span><br><br><span class="hljs-comment">//DMA接收函数，此句一定要加，不加接收不到第一次传进来的实数据，是空的，且此时接收到的数据长度为缓存器的数据长度</span><br>	HAL_UART_Receive_DMA(&amp;huart1,rx_buffer,BUFFER_SIZE);<br><br>	<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p><strong>uart.h</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">extern</span> UART_HandleTypeDef huart1;<br><span class="hljs-keyword">extern</span> DMA_HandleTypeDef hdma_usart1_rx;<br><span class="hljs-keyword">extern</span> DMA_HandleTypeDef hdma_usart1_tx;<br><span class="hljs-comment">/* USER CODE BEGIN Private defines */</span><br> <br> <br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BUFFER_SIZE  100  </span><br><span class="hljs-keyword">extern</span>  <span class="hljs-keyword">volatile</span> <span class="hljs-type">uint8_t</span> rx_len ;  <span class="hljs-comment">//接收一帧数据的长度</span><br><span class="hljs-keyword">extern</span> <span class="hljs-keyword">volatile</span> <span class="hljs-type">uint8_t</span> recv_end_flag; <span class="hljs-comment">//一帧数据接收完成标志</span><br><span class="hljs-keyword">extern</span> <span class="hljs-type">uint8_t</span> rx_buffer[<span class="hljs-number">100</span>];  <span class="hljs-comment">//接收数据缓存数组</span><br><br></code></pre></td></tr></table></figure>
+
+<p><strong>main.c</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/*</span><br><span class="hljs-comment">*********************************************************************************************************</span><br><span class="hljs-comment">* 函 数 名: DMA_Usart_Send</span><br><span class="hljs-comment">* 功能说明: 串口发送功能函数</span><br><span class="hljs-comment">* 形  参: buf，len</span><br><span class="hljs-comment">* 返 回 值: 无</span><br><span class="hljs-comment">*********************************************************************************************************</span><br><span class="hljs-comment">*/</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">DMA_Usart_Send</span><span class="hljs-params">(<span class="hljs-type">uint8_t</span> *buf,<span class="hljs-type">uint8_t</span> len)</span><span class="hljs-comment">//串口发送封装</span><br>&#123;<br> <span class="hljs-keyword">if</span>(HAL_UART_Transmit_DMA(&amp;huart1, buf,len)!= HAL_OK) <span class="hljs-comment">//判断是否发送正常，如果出现异常则进入异常中断函数</span><br>  &#123;<br>   Error_Handler();<br>  &#125;<br><br>&#125;<br><br><br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">*********************************************************************************************************</span><br><span class="hljs-comment">* 函 数 名: DMA_Usart1_Read</span><br><span class="hljs-comment">* 功能说明: 串口接收功能函数</span><br><span class="hljs-comment">* 形  参: Data,len</span><br><span class="hljs-comment">* 返 回 值: 无</span><br><span class="hljs-comment">*********************************************************************************************************</span><br><span class="hljs-comment">*/</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">DMA_Usart1_Read</span><span class="hljs-params">(<span class="hljs-type">uint8_t</span> *Data,<span class="hljs-type">uint8_t</span> len)</span><span class="hljs-comment">//串口接收封装</span><br>&#123;<br>	HAL_UART_Receive_DMA(&amp;huart1,Data,len);<span class="hljs-comment">//重新打开DMA接收</span><br>&#125;<br> <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)<br>  &#123;<br>    <span class="hljs-comment">/* USER CODE END WHILE */</span><br><br>    <span class="hljs-comment">/* USER CODE BEGIN 3 */</span><br>		 <span class="hljs-keyword">if</span>(recv_end_flag == <span class="hljs-number">1</span>)  <span class="hljs-comment">//接收完成标志</span><br>		&#123;<br>			<br>			<br>			DMA_Usart_Send(rx_buffer, rx_len);<br>			rx_len = <span class="hljs-number">0</span>;<span class="hljs-comment">//清除计数</span><br>			recv_end_flag = <span class="hljs-number">0</span>;<span class="hljs-comment">//清除接收结束标志位</span><br><span class="hljs-comment">//			for(uint8_t i=0;i&lt;rx_len;i++)</span><br><span class="hljs-comment">//				&#123;</span><br><span class="hljs-comment">//					rx_buffer[i]=0;//清接收缓存</span><br><span class="hljs-comment">//				&#125;</span><br>				<span class="hljs-built_in">memset</span>(rx_buffer,<span class="hljs-number">0</span>,rx_len);<br>  &#125;<br>		HAL_UART_Receive_DMA(&amp;huart1,rx_buffer,BUFFER_SIZE);<span class="hljs-comment">//重新打开DMA接收</span><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p><strong>stm32f1xx_it.c中</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;usart.h&quot;</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">USART1_IRQHandler</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>	<span class="hljs-type">uint32_t</span> tmp_flag = <span class="hljs-number">0</span>;<br>	<span class="hljs-type">uint32_t</span> temp;<br>	tmp_flag =__HAL_UART_GET_FLAG(&amp;huart1,UART_FLAG_IDLE); <span class="hljs-comment">//获取IDLE标志位</span><br>	<span class="hljs-keyword">if</span>((tmp_flag != RESET))<span class="hljs-comment">//idle标志被置位</span><br>	&#123; <br>		__HAL_UART_CLEAR_IDLEFLAG(&amp;huart1);<span class="hljs-comment">//清除标志位</span><br>		<span class="hljs-comment">//temp = huart1.Instance-&gt;SR;  //清除状态寄存器SR,读取SR寄存器可以实现清除SR寄存器的功能</span><br>		<span class="hljs-comment">//temp = huart1.Instance-&gt;DR; //读取数据寄存器中的数据</span><br>		<span class="hljs-comment">//这两句和上面那句等效</span><br>		HAL_UART_DMAStop(&amp;huart1); <span class="hljs-comment">//</span><br>		temp  =  __HAL_DMA_GET_COUNTER(&amp;hdma_usart1_rx);<span class="hljs-comment">// 获取DMA中未传输的数据个数   </span><br>		<span class="hljs-comment">//temp  = hdma_usart1_rx.Instance-&gt;NDTR;//读取NDTR寄存器 获取DMA中未传输的数据个数，</span><br>		<span class="hljs-comment">//这句和上面那句等效</span><br>		rx_len =  BUFFER_SIZE - temp; <span class="hljs-comment">//总计数减去未传输的数据个数，得到已经接收的数据个数</span><br>		recv_end_flag = <span class="hljs-number">1</span>;	<span class="hljs-comment">// 接受完成标志位置1	</span><br>	 &#125;<br>  HAL_UART_IRQHandler(&amp;huart1);<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
         
       </div>
 
@@ -393,25 +511,25 @@
 <nav id="article-nav">
   <a class="article-nav-btn left "
     
-      href="/2025/10/10/STM32Cube_HAL-4/"
-      title="STM32Cube_HAL库笔记（四）"
+      href="/2025/11/13/STM32Cube_HAL-4/"
+      title="STM32Cube_HAL库笔记（四）-ADC"
      >
     <i class="fa-solid fa-angle-left"></i>
     <p class="title-text">
       
-        STM32Cube_HAL库笔记（四）
+        STM32Cube_HAL库笔记（四）-ADC
         
     </p>
   </a>
   <a class="article-nav-btn right "
     
       href="/2025/10/08/STM32Cube_HAL-2/"
-      title="STM32Cube_HAL库笔记（二）"
+      title="STM32Cube_HAL库笔记（二）-PWM"
      >
 
     <p class="title-text">
       
-        STM32Cube_HAL库笔记（二）
+        STM32Cube_HAL库笔记（二）-PWM
         
     </p>
     <i class="fa-solid fa-angle-right"></i>

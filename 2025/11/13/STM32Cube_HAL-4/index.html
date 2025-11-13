@@ -28,23 +28,37 @@
 
 
   
-  <title>STM32Cube_HAL库笔记（四） | 超小韓の个人博客</title>
+  <title>STM32Cube_HAL库笔记（四）-ADC | 超小韓の个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
   <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
 
-  <meta name="description" content="正在施工ing...">
+  <meta name="description" content="本文介绍了HAL库的ADC模数转换使用。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="STM32Cube_HAL库笔记（四）">
-<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2025/10/10/STM32Cube_HAL-4/index.html">
+<meta property="og:title" content="STM32Cube_HAL库笔记（四）-ADC">
+<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2025/11/13/STM32Cube_HAL-4/index.html">
 <meta property="og:site_name" content="超小韓の个人博客">
-<meta property="og:description" content="正在施工ing...">
+<meta property="og:description" content="本文介绍了HAL库的ADC模数转换使用。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-10-09T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-10-06T10:41:33.247Z">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113200634185.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113205220536.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113211034752.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113211202720.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113201350498.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113200725061.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113211338146.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113211355140.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113211116741.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113211250123.png">
+<meta property="article:published_time" content="2025-11-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-13T15:07:33.963Z">
 <meta property="article:author" content="超小韓">
+<meta property="article:tag" content="STM32">
+<meta property="article:tag" content="HAL">
+<meta property="article:tag" content="ADC">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113200634185.png">
   
     <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
   
@@ -208,7 +222,7 @@
   <div class="widget-wrap">
     <div class="widget">
       <h3 class="widget-title">标签</h3>
-      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Compose/" rel="tag">Compose</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CubeMx/" rel="tag">CubeMx</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCV/" rel="tag">OpenCV</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCv/" rel="tag">OpenCv</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Pytorch/" rel="tag">Pytorch</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Standard/" rel="tag">Standard</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/YOLOV5/" rel="tag">YOLOV5</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/computer/" rel="tag">computer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/resourse/" rel="tag">resourse</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/teach/" rel="tag">teach</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%8D%9A%E5%9B%BE/" rel="tag">博图</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" rel="tag">工程实践</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%A5%BF%E9%97%A8%E5%AD%90%E6%9D%AF/" rel="tag">西门子杯</a></li></ul>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/ADC/" rel="tag">ADC</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Buzzer/" rel="tag">Buzzer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Compose/" rel="tag">Compose</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CubeMx/" rel="tag">CubeMx</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/DMA/" rel="tag">DMA</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Interrupt/" rel="tag">Interrupt</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Motor/" rel="tag">Motor</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCV/" rel="tag">OpenCV</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCv/" rel="tag">OpenCv</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/PWM/" rel="tag">PWM</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Pytorch/" rel="tag">Pytorch</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Serial/" rel="tag">Serial</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Servo/" rel="tag">Servo</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Standard/" rel="tag">Standard</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Timer/" rel="tag">Timer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/UART/" rel="tag">UART</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/YOLOV5/" rel="tag">YOLOV5</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/computer/" rel="tag">computer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/resourse/" rel="tag">resourse</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/teach/" rel="tag">teach</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%8D%9A%E5%9B%BE/" rel="tag">博图</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" rel="tag">工程实践</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%A5%BF%E9%97%A8%E5%AD%90%E6%9D%AF/" rel="tag">西门子杯</a></li></ul>
     </div>
   </div>
 
@@ -220,9 +234,14 @@
       <h3 class="widget-title">归档</h3>
       
       
+        <a class="archive-link" href="/archives/2025/11 ">
+          十一月 2025 
+          <div class="archive-count">1 </div>
+        </a>
+      
         <a class="archive-link" href="/archives/2025/10 ">
           十月 2025 
-          <div class="archive-count">8 </div>
+          <div class="archive-count">7 </div>
         </a>
       
         <a class="archive-link" href="/archives/2025/09 ">
@@ -257,7 +276,7 @@
       
         <a class="archive-link" href="/archives/2024/10 ">
           十月 2024 
-          <div class="archive-count">2 </div>
+          <div class="archive-count">7 </div>
         </a>
       
         <a class="archive-link" href="/archives/2024/09 ">
@@ -281,21 +300,21 @@
       <h3 class="widget-title">最新文章</h3>
       <ul>
         
-          <a class="recent-link" href="/2025/10/10/STM32Cube_HAL-4/" title="STM32Cube_HAL库笔记（四）" >
+          <a class="recent-link" href="/2025/11/13/STM32Cube_HAL-4/" title="STM32Cube_HAL库笔记（四）-ADC" >
             <div class="recent-link-text">
-              STM32Cube_HAL库笔记（四）
+              STM32Cube_HAL库笔记（四）-ADC
             </div>
           </a>
         
-          <a class="recent-link" href="/2025/10/09/STM32Cube_HAL-3/" title="STM32Cube_HAL库笔记（三）" >
+          <a class="recent-link" href="/2025/10/09/STM32Cube_HAL-3/" title="STM32Cube_HAL库笔记（三）-DMA" >
             <div class="recent-link-text">
-              STM32Cube_HAL库笔记（三）
+              STM32Cube_HAL库笔记（三）-DMA
             </div>
           </a>
         
-          <a class="recent-link" href="/2025/10/08/STM32Cube_HAL-2/" title="STM32Cube_HAL库笔记（二）" >
+          <a class="recent-link" href="/2025/10/08/STM32Cube_HAL-2/" title="STM32Cube_HAL库笔记（二）-PWM" >
             <div class="recent-link-text">
-              STM32Cube_HAL库笔记（二）
+              STM32Cube_HAL库笔记（二）-PWM
             </div>
           </a>
         
@@ -323,7 +342,7 @@
           <div class="toc-widget">
   <h3 class="toc-title">目录</h3>
   <div class="toc-content">
-    
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E5%B7%A5%E7%A8%8B%E9%85%8D%E7%BD%AE"><span class="toc-list-text">工程配置</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E8%AE%BE%E7%BD%AERCC"><span class="toc-list-text">设置RCC</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E8%AE%BE%E7%BD%AEADC%E5%BC%95%E8%84%9A"><span class="toc-list-text">设置ADC引脚</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E8%AE%BE%E7%BD%AE%E6%97%B6%E9%92%9F"><span class="toc-list-text">设置时钟</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#ADC%E9%85%8D%E7%BD%AE"><span class="toc-list-text">ADC配置</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#ADC%E8%BD%AC%E6%8D%A2%E7%BB%93%E6%9D%9F%E4%B8%AD%E6%96%AD"><span class="toc-list-text">ADC转换结束中断</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#ADC%E7%9A%84DMA%E4%BC%A0%E8%BE%93"><span class="toc-list-text">ADC的DMA传输</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BB%A3%E7%A0%81"><span class="toc-list-text">代码</span></a></li></ol></li></ol>
   </div>
 </div>
 
@@ -350,7 +369,7 @@
   
     
       <h1 class="p-name article-title" itemprop="headline name">
-        STM32Cube_HAL库笔记（四）
+        STM32Cube_HAL库笔记（四）-ADC
       </h1>
     
   
@@ -358,7 +377,7 @@
 
         <div class='meta-info-bar'>
           <div class="meta-info">
-  <time class="dt-published" datetime="2025-10-09T16:00:00.000Z" itemprop="datePublished">2025-10-10</time>
+  <time class="dt-published" datetime="2025-11-12T16:00:00.000Z" itemprop="datePublished">2025-11-13</time>
 </div>
           <div class="need-seperator meta-info">
             <div class="meta-cate-flex">
@@ -369,16 +388,83 @@
   
           </div>
           <div class="wordcount need-seperator meta-info">
-            69 词 
+            2k 词 
           </div>
         </div>
         
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ADC/" rel="tag">ADC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li></ul>
+
       </header>
       <div class="e-content article-entry" itemprop="articleBody">
         
           <blockquote>
 <p>本系列主要讲解STM32CubeHAL的使用，详细的安装部署教程请见<a target="_blank" rel="noopener" href="https://blog.csdn.net/as480133937/article/details/98885316">【STM32】STM32 CubeMx使用教程一–安装教程-CSDN博客</a></p>
 </blockquote>
+<h1 id="工程配置"><a href="#工程配置" class="headerlink" title="工程配置"></a>工程配置</h1><h3 id="设置RCC"><a href="#设置RCC" class="headerlink" title="设置RCC"></a><strong>设置RCC</strong></h3><p><strong>设置高速外部时钟HSE 选择外部时钟源</strong></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113200634185.png" alt="image-20251113200634185"></p>
+<h3 id="设置ADC引脚"><a href="#设置ADC引脚" class="headerlink" title="设置ADC引脚"></a><strong>设置ADC引脚</strong></h3><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113205220536.png" alt="image-20251113200725061"></p>
+<h3 id="设置时钟"><a href="#设置时钟" class="headerlink" title="设置时钟"></a><strong>设置时钟</strong></h3><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113211034752.png" alt="image-20251113201350498"></p>
+<p>我的是 外部晶振为8MHz</p>
+<ul>
+<li><strong>1选择外部时钟HSE 8MHz</strong></li>
+<li><strong>2PLL锁相环倍频9倍</strong></li>
+<li><strong>3系统时钟来源选择为PLL</strong></li>
+<li><strong>4设置APB1分频器为 &#x2F;2</strong></li>
+<li><strong>5 设置ADC时钟分频 ，只能是6&#x2F;8分频</strong></li>
+</ul>
+<p>如果ADC时钟频率大于14MHz则会报错</p>
+<h3 id="ADC配置"><a href="#ADC配置" class="headerlink" title="ADC配置"></a><strong>ADC配置</strong></h3><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113211202720.png" alt="image-20251113205220536"></p>
+<p><strong>ADCs_Common_Settings</strong>          ADC模式设置<br><strong>Mode     ADC_Mode_Independent</strong><br>这里设置为独立模式</p>
+<p>独立模式模式下，双ADC不能同步，每个ADC接口独立工作。所以如果不需要ADC同步或者只是用了一个ADC的时候，应该设成独立模式，多个ADC同时使用时会有其他模式，如双重ADC同步模式，两个ADC同时采集一个或多个通道，可以提高采样率</p>
+<p><strong>Data Alignment (数据对齐方式)</strong>: 右对齐&#x2F;左对齐</p>
+<p><strong>Scan Conversion Mode( 扫描模式 )</strong> ：   DISABLE</p>
+<p>如果只是用了一个通道的话，DISABLE就可以了(也只能DISABLE)，如果使用了多个通道的话，会自动设置为ENABLE。 就是是否开启扫描模式</p>
+<p><strong>Continuous Conversion Mode(连续转换模式)</strong>    ENABLE</p>
+<p>设置为ENABLE，即连续转换。如果设置为DISABLE，则是单次转换。两者的区别在于连续转换直到所有的数据转换完成后才停止转换，而单次转换则只转换一次数据就停止，要再次触发转换才可以进行转换</p>
+<p><strong>Discontinuous Conversion Mode(间断模式)</strong>    DISABLE</p>
+<p>因为我们只用到了1个ADC,所以这个直接不使能即可</p>
+<p>规则通道设置<br><strong>Enable Regular Conversions (启用常规转换模式)</strong>    ENABLE</p>
+<p>使能 否则无发进行下方配置</p>
+<p><strong>Number OF Conversion(转换通道数)</strong>    1<br>用到几个通道就设置为几<br>多个通道自动使能扫描模式<br><strong>Extenal Trigger Conversion Source (外部触发转换源)</strong></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113201350498.png" alt="image-20251113211034752"></p>
+<p>Regular Conversion launched by software 规则的软件触发 调用函数触发即可</p>
+<p>Timer X Capture Compare X event 外部引脚触发,</p>
+<p>Timer X Trigger Out event 定时器通道输出触发 需要设置相应的定时器设置</p>
+<p><strong>Rank</strong>         <strong>转换顺序</strong><br>这个只修改<strong>通道采样时间</strong>即可 默认为1.5个周期</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113200725061.png" alt="image-20251113211116741"></p>
+<p>多个通道时会有多个Rank，可以设定每个通道的转换顺序<br>ADC总转换时间如下计算：</p>
+<p>TCONV &#x3D; 采样时间+ 12.5个周期</p>
+<p>当ADCCLK&#x3D;14MHz(最大)，采样时间为1.5周期(最快)时，TCONV &#x3D;1.5+12.5&#x3D;14周期&#x3D;1μs。</p>
+<p>因此，<strong>ADC的最小采样时间1us</strong>（ADC时钟&#x3D;14MHz，采样周期为1.5周期下得到） 这个上方也有讲解</p>
+<p>注入通道设置<br><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113211338146.png" alt="image-20251113211202720"></p>
+<p>也就是注入通道的设置，和转换通道没啥太大区别，这里不再详解</p>
+<p><strong>WahchDog</strong></p>
+<p>Enable Analog WatchDog Mode(使能模拟看门狗中断)</p>
+<p>这个上方有讲解，本质也测量值就是超出测量范围或者低于最低范围，启动看门狗</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113211355140.png" alt="image-20251113211250123"></p>
+<h3 id="ADC转换结束中断"><a href="#ADC转换结束中断" class="headerlink" title="ADC转换结束中断"></a><strong>ADC转换结束中断</strong></h3><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113211116741.png" alt="image-20251113211338146"></p>
+<h3 id="ADC的DMA传输"><a href="#ADC的DMA传输" class="headerlink" title="ADC的DMA传输"></a><strong>ADC的DMA传输</strong></h3><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251113211250123.png" alt="image-20251113211355140"></p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p><strong>(1) 初始化过程</strong></p>
+<ul>
+<li><strong>引用头文件</strong>：需要使用 sprintf 打印输出，以及数学函数，在 main.c 引用头文件：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;stdio.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;string.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;math.h&quot;</span></span><br></code></pre></td></tr></table></figure>
+
+<p><strong>在ADC初始化之后加上AD校准函数</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C">MX_ADC1_Init();<br>HAL_ADCEx_Calibration_Start(&amp;hadc1);    <span class="hljs-comment">//AD校准</span><br>​<br>​<br></code></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li><strong>启动连续ADC转换</strong></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 启动连续ADC转换</span><br>HAL_ADC_Start(&amp;hadc1);<br><span class="hljs-comment">// 等待ADC稳定</span><br>HAL_ADC_PollForConversion(&amp;hadc1, <span class="hljs-number">50</span>);   <span class="hljs-comment">//等待转换完成，50为最大等待时间，单位为ms</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p><strong>(2) 读取ADC结果</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 获取ADC值</span><br>result = HAL_ADC_GetValue(&amp;hadc1);<br><span class="hljs-comment">// 计算电压值：电压 = ADC结果 × 3.3V ÷ 4095</span><br>voltage = result * <span class="hljs-number">3.3f</span> / <span class="hljs-number">4095</span>;<br><span class="hljs-comment">// 将变量打印为字符串</span><br><span class="hljs-built_in">sprintf</span>(send_buf, <span class="hljs-string">&quot;原始值: %d，电压值: %.3f V\r\n&quot;</span>, result, voltage);<br><span class="hljs-comment">// 通过串口2发送</span><br>HAL_UART_Transmit(&amp;huart2, (<span class="hljs-type">uint8_t</span>*) send_buf, <span class="hljs-built_in">strlen</span>(send_buf), <span class="hljs-number">20</span>);<br></code></pre></td></tr></table></figure>
+
 
         
       </div>
@@ -401,12 +487,12 @@
   <a class="article-nav-btn right "
     
       href="/2025/10/09/STM32Cube_HAL-3/"
-      title="STM32Cube_HAL库笔记（三）"
+      title="STM32Cube_HAL库笔记（三）-DMA"
      >
 
     <p class="title-text">
       
-        STM32Cube_HAL库笔记（三）
+        STM32Cube_HAL库笔记（三）-DMA
         
     </p>
     <i class="fa-solid fa-angle-right"></i>
