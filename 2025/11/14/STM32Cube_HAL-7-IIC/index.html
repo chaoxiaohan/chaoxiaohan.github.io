@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+
+
+<html theme="light" showBanner="true" hasBanner="true" > 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+<!-- Gaug.es Analytics -->
+<script>
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', 'true');
+    t.setAttribute('data-track-path', 'https://track.gaug.es/track.gif');
+    t.src = 'https://d36ee2fcip1434.cloudfront.net/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+<!-- End Gaug.es Analytics -->
+
+
+  
+  <title>STM32Cube_HAL库笔记（七）-IIC | 超小韓の个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="讲解STM32 HAL库中IIC通信的实现，包括硬件IIC读取AT24C02等应用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STM32Cube_HAL库笔记（七）-IIC">
+<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2025/11/14/STM32Cube_HAL-7-IIC/index.html">
+<meta property="og:site_name" content="超小韓の个人博客">
+<meta property="og:description" content="讲解STM32 HAL库中IIC通信的实现，包括硬件IIC读取AT24C02等应用。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/0cae65d86646b66df9f257ef4459000b.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251114193142806.png">
+<meta property="og:image" content="https://i-blog.csdnimg.cn/blog_migrate/cf0365a5f17a10ba50107a7db6911824.png">
+<meta property="article:published_time" content="2025-11-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-15T15:39:11.114Z">
+<meta property="article:author" content="超小韓">
+<meta property="article:tag" content="STM32">
+<meta property="article:tag" content="HAL">
+<meta property="article:tag" content="IIC">
+<meta property="article:tag" content="I2C">
+<meta property="article:tag" content="EEPROM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/0cae65d86646b66df9f257ef4459000b.png">
+  
+    <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+<link rel="stylesheet" href="/css/search.css">
+
+  
+<link rel="stylesheet" href="/css/toc-fix.css">
+
+  
+<link rel="stylesheet" href="/css/code-copy.css">
+
+  
+<link rel="stylesheet" href="/css/mobile-warning.css">
+
+  
+<link rel="stylesheet" href="/css/image-viewer.css">
+
+  
+<link rel="stylesheet" href="/css/context-menu.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/xiaoxin7284678236.png" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>超小韓の个人博客 </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">主页</a>
+    
+      <a class="main-nav-link" href="/archives">文章</a>
+    
+      <a class="main-nav-link" href="/resources">资料</a>
+    
+      <a class="main-nav-link" href="/about">关于我的</a>
+    
+  </nav>
+  <nav id="search-nav">
+    <div id="search-container">
+      <select id="search-mode-selector" name="search-mode">
+        <option value="exact">精确</option>
+        <option value="fuzzy">模糊</option>
+      </select>
+      <input type="text" id="search-input" placeholder="搜索文章..." autocomplete="off">
+      <div id="search-results" class="hidden">
+        <div id="search-results-content"></div>
+      </div>
+    </div>
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">主页</a>
+    
+      <a class="nav-dropdown-link" href="/archives">文章</a>
+    
+      <a class="nav-dropdown-link" href="/resources">资料</a>
+    
+      <a class="nav-dropdown-link" href="/about">关于我的</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/head.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">超小韓 </div>
+      <div class="dot"></div>
+      <div class="subtitle">生活明朗，万物可爱！ </div>
+      <div class="link-list">
+        
+          <a class="link-btn" href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2537037482&website=www.oicqzone.com" title="QQ"><i class="fa-brands fa-qq"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/353687950" title="哔哩哔哩"><i class="fa-brands fa-bilibili"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/chaoxiaohan/" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        
+          <a class="link-btn" href="mailto:chaoxiaohan@chaoxiaohan.cyou" title="Email"><i class="fa-solid fa-envelope"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+    
+
+
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">分类</h3>
+      <div class="category-box">
+            <a class="category-link" href="/categories/HAL/">
+                HAL
+                <div class="category-count">11</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Android/">
+                Android
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Standard/">
+                Standard
+                <div class="category-count">4</div>
+            </a>
+        
+            <a class="category-link" href="/categories/YOLO/">
+                YOLO
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/C/">
+                C
+                <div class="category-count">8</div>
+            </a>
+        
+            <a class="category-link" href="/categories/computer/">
+                computer
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/siemens-cup/">
+                siemens-cup
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Python/">
+                Python
+                <div class="category-count">2</div>
+            </a>
+        
+            <a class="category-link" href="/categories/OpenCv/">
+                OpenCv
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/test/">
+                test
+                <div class="category-count">1</div>
+            </a>
+        </div>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">标签</h3>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/ADC/" rel="tag">ADC</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Analog/" rel="tag">Analog</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Buzzer/" rel="tag">Buzzer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Compose/" rel="tag">Compose</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Converter/" rel="tag">Converter</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CubeMx/" rel="tag">CubeMx</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/DAC/" rel="tag">DAC</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/DMA/" rel="tag">DMA</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/EEPROM/" rel="tag">EEPROM</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Flash/" rel="tag">Flash</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/I2C/" rel="tag">I2C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/IIC/" rel="tag">IIC</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Interrupt/" rel="tag">Interrupt</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Motor/" rel="tag">Motor</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCV/" rel="tag">OpenCV</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCv/" rel="tag">OpenCv</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/PWM/" rel="tag">PWM</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Pytorch/" rel="tag">Pytorch</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/SPI/" rel="tag">SPI</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Serial/" rel="tag">Serial</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Servo/" rel="tag">Servo</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Standard/" rel="tag">Standard</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Timer/" rel="tag">Timer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/UART/" rel="tag">UART</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/W25Q128/" rel="tag">W25Q128</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/YOLOV5/" rel="tag">YOLOV5</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/computer/" rel="tag">computer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/resourse/" rel="tag">resourse</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/teach/" rel="tag">teach</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%8D%9A%E5%9B%BE/" rel="tag">博图</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" rel="tag">工程实践</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%A5%BF%E9%97%A8%E5%AD%90%E6%9D%AF/" rel="tag">西门子杯</a></li></ul>
+    </div>
+  </div>
+
+
+  
+  <div class="sticky">
+    
+      
+        
+          <div class="toc-widget">
+  <h3 class="toc-title">目录</h3>
+  <div class="toc-content">
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#IIC"><span class="toc-list-text">IIC</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%B7%A5%E7%A8%8B%E9%85%8D%E7%BD%AE"><span class="toc-list-text">工程配置</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#IIC%E7%9A%84HAL%E5%BA%93%E5%87%BD%E6%95%B0"><span class="toc-list-text">IIC的HAL库函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-list-text">一、初始化与反初始化</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81%E9%98%BB%E5%A1%9E%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%EF%BC%88%E8%BD%AE%E8%AF%A2%E6%A8%A1%E5%BC%8F%EF%BC%89"><span class="toc-list-text">二、阻塞式数据传输（轮询模式）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81%E9%9D%9E%E9%98%BB%E5%A1%9E%E5%BC%8F%E4%BC%A0%E8%BE%93%EF%BC%88%E4%B8%AD%E6%96%AD%E6%A8%A1%E5%BC%8F%EF%BC%89"><span class="toc-list-text">三、非阻塞式传输（中断模式）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81%E9%9D%9E%E9%98%BB%E5%A1%9E%E5%BC%8F%E4%BC%A0%E8%BE%93%EF%BC%88DMA-%E6%A8%A1%E5%BC%8F%EF%BC%89"><span class="toc-list-text">四、非阻塞式传输（DMA 模式）</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%BA%94%E3%80%81%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0"><span class="toc-list-text">五、回调函数</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E5%85%AD%E3%80%81%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-list-text">六、其他常用函数</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%A1%AC%E4%BB%B6IIC%E8%AF%BB%E5%8F%96AT24C02"><span class="toc-list-text">硬件IIC读取AT24C02</span></a></li></ol></li></ol>
+  </div>
+</div>
+
+        
+      
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-STM32Cube_HAL-7-IIC" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        STM32Cube_HAL库笔记（七）-IIC
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2025-11-13T16:00:00.000Z" itemprop="datePublished">2025-11-14</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+  <a class="meta-cate-link" href="/categories/HAL/">HAL</a>
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            5.4k 词 
+          </div>
+        </div>
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/EEPROM/" rel="tag">EEPROM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/I2C/" rel="tag">I2C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IIC/" rel="tag">IIC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li></ul>
+
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <blockquote>
+<p>本系列主要讲解STM32CubeHAL的使用，详细的安装部署教程请见<a target="_blank" rel="noopener" href="https://blog.csdn.net/as480133937/article/details/98885316">【STM32】STM32 CubeMx使用教程一–安装教程-CSDN博客</a></p>
+</blockquote>
+<p>IIC原理详见标准库笔记</p>
+<h1 id="IIC"><a href="#IIC" class="headerlink" title="IIC"></a>IIC</h1><h2 id="工程配置"><a href="#工程配置" class="headerlink" title="工程配置"></a>工程配置</h2><p><strong>1设置RCC时钟</strong></p>
+<p><strong>设置高速外部时钟HSE 选择外部时钟源</strong></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/0cae65d86646b66df9f257ef4459000b.png" alt="在这里插入图片描述"></p>
+<p><strong>2 IIC设置</strong></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20251114193142806.png" alt="image-20251114193142806"></p>
+<p><strong>点击I2C1 设置为I2C</strong> 因为我们的硬件IIC 芯片一般都是主设备，也就是一般情况设置主模式即可</p>
+<ul>
+<li><strong>Master  features  主模式特性</strong></li>
+<li><strong>I2C Speed Mode</strong>： IIC模式设置 快速模式和标准模式。实际上也就是速率的选择。</li>
+<li><strong>I2C Clock Speed</strong>：I2C传输速率，默认为100KHz</li>
+<li><strong>Slave  features  从模式特性</strong></li>
+<li><strong>Clock No Stretch Mode</strong>： 时钟没有扩展模式</li>
+<li><ul>
+<li><strong>IIC时钟拉伸(Clock stretching)</strong><br><strong>clock stretching通过将SCL线拉低来暂停一个传输.直到释放SCL线为高电平,传输才继续进行.clock stretching是可选的</strong>,实际上大多数从设备不包括SCL驱动,所以它们不能stretch时钟.</li>
+</ul>
+</li>
+<li><strong>Primary Address Length selection：</strong> <strong>从设备地址长度</strong> 设置从设备的地址是7bit还是10bit 大部分为7bit<br>-<strong>Dual Address Acknowledged：</strong> 双地址确认</li>
+<li><strong>Primary slave address：</strong>  从设备初始地址</li>
+</ul>
+<p><strong>这里我们保持默认即可</strong></p>
+<p><strong>5 时钟源设置</strong><br><img src="https://i-blog.csdnimg.cn/blog_migrate/cf0365a5f17a10ba50107a7db6911824.png" alt="在这里插入图片描述"><br>我的是 外部晶振为8MHz</p>
+<ul>
+<li>1选择外部时钟HSE 8MHz</li>
+<li>2PLL锁相环倍频9倍</li>
+<li>3系统时钟来源选择为PLL</li>
+<li>4设置APB1分频器为 &#x2F;2</li>
+<li>5 使能CSS监视时钟</li>
+</ul>
+<h2 id="IIC的HAL库函数"><a href="#IIC的HAL库函数" class="headerlink" title="IIC的HAL库函数"></a>IIC的HAL库函数</h2><h3 id="一、初始化与反初始化"><a href="#一、初始化与反初始化" class="headerlink" title="一、初始化与反初始化"></a><strong>一、初始化与反初始化</strong></h3><p><strong>1. <code>HAL_I2C_Init(I2C_HandleTypeDef *hi2c)</code></strong></p>
+<ul>
+<li><p>参数</p>
+<p>：</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm">hi<span class="hljs-number">2</span><span class="hljs-keyword">c</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>指向 I2C 句柄结构体的指针（</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">I2C_HandleTypeDef<br></code></pre></td></tr></table></figure>
+
+<p>），包含 I2C 外设配置信息，如：</p>
+<ul>
+<li><code>Instance</code>：I2C 外设基地址（如<code>I2C1</code>、<code>I2C2</code>）；</li>
+<li><code>Init</code>：初始化参数（速率、地址模式、超时时间等）；</li>
+<li><code>State</code>：当前状态（内部维护，用户无需修改）。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>2. <code>HAL_I2C_DeInit(I2C_HandleTypeDef *hi2c)</code></strong></p>
+<ul>
+<li><p>参数</p>
+<p>：</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm">hi<span class="hljs-number">2</span><span class="hljs-keyword">c</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>同<code>HAL_I2C_Init</code>，指向需要反初始化的 I2C 句柄，用于释放外设资源。</li>
+</ul>
+</li>
+</ul>
+<h3 id="二、阻塞式数据传输（轮询模式）"><a href="#二、阻塞式数据传输（轮询模式）" class="headerlink" title="二、阻塞式数据传输（轮询模式）"></a><strong>二、阻塞式数据传输（轮询模式）</strong></h3><p><strong>1. 主机发送：<code>HAL_I2C_Master_Transmit(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint8_t *pData, uint16_t Size, uint32_t Timeout)</code></strong></p>
+<ul>
+<li><code>hi2c</code>：I2C 句柄（如<code>&amp;hi2c1</code>）；</li>
+<li><code>DevAddress</code>：从设备地址（7 位或 10 位，需根据从机支持配置，HAL 会自动处理读写位）；</li>
+<li><code>pData</code>：指向待发送数据的缓冲区指针；</li>
+<li><code>Size</code>：发送数据的长度（字节数）；</li>
+<li><code>Timeout</code>：超时时间（毫秒，超过此时间返回错误）。</li>
+</ul>
+<p><strong>2. 主机接收：<code>HAL_I2C_Master_Receive(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint8_t *pData, uint16_t Size, uint32_t Timeout)</code></strong></p>
+<ul>
+<li>参数同<code>HAL_I2C_Master_Transmit</code>，区别：<code>pData</code>为接收数据的缓冲区指针。</li>
+</ul>
+<p><strong>3. 从机发送：<code>HAL_I2C_Slave_Transmit(I2C_HandleTypeDef *hi2c, uint8_t *pData, uint16_t Size, uint32_t Timeout)</code></strong></p>
+<ul>
+<li><code>hi2c</code>：I2C 句柄；</li>
+<li><code>pData</code>：指向待发送数据的缓冲区指针；</li>
+<li><code>Size</code>：发送数据长度；</li>
+<li><code>Timeout</code>：超时时间（等待主机读取的最大时长）。</li>
+</ul>
+<p><strong>4. 从机接收：<code>HAL_I2C_Slave_Receive(I2C_HandleTypeDef *hi2c, uint8_t *pData, uint16_t Size, uint32_t Timeout)</code></strong></p>
+<ul>
+<li>参数同<code>HAL_I2C_Slave_Transmit</code>，区别：<code>pData</code>为接收主机数据的缓冲区指针。</li>
+</ul>
+<p><strong>5. 主机写寄存器：<code>HAL_I2C_Mem_Write(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size, uint32_t Timeout)</code></strong></p>
+<ul>
+<li><code>hi2c</code>：I2C 句柄；</li>
+<li><code>DevAddress</code>：从设备地址；</li>
+<li><code>MemAddress</code>：从设备内部寄存器地址（如传感器的控制寄存器地址）；</li>
+<li><code>MemAddSize</code>：寄存器地址长度（<code>I2C_MEMADD_SIZE_8BIT</code>或<code>I2C_MEMADD_SIZE_16BIT</code>）；</li>
+<li><code>pData</code>：待写入寄存器的数据缓冲区；</li>
+<li><code>Size</code>：写入数据长度；</li>
+<li><code>Timeout</code>：超时时间。</li>
+</ul>
+<p><strong>6. 主机读寄存器：<code>HAL_I2C_Mem_Read(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size, uint32_t Timeout)</code></strong></p>
+<ul>
+<li>参数同<code>HAL_I2C_Mem_Write</code>，区别：<code>pData</code>为从寄存器读取数据的缓冲区指针。</li>
+</ul>
+<h3 id="三、非阻塞式传输（中断模式）"><a href="#三、非阻塞式传输（中断模式）" class="headerlink" title="三、非阻塞式传输（中断模式）"></a><strong>三、非阻塞式传输（中断模式）</strong></h3><p>以主机发送为例（其他中断函数参数类似）：<code>HAL_I2C_Master_Transmit_IT(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint8_t *pData, uint16_t Size)</code></p>
+<ul>
+<li><p>参数与阻塞式</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">HAL_I2C_Master_Transmit<br></code></pre></td></tr></table></figure>
+
+<p>相比，</p>
+<p>无<code>Timeout</code>参数</p>
+<p>（中断模式无需轮询等待），其余参数含义相同：</p>
+<ul>
+<li><code>hi2c</code>、<code>DevAddress</code>、<code>pData</code>、<code>Size</code>：同阻塞式。</li>
+</ul>
+</li>
+</ul>
+<h3 id="四、非阻塞式传输（DMA-模式）"><a href="#四、非阻塞式传输（DMA-模式）" class="headerlink" title="四、非阻塞式传输（DMA 模式）"></a><strong>四、非阻塞式传输（DMA 模式）</strong></h3><p>以主机接收为例（其他 DMA 函数参数类似）：<code>HAL_I2C_Master_Receive_DMA(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint8_t *pData, uint16_t Size)</code></p>
+<ul>
+<li>参数与中断模式一致，**无<code>Timeout</code>**，依赖 DMA 控制器完成数据传输，其余参数含义同阻塞式。</li>
+</ul>
+<h3 id="五、回调函数"><a href="#五、回调函数" class="headerlink" title="五、回调函数"></a><strong>五、回调函数</strong></h3><p><strong>1. 传输完成回调（以主机为例）：<code>HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)</code></strong></p>
+<ul>
+<li><code>hi2c</code>：触发回调的 I2C 句柄，用于区分多个 I2C 外设（如同时使用 I2C1 和 I2C2 时）。</li>
+</ul>
+<p><strong>2. 错误回调：<code>HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)</code></strong></p>
+<ul>
+<li><code>hi2c</code>：发生错误的 I2C 句柄，可通过<code>HAL_I2C_GetError(hi2c)</code>获取具体错误码（如应答失败<code>HAL_I2C_ERROR_AF</code>）。</li>
+</ul>
+<h3 id="六、其他常用函数"><a href="#六、其他常用函数" class="headerlink" title="六、其他常用函数"></a><strong>六、其他常用函数</strong></h3><p><strong>1. <code>HAL_I2C_GetState(I2C_HandleTypeDef *hi2c)</code></strong></p>
+<ul>
+<li><code>hi2c</code>：I2C 句柄；</li>
+<li>返回值：当前 I2C 状态（如<code>HAL_I2C_STATE_READY</code>（就绪）、<code>HAL_I2C_STATE_BUSY_TX</code>（发送中）等）。</li>
+</ul>
+<p><strong>2. <code>HAL_I2C_GetError(I2C_HandleTypeDef *hi2c)</code></strong></p>
+<ul>
+<li><code>hi2c</code>：I2C 句柄；</li>
+<li>返回值：错误代码（如<code>HAL_I2C_ERROR_NONE</code>（无错）、<code>HAL_I2C_ERROR_TIMEOUT</code>（超时）、<code>HAL_I2C_ERROR_AF</code>（应答失败）等）。</li>
+</ul>
+<p><strong>3. <code>HAL_I2C_IsDeviceReady(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint32_t Trials, uint32_t Timeout)</code></strong></p>
+<ul>
+<li><code>hi2c</code>：I2C 句柄；</li>
+<li><code>DevAddress</code>：从设备地址；</li>
+<li><code>Trials</code>：重试次数（检测失败后重试的次数）；</li>
+<li><code>Timeout</code>：单次检测的超时时间（毫秒）；</li>
+<li>功能：检测从设备是否在线（发送地址并等待应答）。</li>
+</ul>
+<p><strong>4. <code>HAL_I2C_Abort(I2C_HandleTypeDef *hi2c, uint32_t Timeout)</code></strong></p>
+<ul>
+<li><code>hi2c</code>：I2C 句柄；</li>
+<li><code>Timeout</code>：超时时间；</li>
+<li>功能：强制终止当前 I2C 传输，释放总线（用于异常处理，如死锁时）。</li>
+</ul>
+<h2 id="硬件IIC读取AT24C02"><a href="#硬件IIC读取AT24C02" class="headerlink" title="硬件IIC读取AT24C02"></a>硬件IIC读取AT24C02</h2><p>在<strong>mian.c</strong>文件前面声明，AT24C02 写地址和读地址 ，定义写数据数组，和读数据数组</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/* USER CODE BEGIN PV */</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> ADDR_24LCxx_Write 0xA0</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> ADDR_24LCxx_Read 0xA1</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BufferSize 256</span><br><span class="hljs-type">uint8_t</span> WriteBuffer[BufferSize],ReadBuffer[BufferSize];<br><span class="hljs-type">uint16_t</span> i;<br><span class="hljs-comment">/* USER CODE END PV */</span><br><br></code></pre></td></tr></table></figure>
+
+<p><strong>重新定义printf函数</strong></p>
+<p>在 <strong>stm32f4xx_hal.c</strong>中包含#include &lt;stdio.h&gt;</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;stm32f4xx_hal.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-keyword">extern</span> UART_HandleTypeDef huart1;   <span class="hljs-comment">//声明串口</span><br><br></code></pre></td></tr></table></figure>
+
+<p>在 <strong>stm32f4xx_hal.c</strong> 中重写fget和fput函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/**</span><br><span class="hljs-comment">  * 函数功能: 重定向c库函数printf到DEBUG_USARTx</span><br><span class="hljs-comment">  * 输入参数: 无</span><br><span class="hljs-comment">  * 返 回 值: 无</span><br><span class="hljs-comment">  * 说    明：无</span><br><span class="hljs-comment">  */</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">fputc</span><span class="hljs-params">(<span class="hljs-type">int</span> ch, FILE *f)</span><br>&#123;<br>  HAL_UART_Transmit(&amp;huart1, (<span class="hljs-type">uint8_t</span> *)&amp;ch, <span class="hljs-number">1</span>, <span class="hljs-number">0xffff</span>);<br>  <span class="hljs-keyword">return</span> ch;<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment">  * 函数功能: 重定向c库函数getchar,scanf到DEBUG_USARTx</span><br><span class="hljs-comment">  * 输入参数: 无</span><br><span class="hljs-comment">  * 返 回 值: 无</span><br><span class="hljs-comment">  * 说    明：无</span><br><span class="hljs-comment">  */</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">fgetc</span><span class="hljs-params">(FILE *f)</span><br>&#123;<br>  <span class="hljs-type">uint8_t</span> ch = <span class="hljs-number">0</span>;<br>  HAL_UART_Receive(&amp;huart1, &amp;ch, <span class="hljs-number">1</span>, <span class="hljs-number">0xffff</span>);<br>  <span class="hljs-keyword">return</span> ch;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>在<strong>main.c</strong>中添加</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs C"> <span class="hljs-comment">/* USER CODE BEGIN 2 */</span><br><span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">256</span>; i++)<br>   WriteBuffer[i]=i;    <span class="hljs-comment">/* WriteBuffer init */</span><br><br><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\r\n***************I2C Example Z小旋测试*******************************\r\n&quot;</span>);<br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j=<span class="hljs-number">0</span>; j&lt;<span class="hljs-number">32</span>; j++)<br>       &#123;<br>               <span class="hljs-keyword">if</span>(HAL_I2C_Mem_Write(&amp;hi2c1, ADDR_24LCxx_Write, <span class="hljs-number">8</span>*j, I2C_MEMADD_SIZE_8BIT,WriteBuffer+<span class="hljs-number">8</span>*j,<span class="hljs-number">8</span>, <span class="hljs-number">1000</span>) == HAL_OK)<br>               &#123;<br>                               <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\r\n EEPROM 24C02 Write Test OK \r\n&quot;</span>);<br>                       HAL_Delay(<span class="hljs-number">20</span>);<br>               &#125;<br>               <span class="hljs-keyword">else</span><br>               &#123;<br>                        HAL_Delay(<span class="hljs-number">20</span>);<br>                               <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\r\n EEPROM 24C02 Write Test False \r\n&quot;</span>);<br>               &#125;<br>	&#125;<br>	<span class="hljs-comment">/*</span><br><span class="hljs-comment">	// wrinte date to EEPROM   如果要一次写一个字节，写256次，用这里的代码</span><br><span class="hljs-comment">	for(i=0;i&lt;BufferSize;i++)</span><br><span class="hljs-comment">	&#123;</span><br><span class="hljs-comment">	    HAL_I2C_Mem_Write(&amp;hi2c1, ADDR_24LCxx_Write, i, I2C_MEMADD_SIZE_8BIT,&amp;WriteBuffer[i],1，0xff);//使用I2C块读，出错。因此采用此种方式，逐个单字节写入</span><br><span class="hljs-comment">	  HAL_Delay(5);//此处延时必加，与AT24C02写时序有关</span><br><span class="hljs-comment">	&#125;</span><br><span class="hljs-comment">	printf(&quot;\r\n EEPROM 24C02 Write Test OK \r\n&quot;);</span><br><span class="hljs-comment">	*/</span><br><br>	HAL_I2C_Mem_Read(&amp;hi2c1, ADDR_24LCxx_Read, <span class="hljs-number">0</span>, I2C_MEMADD_SIZE_8BIT,ReadBuffer,BufferSize, <span class="hljs-number">0xff</span>);<br><br>	<span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">256</span>; i++)<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;0x%02X  &quot;</span>,ReadBuffer[i]);<br>		<br> <span class="hljs-comment">/* USER CODE END 2 */</span><br><br></code></pre></td></tr></table></figure>
+
+<p><strong>注意事项：</strong></p>
+<ul>
+<li><strong>AT24C02的IIC每次写之后要延时一段时间才能继续写</strong> 每次写之后要delay 5ms左右 <strong>不管硬件IIC采用何种形式（DMA，IT），都要确保两次写入的间隔大于5ms;</strong></li>
+<li>读写函数最后一个超时调整为1000以上 因为我们一次写8个字节，延时要久一点</li>
+<li><strong>AT24C02页写入只支持8个byte，所以需要分32次写入。这不是HAL库的bug，而是AT24C02的限制，其他的EEPROM可以支持更多byte的写入。</strong></li>
+</ul>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left "
+    
+      href="/2025/11/15/STM32Cube_HAL-8-SPI/"
+      title="STM32Cube_HAL库笔记（八）-SPI"
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+      
+        STM32Cube_HAL库笔记（八）-SPI
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2025/11/13/STM32Cube_HAL-6-UART/"
+      title="STM32Cube_HAL库笔记（六）-UART"
+     >
+
+    <p class="title-text">
+      
+        STM32Cube_HAL库笔记（六）-UART
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+
+  <div id="comment-card" class="comment-card">
+    <div class="main-title-bar">
+      <div class="main-title-dot"></div>
+      <div class="main-title">留言 </div>
+    </div>
+    <div id="giscus-container"></div>
+  </div>
+  <script src="https://giscus.app/client.js"
+    data-repo="chaoxiaohan/myblog"
+    data-repo-id="R_kgDOPe4zOQ"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOPe4zOc4CuRDG"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="noborder_light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async>
+  </script>
+  
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2025 超小韓<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+  <script src="/js/toc.js"></script>
+  
+  <script src="/js/search.js"></script>
+  <script src="/js/code-copy.js"></script>
+  <script src="/js/mobile-warning.js"></script>
+  <script src="/js/image-viewer.js"></script>
+  <script src="/js/context-menu.js"></script>
+</body>
+</html>
