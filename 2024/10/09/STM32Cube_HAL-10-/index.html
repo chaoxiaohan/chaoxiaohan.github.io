@@ -28,25 +28,22 @@
 
 
   
-  <title>使用YOLOV5-Lite训练模型 | 超小韓の个人博客</title>
+  <title>STM32Cube_HAL库笔记（九）- | 超小韓の个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
   <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
 
-  <meta name="description" content="在Windows上使用yolov5-lite部署和训练">
+  <meta name="description" content="正在施工ing...">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用YOLOV5-Lite训练模型">
-<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2025/09/27/VOLOV5-lite_train/index.html">
+<meta property="og:title" content="STM32Cube_HAL库笔记（九）-">
+<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2024/10/09/STM32Cube_HAL-10-/index.html">
 <meta property="og:site_name" content="超小韓の个人博客">
-<meta property="og:description" content="在Windows上使用yolov5-lite部署和训练">
+<meta property="og:description" content="正在施工ing...">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-09-26T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-11-14T09:37:55.752Z">
+<meta property="article:published_time" content="2024-10-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-16T07:15:43.632Z">
 <meta property="article:author" content="超小韓">
-<meta property="article:tag" content="YOLOV5">
-<meta property="article:tag" content="OpenCV">
-<meta property="article:tag" content="Pytorch">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
@@ -281,7 +278,7 @@
           <div class="toc-widget">
   <h3 class="toc-title">目录</h3>
   <div class="toc-content">
-    <ol class="toc-list"><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E5%9C%A8Windows%E4%B8%8A%E4%BD%BF%E7%94%A8yolov5-lite%E9%83%A8%E7%BD%B2%E5%92%8C%E8%AE%AD%E7%BB%83"><span class="toc-list-text">在Windows上使用yolov5-lite部署和训练</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E5%85%8B%E9%9A%86YOLOV5-lite%E4%BB%93%E5%BA%93"><span class="toc-list-text">一、克隆YOLOV5-lite仓库</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81%E4%B8%8B%E8%BD%BD%E6%9D%83%E9%87%8D%E6%96%87%E4%BB%B6"><span class="toc-list-text">二、下载权重文件</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81%E5%87%86%E5%A4%87%E8%AE%AD%E7%BB%83%E9%9B%86"><span class="toc-list-text">三、准备训练集</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%9B%9B%E3%80%81%E5%87%86%E5%A4%87%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-list-text">四、准备配置文件</span></a></li></ol></li></ol>
+    
   </div>
 </div>
 
@@ -295,7 +292,7 @@
        
 
 
-<article id="post-VOLOV5-lite_train" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+<article id="post-STM32Cube_HAL-10-" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
     
    
@@ -308,7 +305,7 @@
   
     
       <h1 class="p-name article-title" itemprop="headline name">
-        使用YOLOV5-Lite训练模型
+        STM32Cube_HAL库笔记（九）-
       </h1>
     
   
@@ -316,89 +313,27 @@
 
         <div class='meta-info-bar'>
           <div class="meta-info">
-  <time class="dt-published" datetime="2025-09-26T16:00:00.000Z" itemprop="datePublished">2025-09-27</time>
+  <time class="dt-published" datetime="2024-10-08T16:00:00.000Z" itemprop="datePublished">2024-10-09</time>
 </div>
           <div class="need-seperator meta-info">
             <div class="meta-cate-flex">
   
-  <a class="meta-cate-link" href="/categories/YOLO/">YOLO</a>
+  <a class="meta-cate-link" href="/categories/HAL/">HAL</a>
    
 </div>
   
           </div>
           <div class="wordcount need-seperator meta-info">
-            1.9k 词 
+            69 词 
           </div>
         </div>
         
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenCV/" rel="tag">OpenCV</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pytorch/" rel="tag">Pytorch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/YOLOV5/" rel="tag">YOLOV5</a></li></ul>
-
       </header>
       <div class="e-content article-entry" itemprop="articleBody">
         
-          <h1 id="在Windows上使用yolov5-lite部署和训练"><a href="#在Windows上使用yolov5-lite部署和训练" class="headerlink" title="在Windows上使用yolov5-lite部署和训练"></a>在Windows上使用yolov5-lite部署和训练</h1><h2 id="一、克隆YOLOV5-lite仓库"><a href="#一、克隆YOLOV5-lite仓库" class="headerlink" title="一、克隆YOLOV5-lite仓库"></a>一、克隆YOLOV5-lite仓库</h2><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">git <span class="hljs-keyword">clone</span> <span class="hljs-title">https</span>://github.com/ppogg/YOLOv5-Lite.git<br></code></pre></td></tr></table></figure>
-
-<p>克隆后使用IDE打开该文件夹</p>
-<p>输入</p>
-<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">pip <span class="hljs-keyword">install</span> -r requirements.txt<br></code></pre></td></tr></table></figure>
-
-<p>安装依赖文件</p>
-<h2 id="二、下载权重文件"><a href="#二、下载权重文件" class="headerlink" title="二、下载权重文件"></a>二、下载权重文件</h2><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">git <span class="hljs-keyword">clone</span> <span class="hljs-title">https</span>://gitcode.com/open-source-toolkit/<span class="hljs-number">8</span>fb60.git<br></code></pre></td></tr></table></figure>
-
-<p>v5lite_s,复制到yolov5的weights文件夹</p>
-<h2 id="三、准备训练集"><a href="#三、准备训练集" class="headerlink" title="三、准备训练集"></a>三、准备训练集</h2><p>使用labelimg进行训练集标注</p>
-<p>labelimg已打包好的程序</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">通过网盘分享的文件：windows_v1.<span class="hljs-number">8.1</span>.zip<br>链接: https:<span class="hljs-regexp">//</span>pan.baidu.com<span class="hljs-regexp">/s/</span><span class="hljs-number">1</span>L4oobKRK2EWzRD9e9SW8MQ?pwd=<span class="hljs-number">75</span>kf 提取码: <span class="hljs-number">75</span>kf<br></code></pre></td></tr></table></figure>
-
-<p>在yolov5-lite文件夹里创建一个新的文件夹，名为xunlianji</p>
-<p>文件结构如下图</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs ada">xunlianji<br>	<span class="hljs-comment">--train</span><br>		<span class="hljs-comment">--images</span><br>		<span class="hljs-comment">--label</span><br>	<span class="hljs-comment">--valid</span><br>		<span class="hljs-comment">--images</span><br>		<span class="hljs-comment">--label</span><br>	<span class="hljs-comment">--text</span><br>		<span class="hljs-comment">--images</span><br>		<span class="hljs-comment">--label</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="四、准备配置文件"><a href="#四、准备配置文件" class="headerlink" title="四、准备配置文件"></a>四、准备配置文件</h2><p>准备model文件</p>
-<p>复制data文件夹里的<code>coco128.yaml</code>到xunlianji里，修改名称<code>xunlianji_model.yaml</code></p>
-<p>修改文件内的nc</p>
-<blockquote>
-<p>nc的值为你的标签数量</p>
+          <blockquote>
+<p>本系列主要讲解STM32CubeHAL的使用，详细的安装部署教程请见<a target="_blank" rel="noopener" href="https://blog.csdn.net/as480133937/article/details/98885316">【STM32】STM32 CubeMx使用教程一–安装教程-CSDN博客</a></p>
 </blockquote>
-<p>复制data文件夹里的<code>v5Lite-s.yaml</code>到xunlianji里，修改名称<code>xunlianji_parameter.yaml</code></p>
-<p>修改文件里的内容</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># COCO 2017 dataset http://cocodataset.org - first 128 training images</span><br><span class="hljs-comment"># Train command: python train.py --data coco128.yaml</span><br><span class="hljs-comment"># Default dataset location is next to /yolov5:</span><br><span class="hljs-comment">#   /parent_folder</span><br><span class="hljs-comment">#     /coco128</span><br><span class="hljs-comment">#     /yolov5</span><br><br><br><span class="hljs-comment"># train and val data as 1) directory: path/images/, 2) file: path/images.txt, or 3) list: [path1/images/, path2/images/]</span><br><span class="hljs-attr">train:</span> <span class="hljs-string">./xunlianji/train/images/</span>  <span class="hljs-comment"># 128 images</span><br><span class="hljs-attr">val:</span> <span class="hljs-string">./xunlianji/vaild/images/</span>  <span class="hljs-comment"># 128 images</span><br><br><span class="hljs-comment"># number of classes</span><br><span class="hljs-attr">nc:</span> <span class="hljs-number">6</span><br><br><span class="hljs-comment"># class names</span><br><span class="hljs-attr">names:</span> [ <span class="hljs-string">&#x27;red&#x27;</span>, <span class="hljs-string">&#x27;green&#x27;</span>, <span class="hljs-string">&#x27;blue&#x27;</span>,<span class="hljs-string">&quot;red_box&quot;</span>,<span class="hljs-string">&quot;green_box&quot;</span>,<span class="hljs-string">&quot;blue_box&quot;</span> ]<br><br></code></pre></td></tr></table></figure>
-
-<blockquote>
-<p>train为train的地址</p>
-<p>val为valid的地址</p>
-<p>nc为标签数量</p>
-<p>names为所有标签内容</p>
-</blockquote>
-<p>五、修改train.py</p>
-<ul>
-<li><p><code>--weights</code>：指定预训练权重，这里我们使用的是yolov5s.pt，如果没有下载，你运行后它会自己下载的</p>
-</li>
-<li><p><code>--cfg</code>：指定模型配置文件，这里我们使用的是yolov5s.yaml</p>
-</li>
-<li><p><code>--data</code>：指定数据集配置文件，这里我们使用的是myvoc.yaml。这个要改成你自己的配置文件路径。</p>
-</li>
-<li><p><code>--epoch</code>：指定训练的轮数，这里我们设置为200。训练200次</p>
-</li>
-<li><p><code>--batch-size</code>：指定训练的batch size，这里我们设置为8。训练8张图片后进行权重更新</p>
-</li>
-<li><p><code>--img</code>：指定训练的图片大小，这里我们设置为640。</p>
-</li>
-<li><p><code>--device</code>：指定训练的设备，这里我们设置为cpu。当然cpu会比较慢而且如果你cpu不咋行会报一些错，如果可以建议用GPU训练。</p>
-</li>
-</ul>
-<blockquote>
-<p>我们设置如下几个核心配置：</p>
-<p>–weights v5lite-s.pt</p>
-<p>–cfg models&#x2F;v5Lite-s.yaml</p>
-<p>–data data&#x2F;mydata.yaml</p>
-<p>–img-size 320</p>
-<p>–batch-size 16</p>
-<p>–data data&#x2F;mydata.yaml</p>
-<p>device 0&#x2F;cpu                        （可以不使用CUDA训练）</p>
-</blockquote>
-<p>修改后运行<code>train.py</code></p>
-<p>训练成功之后，将会在当前目录下的 <strong>run</strong> 文件下的 <strong>trian</strong> 文件下找到 <strong>expx</strong> (x代表数字)，<strong>expx</strong> 则存放了第 <strong>x</strong> 次训练时候的各种数据内容，<strong>包括：</strong>历史最优权重<strong>best_weight</strong>，当前权重<strong>last_weight</strong>，训练结果<strong>result</strong>等等；</p>
 
         
       </div>
@@ -413,25 +348,25 @@
 <nav id="article-nav">
   <a class="article-nav-btn left "
     
-      href="/2025/10/01/STM32_Standard_Peripheral_Libraries-1/"
-      title="STM32标准库笔记（一）-准备、GPIO、中断"
+      href="/2024/10/25/c-notes-enum-io-file-6/"
+      title="C语言学习笔记-枚举、输入输出、文件(六)"
      >
     <i class="fa-solid fa-angle-left"></i>
     <p class="title-text">
       
-        STM32标准库笔记（一）-准备、GPIO、中断
+        C语言学习笔记-枚举、输入输出、文件(六)
         
     </p>
   </a>
   <a class="article-nav-btn right "
     
-      href="/2025/09/27/newcomputer_guide/"
-      title="笔记本新机「开荒」指南"
+      href="/2024/10/05/c-notes-enum-struct-5/"
+      title="C语言学习笔记-枚举、结构体(五)"
      >
 
     <p class="title-text">
       
-        笔记本新机「开荒」指南
+        C语言学习笔记-枚举、结构体(五)
         
     </p>
     <i class="fa-solid fa-angle-right"></i>
