@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+
+
+<html theme="light" showBanner="true" hasBanner="true" > 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+<!-- Gaug.es Analytics -->
+<script>
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', 'true');
+    t.setAttribute('data-track-path', 'https://track.gaug.es/track.gif');
+    t.src = 'https://d36ee2fcip1434.cloudfront.net/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+<!-- End Gaug.es Analytics -->
+
+
+  
+  <title>GD32F470入门教程（二）时钟系统 | 超小韓の个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="GD32F470的时钟系统是其核心组成部分。本文解析了时钟树结构，包括外部晶振、内部RC振荡器、PLL倍频器及分频器，并详细说明了时钟分配到各模块的过程，确保系统高效运行。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GD32F470入门教程（二）时钟系统">
+<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2026/02/10/GD32F470-2-clock/index.html">
+<meta property="og:site_name" content="超小韓の个人博客">
+<meta property="og:description" content="GD32F470的时钟系统是其核心组成部分。本文解析了时钟树结构，包括外部晶振、内部RC振荡器、PLL倍频器及分频器，并详细说明了时钟分配到各模块的过程，确保系统高效运行。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260211215134361.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260211215424151.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260211220225171.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260211223146323.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260211223204682.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260211223217448.png">
+<meta property="article:published_time" content="2026-02-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-11T15:10:01.501Z">
+<meta property="article:author" content="超小韓">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260211215134361.png">
+  
+    <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+<link rel="stylesheet" href="/css/search.css">
+
+  
+<link rel="stylesheet" href="/css/toc-fix.css">
+
+  
+<link rel="stylesheet" href="/css/code-copy.css">
+
+  
+<link rel="stylesheet" href="/css/mobile-warning.css">
+
+  
+<link rel="stylesheet" href="/css/image-viewer.css">
+
+  
+<link rel="stylesheet" href="/css/context-menu.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/xiaoxin7284678236.png" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>超小韓の个人博客 </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">主页</a>
+    
+      <a class="main-nav-link" href="/archives">文章</a>
+    
+      <a class="main-nav-link" href="/resources">资料</a>
+    
+      <a class="main-nav-link" href="/about">关于我的</a>
+    
+  </nav>
+  <nav id="search-nav">
+    <div id="search-container">
+      <select id="search-mode-selector" name="search-mode">
+        <option value="exact">精确</option>
+        <option value="fuzzy">模糊</option>
+      </select>
+      <input type="text" id="search-input" placeholder="搜索文章..." autocomplete="off">
+      <div id="search-results" class="hidden">
+        <div id="search-results-content"></div>
+      </div>
+    </div>
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">主页</a>
+    
+      <a class="nav-dropdown-link" href="/archives">文章</a>
+    
+      <a class="nav-dropdown-link" href="/resources">资料</a>
+    
+      <a class="nav-dropdown-link" href="/about">关于我的</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/head.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">超小韓 </div>
+      <div class="dot"></div>
+      <div class="subtitle">生活明朗，万物可爱！ </div>
+      <div class="link-list">
+        
+          <a class="link-btn" href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2537037482&website=www.oicqzone.com" title="QQ"><i class="fa-brands fa-qq"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/353687950" title="哔哩哔哩"><i class="fa-brands fa-bilibili"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/chaoxiaohan/" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        
+          <a class="link-btn" href="mailto:chaoxiaohan@chaoxiaohan.cyou" title="Email"><i class="fa-solid fa-envelope"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+    
+
+
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">分类</h3>
+      <div class="category-box">
+            <a class="category-link" href="/categories/HAL/">
+                HAL
+                <div class="category-count">14</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Android/">
+                Android
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Standard/">
+                Standard
+                <div class="category-count">4</div>
+            </a>
+        
+            <a class="category-link" href="/categories/YOLO/">
+                YOLO
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/C/">
+                C
+                <div class="category-count">8</div>
+            </a>
+        
+            <a class="category-link" href="/categories/computer/">
+                computer
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/siemens-cup/">
+                siemens-cup
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Python/">
+                Python
+                <div class="category-count">2</div>
+            </a>
+        
+            <a class="category-link" href="/categories/OpenCv/">
+                OpenCv
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/test/">
+                test
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/GD32F470xx/">
+                GD32F470xx
+                <div class="category-count">5</div>
+            </a>
+        </div>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">标签</h3>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/ADC/" rel="tag">ADC</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Analog/" rel="tag">Analog</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Buzzer/" rel="tag">Buzzer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CAN/" rel="tag">CAN</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Compose/" rel="tag">Compose</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Converter/" rel="tag">Converter</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CubeMx/" rel="tag">CubeMx</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/DAC/" rel="tag">DAC</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/DMA/" rel="tag">DMA</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/EEPROM/" rel="tag">EEPROM</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Flash/" rel="tag">Flash</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/I2C/" rel="tag">I2C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/IIC/" rel="tag">IIC</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Interrupt/" rel="tag">Interrupt</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Motor/" rel="tag">Motor</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCV/" rel="tag">OpenCV</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCv/" rel="tag">OpenCv</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/PWM/" rel="tag">PWM</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Pytorch/" rel="tag">Pytorch</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/SPI/" rel="tag">SPI</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Serial/" rel="tag">Serial</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Servo/" rel="tag">Servo</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Standard/" rel="tag">Standard</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/TIM/" rel="tag">TIM</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Timer/" rel="tag">Timer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/UART/" rel="tag">UART</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/W25Q128/" rel="tag">W25Q128</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/YOLOV5/" rel="tag">YOLOV5</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/computer/" rel="tag">computer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/resourse/" rel="tag">resourse</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/teach/" rel="tag">teach</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%8D%9A%E5%9B%BE/" rel="tag">博图</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" rel="tag">工程实践</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%A5%BF%E9%97%A8%E5%AD%90%E6%9D%AF/" rel="tag">西门子杯</a></li></ul>
+    </div>
+  </div>
+
+
+  
+  <div class="sticky">
+    
+      
+        
+          <div class="toc-widget">
+  <h3 class="toc-title">目录</h3>
+  <div class="toc-content">
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E6%97%B6%E9%92%9F%E7%B3%BB%E7%BB%9F"><span class="toc-list-text">时钟系统</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%97%B6%E9%92%9F%E6%A0%91"><span class="toc-list-text">时钟树</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E6%97%B6%E9%92%9F%E6%BA%90%EF%BC%88%E6%A0%B9%E5%9F%BA%EF%BC%89"><span class="toc-list-text">一、时钟源（根基）</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E5%A4%96%E9%83%A8%E6%99%B6%E6%8C%AF%EF%BC%9A"><span class="toc-list-text">外部晶振：</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E5%86%85%E9%83%A8-RC-%E6%8C%AF%E8%8D%A1%E5%99%A8%EF%BC%9A"><span class="toc-list-text">内部 RC 振荡器：</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81%E6%97%B6%E9%92%9F%E5%A4%84%E7%90%86%E6%A0%B8%E5%BF%83%EF%BC%88PLL-%E4%B8%8E%E5%88%86%E9%A2%91%E5%99%A8%EF%BC%89"><span class="toc-list-text">二、时钟处理核心（PLL 与分频器）</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#PLL%EF%BC%88%E9%94%81%E7%9B%B8%E7%8E%AF%EF%BC%89%EF%BC%9A"><span class="toc-list-text">PLL（锁相环）：</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E5%88%86%E9%A2%91%E5%99%A8%EF%BC%88Division%EF%BC%89%EF%BC%9A"><span class="toc-list-text">分频器（Division）：</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%B8%89%E3%80%81%E6%97%B6%E9%92%9F%E5%88%86%E9%85%8D%EF%BC%88%E5%88%B0%E5%90%84%E6%A8%A1%E5%9D%97%EF%BC%89"><span class="toc-list-text">三、时钟分配（到各模块）</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E5%86%85%E6%A0%B8%E4%B8%8E%E6%80%BB%E7%BA%BF%EF%BC%9A"><span class="toc-list-text">内核与总线：</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E5%A4%96%E8%AE%BE%E4%B8%93%E5%B1%9E%E6%97%B6%E9%92%9F%EF%BC%9A"><span class="toc-list-text">外设专属时钟：</span></a></li></ol></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BD%BF%E7%94%A8%E6%97%B6%E9%92%9F"><span class="toc-list-text">使用时钟</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#RCU%E6%A0%87%E5%87%86%E5%9B%BA%E4%BB%B6%E5%BA%93%E4%BB%8B%E7%BB%8D"><span class="toc-list-text">RCU标准固件库介绍</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#rcu-periph-clock-enable"><span class="toc-list-text">rcu_periph_clock_enable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#rcu-periph-clock-disable"><span class="toc-list-text">rcu_periph_clock_disable</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E6%97%B6%E9%92%9F%E5%9B%BA%E4%BB%B6%E5%BA%93%E5%87%BD%E6%95%B0"><span class="toc-list-text">时钟固件库函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE%E5%87%BD%E6%95%B0"><span class="toc-list-text">1. 系统时钟配置函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#rcu-system-clock-source-config"><span class="toc-list-text">rcu_system_clock_source_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#rcu-system-clock-source-get"><span class="toc-list-text">rcu_system_clock_source_get</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-PLL%E9%85%8D%E7%BD%AE%E5%87%BD%E6%95%B0"><span class="toc-list-text">2. PLL配置函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#rcu-pll-config"><span class="toc-list-text">rcu_pll_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#rcu-pll-enable"><span class="toc-list-text">rcu_pll_enable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#rcu-pll-disable"><span class="toc-list-text">rcu_pll_disable</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-%E6%97%B6%E9%92%9F%E5%88%86%E9%A2%91%E9%85%8D%E7%BD%AE%E5%87%BD%E6%95%B0"><span class="toc-list-text">3. 时钟分频配置函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#rcu-ahb-clock-config"><span class="toc-list-text">rcu_ahb_clock_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#rcu-apb1-clock-config"><span class="toc-list-text">rcu_apb1_clock_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#rcu-apb2-clock-config"><span class="toc-list-text">rcu_apb2_clock_config</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-%E6%8C%AF%E8%8D%A1%E5%99%A8%E6%8E%A7%E5%88%B6%E5%87%BD%E6%95%B0"><span class="toc-list-text">4. 振荡器控制函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#rcu-osci-on"><span class="toc-list-text">rcu_osci_on</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#rcu-osci-off"><span class="toc-list-text">rcu_osci_off</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#rcu-osci-stab-wait"><span class="toc-list-text">rcu_osci_stab_wait</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-%E6%97%B6%E9%92%9F%E9%A2%91%E7%8E%87%E8%8E%B7%E5%8F%96%E5%87%BD%E6%95%B0"><span class="toc-list-text">5. 时钟频率获取函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#rcu-clock-freq-get"><span class="toc-list-text">rcu_clock_freq_get</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-%E5%A4%96%E8%AE%BE%E6%97%B6%E9%92%9F%E6%8E%A7%E5%88%B6%E5%87%BD%E6%95%B0"><span class="toc-list-text">6. 外设时钟控制函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#rcu-periph-clock-enable-1"><span class="toc-list-text">rcu_periph_clock_enable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#rcu-periph-clock-disable-1"><span class="toc-list-text">rcu_periph_clock_disable</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#7-%E5%85%B6%E4%BB%96%E5%87%BD%E6%95%B0"><span class="toc-list-text">7. 其他函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#rcu-deinit"><span class="toc-list-text">rcu_deinit</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#rcu-step-mode-wakeup-disable"><span class="toc-list-text">rcu_step_mode_wakeup_disable</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#8-%E7%9B%B8%E5%85%B3%E5%AE%8F%E5%AE%9A%E4%B9%89%E5%92%8C%E6%9E%9A%E4%B8%BE"><span class="toc-list-text">8. 相关宏定义和枚举</span></a></li></ol></li></ol></li></ol>
+  </div>
+</div>
+
+        
+      
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-GD32F470-2-clock" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        GD32F470入门教程（二）时钟系统
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2026-02-09T16:00:00.000Z" itemprop="datePublished">2026-02-10</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+  <a class="meta-cate-link" href="/categories/GD32F470xx/">GD32F470xx</a>
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            11k 词 
+          </div>
+        </div>
+        
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <h1 id="时钟系统"><a href="#时钟系统" class="headerlink" title="时钟系统"></a>时钟系统</h1><p>我们根据数据手册，可以找到这款芯片的时钟树，时钟树是了解整个芯片时钟系统的核心</p>
+<h2 id="时钟树"><a href="#时钟树" class="headerlink" title="时钟树"></a>时钟树</h2><p>![GD32F4xx 时钟树](<a target="_blank" rel="noopener" href="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/GD32F4xx">https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/GD32F4xx</a> 时钟树.png)</p>
+<h3 id="一、时钟源（根基）"><a href="#一、时钟源（根基）" class="headerlink" title="一、时钟源（根基）"></a>一、时钟源（根基）</h3><h4 id="外部晶振："><a href="#外部晶振：" class="headerlink" title="外部晶振："></a>外部晶振：</h4><p>HXTAL（高速）：接外部高频晶振（如常见 8MHz、24MHz ），为系统提供精准、稳定高频时钟，是高性能运算、高速外设（以太网、高速 ADC ）的优质时钟源，经 PLL 倍频可提升到内核所需高频率 。<br>LXTAL（低速）：接外部低频晶振（一般 32.768KHz ），专为 RTC（实时时钟）、低功耗应用设计，给系统提供长时稳定低速时钟，保障时间记录、低功耗模式下基础时序 。</p>
+<h4 id="内部-RC-振荡器："><a href="#内部-RC-振荡器：" class="headerlink" title="内部 RC 振荡器："></a>内部 RC 振荡器：</h4><p>IRC16M：内部 16MHz RC 振荡，无需外接元件，启动快、成本低，系统启动初期或对精度要求不高时（如初始化阶段、简单 IO 控制 ），可快速提供时钟，作为过渡或备用 。<br>IRC32K：内部 32KHz RC 振荡，类似 LXTAL 功能，给 RTC、低功耗外设供时钟，可替代外部低速晶振，简化硬件设计，不过精度略逊于外部晶振 。<br>IRC48M：内部 48MHz RC 振荡，为 USB 等对时钟精度、频率有特定要求的外设服务（USB 需 48MHz 精准时钟 ），也可作为系统辅助高速时钟，灵活补充高频需求 。</p>
+<h3 id="二、时钟处理核心（PLL-与分频器）"><a href="#二、时钟处理核心（PLL-与分频器）" class="headerlink" title="二、时钟处理核心（PLL 与分频器）"></a>二、时钟处理核心（PLL 与分频器）</h3><h4 id="PLL（锁相环）："><a href="#PLL（锁相环）：" class="headerlink" title="PLL（锁相环）："></a>PLL（锁相环）：</h4><p>接收 HXTAL 或 IRC 等输入时钟，通过倍频（比如把 8MHz 倍到 168MHz、240MHz ），为内核、高速总线（AHB ）、高性能外设提供高频时钟，是提升系统运算速度、支撑高速数据处理的关键，让芯片发挥最大性能 。<br>可配置不同倍频系数，适配内核（如 240MHz ）、外设（如以太网需特定频率 ）的多样化需求，平衡性能与功耗（高倍频对应高性能、高功耗，低倍频反之 ）。</p>
+<h4 id="分频器（Division）："><a href="#分频器（Division）：" class="headerlink" title="分频器（Division）："></a>分频器（Division）：</h4><p>对 PLL 输出、原始时钟源分频，给不同总线（APB1、APB2 ）、外设分配合适频率。比如 APB1 总线时钟通常低于 AHB，通过分频降低频率，既满足外设时序要求（部分外设不支持高频 ），又降低总线、外设功耗，像定时器、串口等外设，用分频后的 APB 时钟就能稳定工作 。<br>灵活调整分频系数，适配不同外设特性，比如高速 SPI 用高频，低速 UART 用低频，让每个外设都在 “舒适区” 运行，保障兼容性、稳定性 。</p>
+<h3 id="三、时钟分配（到各模块）"><a href="#三、时钟分配（到各模块）" class="headerlink" title="三、时钟分配（到各模块）"></a>三、时钟分配（到各模块）</h3><h4 id="内核与总线："><a href="#内核与总线：" class="headerlink" title="内核与总线："></a>内核与总线：</h4><p>AHB 总线：接收 PLL 高倍频时钟（或原始高频时钟 ），最高可达 240MHz，给 CPU 内核、高速存储（TCM_SRAM ）、高速外设（DMA、以太网 ）供时钟，保障系统核心运算、高速数据传输效率，是系统高性能运行的 “大动脉” 。<br>APB 总线（APB1、APB2 ）：经分频器从 AHB 取时钟，APB2 频率通常高于 APB1 ，分别给不同外设群供时钟。APB2 连高速外设（ADC、SPI 高速模式 ），APB1 接低速 - 中速外设（定时器、普通 UART ），通过分频差异化分配，让外设适配自身时序，同时降低整体功耗 。</p>
+<h4 id="外设专属时钟："><a href="#外设专属时钟：" class="headerlink" title="外设专属时钟："></a>外设专属时钟：</h4><p>部分外设（USB、RTC ）有独立时钟路径。USB 必须用 48MHz 精准时钟（来自 IRC48M 或 PLL 处理后的 HXTAL ），保障 USB 通信协议严格时序；RTC 用 LXTAL 或 IRC32K 供时钟，维持实时时间计数，即使系统休眠，也靠这些低速时钟保持运行，实现低功耗长时计时 。<br>定时器、串口等通用外设，从 APB 总线取时钟，经自身预分频、倍频，生成精准定时、通信时序，比如定时器通过内部分频 &#x2F; 倍频，实现微秒级定时，串口依总线时钟配置波特率，保障数据收发正确 。</p>
+<h2 id="使用时钟"><a href="#使用时钟" class="headerlink" title="使用时钟"></a>使用时钟</h2><p>打开我们的工程模板找到并打开startup_gd32f450_470.s启动文件，在190行有<code>SystemInit</code>，我们在system_gd32f4xx.c文件内找到这个函数，在这个函数下面，找到<code>system_clock_config()</code></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260211215134361.png" alt="image-20260211215134361"></p>
+<p>继续跳转到system_clock_config函数所在的位置，我们可以下面这样一段的代码，里面通过预先定义的宏编译，选择真正的系统时钟配置函数<code>system_clock_240m_25m_hxtal()</code></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260211215424151.png" alt="image-20260211215424151"></p>
+<p>跳转到宏定义__SYSTEM_CLOCK_240M_PLL_25M_HXTAL地方，我们可以看到下图内容</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260211220225171.png" alt="image-20260211220225171"></p>
+<blockquote>
+<ul>
+<li>这些宏定义用于<strong>选择系统主频和时钟源</strong>，比如内部16MHz、外部晶振、PLL倍频等。</li>
+<li>你只能<strong>取消一行的注释</strong>，表示你要用哪种主频和时钟源，其它全部注释。</li>
+<li>例如：<ul>
+<li><code>#define __SYSTEM_CLOCK_240M_PLL_25M_HXTAL (uint32_t)(240000000)</code><br>表示用25MHz外部晶振，经PLL倍频后，系统主频为240MHz。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h2 id="RCU标准固件库介绍"><a href="#RCU标准固件库介绍" class="headerlink" title="RCU标准固件库介绍"></a>RCU标准固件库介绍</h2><p>根据固件库文档，我们得知RCU的函数有如下</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260211223146323.png" alt="image-20260211223146323"></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260211223204682.png" alt="image-20260211223204682"></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260211223217448.png" alt="image-20260211223217448"></p>
+<p>这里我们介绍几个比较常用的函数</p>
+<h3 id="rcu-periph-clock-enable"><a href="#rcu-periph-clock-enable" class="headerlink" title="rcu_periph_clock_enable"></a>rcu_periph_clock_enable</h3><p><strong>函数原型</strong>：void rcu_periph_clock_enable(rcu_periph_enum periph);</p>
+<p><strong>功能</strong>：使能外设时钟</p>
+<p><strong>输入参数：</strong>rcu_periph_enum periph枚举</p>
+<p><strong>输出</strong>：无</p>
+<p>rcu_periph_enum periph枚举：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">enum</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-comment">/* AHB1 peripherals */</span><br>    RCU_GPIOA     = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">0U</span>),                  <span class="hljs-comment">/*!&lt; GPIOA clock */</span><br>    RCU_GPIOB     = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">1U</span>),                  <span class="hljs-comment">/*!&lt; GPIOB clock */</span><br>    RCU_GPIOC     = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">2U</span>),                  <span class="hljs-comment">/*!&lt; GPIOC clock */</span><br>    RCU_GPIOD     = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">3U</span>),                  <span class="hljs-comment">/*!&lt; GPIOD clock */</span><br>    RCU_GPIOE     = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">4U</span>),                  <span class="hljs-comment">/*!&lt; GPIOE clock */</span><br>    RCU_GPIOF     = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">5U</span>),                  <span class="hljs-comment">/*!&lt; GPIOF clock */</span><br>    RCU_GPIOG     = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">6U</span>),                  <span class="hljs-comment">/*!&lt; GPIOG clock */</span><br>    RCU_GPIOH     = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">7U</span>),                  <span class="hljs-comment">/*!&lt; GPIOH clock */</span><br>    RCU_GPIOI     = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">8U</span>),                  <span class="hljs-comment">/*!&lt; GPIOI clock */</span><br>    RCU_CRC       = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">12U</span>),                 <span class="hljs-comment">/*!&lt; CRC clock */</span><br>    RCU_BKPSRAM   = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">18U</span>),                 <span class="hljs-comment">/*!&lt; BKPSRAM clock */</span><br>    RCU_TCMSRAM   = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">20U</span>),                 <span class="hljs-comment">/*!&lt; TCMSRAM clock */</span><br>    RCU_DMA0      = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">21U</span>),                 <span class="hljs-comment">/*!&lt; DMA0 clock */</span><br>    RCU_DMA1      = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">22U</span>),                 <span class="hljs-comment">/*!&lt; DMA1 clock */</span><br>    RCU_IPA       = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">23U</span>),                 <span class="hljs-comment">/*!&lt; IPA clock */</span><br>    RCU_ENET      = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">25U</span>),                 <span class="hljs-comment">/*!&lt; ENET clock */</span><br>    RCU_ENETTX    = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">26U</span>),                 <span class="hljs-comment">/*!&lt; ENETTX clock */</span><br>    RCU_ENETRX    = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">27U</span>),                 <span class="hljs-comment">/*!&lt; ENETRX clock */</span><br>    RCU_ENETPTP   = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">28U</span>),                 <span class="hljs-comment">/*!&lt; ENETPTP clock */</span><br>    RCU_USBHS     = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">29U</span>),                 <span class="hljs-comment">/*!&lt; USBHS clock */</span><br>    RCU_USBHSULPI = RCU_REGIDX_BIT(AHB1EN_REG_OFFSET, <span class="hljs-number">30U</span>),                 <span class="hljs-comment">/*!&lt; USBHSULPI clock */</span><br>    <span class="hljs-comment">/* AHB2 peripherals */</span><br>    RCU_DCI       = RCU_REGIDX_BIT(AHB2EN_REG_OFFSET, <span class="hljs-number">0U</span>),                  <span class="hljs-comment">/*!&lt; DCI clock */</span><br>    RCU_TRNG      = RCU_REGIDX_BIT(AHB2EN_REG_OFFSET, <span class="hljs-number">6U</span>),                  <span class="hljs-comment">/*!&lt; TRNG clock */</span><br>    RCU_USBFS     = RCU_REGIDX_BIT(AHB2EN_REG_OFFSET, <span class="hljs-number">7U</span>),                  <span class="hljs-comment">/*!&lt; USBFS clock */</span><br>    <span class="hljs-comment">/* AHB3 peripherals */</span><br>    RCU_EXMC      = RCU_REGIDX_BIT(AHB3EN_REG_OFFSET, <span class="hljs-number">0U</span>),                  <span class="hljs-comment">/*!&lt; EXMC clock */</span><br>    <span class="hljs-comment">/* APB1 peripherals */</span><br>    RCU_TIMER1    = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">0U</span>),                  <span class="hljs-comment">/*!&lt; TIMER1 clock */</span><br>    RCU_TIMER2    = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">1U</span>),                  <span class="hljs-comment">/*!&lt; TIMER2 clock */</span><br>    RCU_TIMER3    = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">2U</span>),                  <span class="hljs-comment">/*!&lt; TIMER3 clock */</span><br>    RCU_TIMER4    = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">3U</span>),                  <span class="hljs-comment">/*!&lt; TIMER4 clock */</span><br>    RCU_TIMER5    = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">4U</span>),                  <span class="hljs-comment">/*!&lt; TIMER5 clock */</span><br>    RCU_TIMER6    = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">5U</span>),                  <span class="hljs-comment">/*!&lt; TIMER6 clock */</span><br>    RCU_TIMER11   = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">6U</span>),                  <span class="hljs-comment">/*!&lt; TIMER11 clock */</span><br>    RCU_TIMER12   = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">7U</span>),                  <span class="hljs-comment">/*!&lt; TIMER12 clock */</span><br>    RCU_TIMER13   = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">8U</span>),                  <span class="hljs-comment">/*!&lt; TIMER13 clock */</span>   <br>    RCU_WWDGT     = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">11U</span>),                 <span class="hljs-comment">/*!&lt; WWDGT clock */</span><br>    RCU_SPI1      = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">14U</span>),                 <span class="hljs-comment">/*!&lt; SPI1 clock */</span><br>    RCU_SPI2      = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">15U</span>),                 <span class="hljs-comment">/*!&lt; SPI2 clock */</span><br>    RCU_USART1    = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">17U</span>),                 <span class="hljs-comment">/*!&lt; USART1 clock */</span><br>    RCU_USART2    = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">18U</span>),                 <span class="hljs-comment">/*!&lt; USART2 clock */</span><br>    RCU_UART3     = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">19U</span>),                 <span class="hljs-comment">/*!&lt; UART3 clock */</span><br>    RCU_UART4     = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">20U</span>),                 <span class="hljs-comment">/*!&lt; UART4 clock */</span><br>    RCU_I2C0      = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">21U</span>),                 <span class="hljs-comment">/*!&lt; I2C0 clock */</span><br>    RCU_I2C1      = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">22U</span>),                 <span class="hljs-comment">/*!&lt; I2C1 clock */</span><br>    RCU_I2C2      = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">23U</span>),                 <span class="hljs-comment">/*!&lt; I2C2 clock */</span>   <br>    RCU_CAN0      = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">25U</span>),                 <span class="hljs-comment">/*!&lt; CAN0 clock */</span><br>    RCU_CAN1      = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">26U</span>),                 <span class="hljs-comment">/*!&lt; CAN1 clock */</span><br>    RCU_PMU       = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">28U</span>),                 <span class="hljs-comment">/*!&lt; PMU clock */</span><br>    RCU_DAC       = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">29U</span>),                 <span class="hljs-comment">/*!&lt; DAC clock */</span><br>    RCU_UART6     = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">30U</span>),                 <span class="hljs-comment">/*!&lt; UART6 clock */</span><br>    RCU_UART7     = RCU_REGIDX_BIT(APB1EN_REG_OFFSET, <span class="hljs-number">31U</span>),                 <span class="hljs-comment">/*!&lt; UART7 clock */</span><br>    RCU_RTC       = RCU_REGIDX_BIT(BDCTL_REG_OFFSET, <span class="hljs-number">15U</span>),                  <span class="hljs-comment">/*!&lt; RTC clock */</span><br>    <span class="hljs-comment">/* APB2 peripherals */</span><br>    RCU_TIMER0    = RCU_REGIDX_BIT(APB2EN_REG_OFFSET, <span class="hljs-number">0U</span>),                  <span class="hljs-comment">/*!&lt; TIMER0 clock */</span><br>    RCU_TIMER7    = RCU_REGIDX_BIT(APB2EN_REG_OFFSET, <span class="hljs-number">1U</span>),                  <span class="hljs-comment">/*!&lt; TIMER7 clock */</span><br>    RCU_USART0    = RCU_REGIDX_BIT(APB2EN_REG_OFFSET, <span class="hljs-number">4U</span>),                  <span class="hljs-comment">/*!&lt; USART0 clock */</span><br>    RCU_USART5    = RCU_REGIDX_BIT(APB2EN_REG_OFFSET, <span class="hljs-number">5U</span>),                  <span class="hljs-comment">/*!&lt; USART5 clock */</span><br>    RCU_ADC0      = RCU_REGIDX_BIT(APB2EN_REG_OFFSET, <span class="hljs-number">8U</span>),                  <span class="hljs-comment">/*!&lt; ADC0 clock */</span><br>    RCU_ADC1      = RCU_REGIDX_BIT(APB2EN_REG_OFFSET, <span class="hljs-number">9U</span>),                  <span class="hljs-comment">/*!&lt; ADC1 clock */</span><br>    RCU_ADC2      = RCU_REGIDX_BIT(APB2EN_REG_OFFSET, <span class="hljs-number">10U</span>),                 <span class="hljs-comment">/*!&lt; ADC2 clock */</span><br>    RCU_SDIO      = RCU_REGIDX_BIT(APB2EN_REG_OFFSET, <span class="hljs-number">11U</span>),                 <span class="hljs-comment">/*!&lt; SDIO clock */</span><br>    RCU_SPI0      = RCU_REGIDX_BIT(APB2EN_REG_OFFSET, <span class="hljs-number">12U</span>),                 <span class="hljs-comment">/*!&lt; SPI0 clock */</span><br>    RCU_SPI3      = RCU_REGIDX_BIT(APB2EN_REG_OFFSET, <span class="hljs-number">13U</span>),                 <span class="hljs-comment">/*!&lt; SPI3 clock */</span><br>    RCU_SYSCFG    = RCU_REGIDX_BIT(APB2EN_REG_OFFSET, <span class="hljs-number">14U</span>),                 <span class="hljs-comment">/*!&lt; SYSCFG clock */</span><br>    RCU_TIMER8    = RCU_REGIDX_BIT(APB2EN_REG_OFFSET, <span class="hljs-number">16U</span>),                 <span class="hljs-comment">/*!&lt; TIMER8 clock */</span><br>    RCU_TIMER9    = RCU_REGIDX_BIT(APB2EN_REG_OFFSET, <span class="hljs-number">17U</span>),                 <span class="hljs-comment">/*!&lt; TIMER9 clock */</span><br>    RCU_TIMER10   = RCU_REGIDX_BIT(APB2EN_REG_OFFSET, <span class="hljs-number">18U</span>),                 <span class="hljs-comment">/*!&lt; TIMER10 clock */</span><br>    RCU_SPI4      = RCU_REGIDX_BIT(APB2EN_REG_OFFSET, <span class="hljs-number">20U</span>),                 <span class="hljs-comment">/*!&lt; SPI4 clock */</span><br>    RCU_SPI5      = RCU_REGIDX_BIT(APB2EN_REG_OFFSET, <span class="hljs-number">21U</span>),                 <span class="hljs-comment">/*!&lt; SPI5 clock */</span><br>    RCU_TLI       = RCU_REGIDX_BIT(APB2EN_REG_OFFSET, <span class="hljs-number">26U</span>),                 <span class="hljs-comment">/*!&lt; TLI clock */</span><br>    <span class="hljs-comment">/* APB1 additional peripherals */</span><br>    RCU_CTC       = RCU_REGIDX_BIT(ADD_APB1EN_REG_OFFSET, <span class="hljs-number">27U</span>),             <span class="hljs-comment">/*!&lt; CTC clock */</span><br>    RCU_IREF      = RCU_REGIDX_BIT(ADD_APB1EN_REG_OFFSET, <span class="hljs-number">31U</span>),             <span class="hljs-comment">/*!&lt; IREF clock */</span><br>&#125;rcu_periph_enum;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="rcu-periph-clock-disable"><a href="#rcu-periph-clock-disable" class="headerlink" title="rcu_periph_clock_disable"></a>rcu_periph_clock_disable</h3><p><strong>功能</strong>：禁用外设时钟</p>
+<p><strong>函数原型</strong>：void rcu_periph_clock_disable(rcu_periph_enum periph);</p>
+<p><strong>参数</strong>：periph - 要禁用的外设时钟枚举值</p>
+<p><strong>返回值</strong>：无</p>
+<p><strong>示例</strong>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">rcu_periph_clock_disable(RCU_GPIOA); <span class="hljs-comment">// 禁用GPIOA时钟</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="时钟固件库函数"><a href="#时钟固件库函数" class="headerlink" title="时钟固件库函数"></a>时钟固件库函数</h2><p>GD32F4xx固件库提供了丰富的RCU（Reset and Clock Unit）函数，用于配置和管理时钟系统。以下是主要时钟函数的详细介绍，基于GD32F4xx_固件库使用指南_Rev1.2。</p>
+<h3 id="1-系统时钟配置函数"><a href="#1-系统时钟配置函数" class="headerlink" title="1. 系统时钟配置函数"></a>1. 系统时钟配置函数</h3><h4 id="rcu-system-clock-source-config"><a href="#rcu-system-clock-source-config" class="headerlink" title="rcu_system_clock_source_config"></a>rcu_system_clock_source_config</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">rcu_system_clock_source_config</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> ck_sys)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>配置系统时钟源（SYSCLK）。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>ck_sys</code>: 系统时钟源选择（RCU_CKSYSSRC_IRC16M, RCU_CKSYSSRC_HXTAL, RCU_CKSYSSRC_PLL）。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">rcu_system_clock_source_config(RCU_CKSYSSRC_PLL); <span class="hljs-comment">// 设置PLL作为系统时钟源</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="rcu-system-clock-source-get"><a href="#rcu-system-clock-source-get" class="headerlink" title="rcu_system_clock_source_get"></a>rcu_system_clock_source_get</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">uint32_t</span> <span class="hljs-title function_">rcu_system_clock_source_get</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>获取当前系统时钟源。</p>
+<p><strong>参数：</strong> 无</p>
+<p><strong>返回值：</strong> 当前系统时钟源（RCU_SCSS_IRC16M, RCU_SCSS_HXTAL, RCU_SCSS_PLL）。</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">uint32_t</span> sys_src = rcu_system_clock_source_get();<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-PLL配置函数"><a href="#2-PLL配置函数" class="headerlink" title="2. PLL配置函数"></a>2. PLL配置函数</h3><h4 id="rcu-pll-config"><a href="#rcu-pll-config" class="headerlink" title="rcu_pll_config"></a>rcu_pll_config</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">ErrStatus <span class="hljs-title function_">rcu_pll_config</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> pll_src, <span class="hljs-type">uint32_t</span> pll_psc, <span class="hljs-type">uint32_t</span> pll_n, <span class="hljs-type">uint32_t</span> pll_p, <span class="hljs-type">uint32_t</span> pll_range)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>配置PLL参数。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>pll_src</code>: PLL输入时钟源（RCU_PLLSRC_IRC16M, RCU_PLLSRC_HXTAL）。</li>
+<li><code>pll_psc</code>: PLL预分频器（1-63）。</li>
+<li><code>pll_n</code>: PLL倍频器（50-432）。</li>
+<li><code>pll_p</code>: PLL主分频器（2,4,6,8）。</li>
+<li><code>pll_range</code>: PLL频率范围（RCU_PLLVCO_RANGE1, RCU_PLLVCO_RANGE2）。</li>
+</ul>
+<p><strong>返回值：</strong> SUCCESS或ERROR。</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">rcu_pll_config(RCU_PLLSRC_HXTAL, <span class="hljs-number">8</span>, <span class="hljs-number">240</span>, <span class="hljs-number">2</span>, RCU_PLLVCO_RANGE1); <span class="hljs-comment">// HXTAL/8 * 240 / 2 = 120MHz</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="rcu-pll-enable"><a href="#rcu-pll-enable" class="headerlink" title="rcu_pll_enable"></a>rcu_pll_enable</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">rcu_pll_enable</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>使能PLL。</p>
+<p><strong>参数：</strong> 无</p>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">rcu_pll_enable();<br></code></pre></td></tr></table></figure>
+
+<h4 id="rcu-pll-disable"><a href="#rcu-pll-disable" class="headerlink" title="rcu_pll_disable"></a>rcu_pll_disable</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">rcu_pll_disable</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>禁用PLL。</p>
+<p><strong>参数：</strong> 无</p>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">rcu_pll_disable();<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-时钟分频配置函数"><a href="#3-时钟分频配置函数" class="headerlink" title="3. 时钟分频配置函数"></a>3. 时钟分频配置函数</h3><h4 id="rcu-ahb-clock-config"><a href="#rcu-ahb-clock-config" class="headerlink" title="rcu_ahb_clock_config"></a>rcu_ahb_clock_config</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">rcu_ahb_clock_config</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> ck_ahb)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>配置AHB总线时钟分频。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>ck_ahb</code>: AHB分频系数（RCU_AHB_CKSYS_DIV1 ~ RCU_AHB_CKSYS_DIV512）。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">rcu_ahb_clock_config(RCU_AHB_CKSYS_DIV1); <span class="hljs-comment">// AHB = SYSCLK</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="rcu-apb1-clock-config"><a href="#rcu-apb1-clock-config" class="headerlink" title="rcu_apb1_clock_config"></a>rcu_apb1_clock_config</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">rcu_apb1_clock_config</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> ck_apb1)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>配置APB1总线时钟分频。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>ck_apb1</code>: APB1分频系数（RCU_APB1_CKAHB_DIV1 ~ RCU_APB1_CKAHB_DIV16）。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">rcu_apb1_clock_config(RCU_APB1_CKAHB_DIV2); <span class="hljs-comment">// APB1 = AHB/2</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="rcu-apb2-clock-config"><a href="#rcu-apb2-clock-config" class="headerlink" title="rcu_apb2_clock_config"></a>rcu_apb2_clock_config</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">rcu_apb2_clock_config</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> ck_apb2)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>配置APB2总线时钟分频。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>ck_apb2</code>: APB2分频系数（RCU_APB2_CKAHB_DIV1 ~ RCU_APB2_CKAHB_DIV16）。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">rcu_apb2_clock_config(RCU_APB2_CKAHB_DIV1); <span class="hljs-comment">// APB2 = AHB</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-振荡器控制函数"><a href="#4-振荡器控制函数" class="headerlink" title="4. 振荡器控制函数"></a>4. 振荡器控制函数</h3><h4 id="rcu-osci-on"><a href="#rcu-osci-on" class="headerlink" title="rcu_osci_on"></a>rcu_osci_on</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">ErrStatus <span class="hljs-title function_">rcu_osci_on</span><span class="hljs-params">(rcu_osci_type_enum osci)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>开启指定的振荡器。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>osci</code>: 振荡器类型（RCU_HXTAL, RCU_LXTAL, RCU_IRC16M, RCU_IRC32K, RCU_IRC48M, RCU_PLL）。</li>
+</ul>
+<p><strong>返回值：</strong> SUCCESS或ERROR。</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">rcu_osci_on(RCU_HXTAL); <span class="hljs-comment">// 开启外部高速晶振</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="rcu-osci-off"><a href="#rcu-osci-off" class="headerlink" title="rcu_osci_off"></a>rcu_osci_off</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">rcu_osci_off</span><span class="hljs-params">(rcu_osci_type_enum osci)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>关闭指定的振荡器。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>osci</code>: 振荡器类型。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">rcu_osci_off(RCU_IRC16M); <span class="hljs-comment">// 关闭内部16MHz RC振荡器</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="rcu-osci-stab-wait"><a href="#rcu-osci-stab-wait" class="headerlink" title="rcu_osci_stab_wait"></a>rcu_osci_stab_wait</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">rcu_osci_stab_wait</span><span class="hljs-params">(rcu_osci_type_enum osci)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>等待指定的振荡器稳定。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>osci</code>: 振荡器类型。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C">rcu_osci_on(RCU_HXTAL);<br>rcu_osci_stab_wait(RCU_HXTAL); <span class="hljs-comment">// 等待HXTAL稳定</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="5-时钟频率获取函数"><a href="#5-时钟频率获取函数" class="headerlink" title="5. 时钟频率获取函数"></a>5. 时钟频率获取函数</h3><h4 id="rcu-clock-freq-get"><a href="#rcu-clock-freq-get" class="headerlink" title="rcu_clock_freq_get"></a>rcu_clock_freq_get</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">uint32_t</span> <span class="hljs-title function_">rcu_clock_freq_get</span><span class="hljs-params">(rcu_clock_freq_enum clock)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>获取指定时钟的频率。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>clock</code>: 时钟类型（CK_SYS, CK_AHB, CK_APB1, CK_APB2）。</li>
+</ul>
+<p><strong>返回值：</strong> 时钟频率（Hz）。</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">uint32_t</span> sys_freq = rcu_clock_freq_get(CK_SYS); <span class="hljs-comment">// 获取系统时钟频率</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="6-外设时钟控制函数"><a href="#6-外设时钟控制函数" class="headerlink" title="6. 外设时钟控制函数"></a>6. 外设时钟控制函数</h3><h4 id="rcu-periph-clock-enable-1"><a href="#rcu-periph-clock-enable-1" class="headerlink" title="rcu_periph_clock_enable"></a>rcu_periph_clock_enable</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">rcu_periph_clock_enable</span><span class="hljs-params">(rcu_periph_enum periph)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>使能外设时钟。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>periph</code>: 外设时钟枚举值。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">rcu_periph_clock_enable(RCU_GPIOA); <span class="hljs-comment">// 使能GPIOA时钟</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="rcu-periph-clock-disable-1"><a href="#rcu-periph-clock-disable-1" class="headerlink" title="rcu_periph_clock_disable"></a>rcu_periph_clock_disable</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">rcu_periph_clock_disable</span><span class="hljs-params">(rcu_periph_enum periph)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>禁用外设时钟。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>periph</code>: 外设时钟枚举值。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">rcu_periph_clock_disable(RCU_GPIOA); <span class="hljs-comment">// 禁用GPIOA时钟</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="7-其他函数"><a href="#7-其他函数" class="headerlink" title="7. 其他函数"></a>7. 其他函数</h3><h4 id="rcu-deinit"><a href="#rcu-deinit" class="headerlink" title="rcu_deinit"></a>rcu_deinit</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">rcu_deinit</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>将RCU重置为默认状态。</p>
+<p><strong>参数：</strong> 无</p>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">rcu_deinit(); <span class="hljs-comment">// 重置时钟系统</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="rcu-step-mode-wakeup-disable"><a href="#rcu-step-mode-wakeup-disable" class="headerlink" title="rcu_step_mode_wakeup_disable"></a>rcu_step_mode_wakeup_disable</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">rcu_step_mode_wakeup_disable</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>禁用步进模式唤醒。</p>
+<p><strong>参数：</strong> 无</p>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">rcu_step_mode_wakeup_disable();<br></code></pre></td></tr></table></figure>
+
+<h3 id="8-相关宏定义和枚举"><a href="#8-相关宏定义和枚举" class="headerlink" title="8. 相关宏定义和枚举"></a>8. 相关宏定义和枚举</h3><ul>
+<li><strong>系统时钟源：</strong> RCU_CKSYSSRC_IRC16M, RCU_CKSYSSRC_HXTAL, RCU_CKSYSSRC_PLL</li>
+<li><strong>PLL源：</strong> RCU_PLLSRC_IRC16M, RCU_PLLSRC_HXTAL</li>
+<li><strong>AHB分频：</strong> RCU_AHB_CKSYS_DIV1 ~ RCU_AHB_CKSYS_DIV512</li>
+<li><strong>APB分频：</strong> RCU_APB1_CKAHB_DIV1 ~ RCU_APB1_CKAHB_DIV16</li>
+<li><strong>振荡器类型：</strong> RCU_HXTAL, RCU_LXTAL, RCU_IRC16M, RCU_IRC32K, RCU_IRC48M, RCU_PLL</li>
+<li><strong>时钟频率类型：</strong> CK_SYS, CK_AHB, CK_APB1, CK_APB2</li>
+</ul>
+<p>在使用这些函数时，需要按照时钟配置顺序：先开启振荡器，等待稳定，然后配置PLL，使能PLL，配置系统时钟源，最后配置各总线分频。所有函数都在gd32f4xx_rcu.h头文件中声明。</p>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left "
+    
+      href="/2026/02/11/GD32F470/"
+      title="GD32F470入门教程（一）系统架构"
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+      
+        GD32F470入门教程（一）系统架构
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2025/12/20/STM32Cube_HAL-11-/"
+      title="STM32Cube_HAL库笔记（十一）-RTC"
+     >
+
+    <p class="title-text">
+      
+        STM32Cube_HAL库笔记（十一）-RTC
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+
+  <div id="comment-card" class="comment-card">
+    <div class="main-title-bar">
+      <div class="main-title-dot"></div>
+      <div class="main-title">留言 </div>
+    </div>
+    <div id="giscus-container"></div>
+  </div>
+  <script src="https://giscus.app/client.js"
+    data-repo="chaoxiaohan/myblog"
+    data-repo-id="R_kgDOPe4zOQ"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOPe4zOc4CuRDG"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="noborder_light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async>
+  </script>
+  
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2026 超小韓<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+  <script src="/js/toc.js"></script>
+  
+  <script src="/js/search.js"></script>
+  <script src="/js/code-copy.js"></script>
+  <script src="/js/mobile-warning.js"></script>
+  <script src="/js/image-viewer.js"></script>
+  <script src="/js/context-menu.js"></script>
+</body>
+</html>
