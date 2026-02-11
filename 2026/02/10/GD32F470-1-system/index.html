@@ -37,14 +37,17 @@
   <meta name="description" content="这是摘要">
 <meta property="og:type" content="article">
 <meta property="og:title" content="GD32F470入门教程（一）系统架构">
-<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2026/02/11/GD32F470-1-system/index.html">
+<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2026/02/10/GD32F470-1-system/index.html">
 <meta property="og:site_name" content="超小韓の个人博客">
 <meta property="og:description" content="这是摘要">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-02-10T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-02-11T15:13:25.970Z">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/Cortex%C2%AE-M41231434sd.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/GD32F4xx854642213ssa.png">
+<meta property="article:published_time" content="2026-02-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-11T15:17:38.875Z">
 <meta property="article:author" content="超小韓">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/Cortex%C2%AE-M41231434sd.png">
   
     <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
   
@@ -318,7 +321,7 @@
 
         <div class='meta-info-bar'>
           <div class="meta-info">
-  <time class="dt-published" datetime="2026-02-10T16:00:00.000Z" itemprop="datePublished">2026-02-11</time>
+  <time class="dt-published" datetime="2026-02-09T16:00:00.000Z" itemprop="datePublished">2026-02-10</time>
 </div>
           <div class="need-seperator meta-info">
             <div class="meta-cate-flex">
@@ -329,7 +332,7 @@
   
           </div>
           <div class="wordcount need-seperator meta-info">
-            884 词 
+            683 词 
           </div>
         </div>
         
@@ -342,7 +345,7 @@
 <p>了解一个芯片首先了解其系统架构</p>
 <h1 id="系统及存储器架构"><a href="#系统及存储器架构" class="headerlink" title="系统及存储器架构"></a>系统及存储器架构</h1><p>GD32F470系列MCU基于ARM Cortex-M4内核，主频高达200MHz，集成了丰富的片上资源和外设，适用于高性能嵌入式应用。其系统架构主要包括以下几个部分：</p>
 <h2 id="1-内核与总线架构"><a href="#1-内核与总线架构" class="headerlink" title="1. 内核与总线架构"></a>1. 内核与总线架构</h2><p>GD32F470采用Cortex-M4内核，支持单周期乘法和硬件浮点运算。内核通过AHB&#x2F;APB多层总线与片上各模块连接，实现高速数据传输。</p>
-<p>![Cortex®-M4 结构框图](<a target="_blank" rel="noopener" href="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/Cortex%C2%AE-M4">https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/Cortex®-M4</a> 1231434sd.png)</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/Cortex%C2%AE-M41231434sd.png" alt="Cortex®-M4 结构框图"></p>
 <h2 id="2-存储器结构"><a href="#2-存储器结构" class="headerlink" title="2. 存储器结构"></a>2. 存储器结构</h2><ul>
 <li><strong>Flash存储器</strong>：最大可达3072KB，用于存放程序代码和常量数据。</li>
 <li><strong>SRAM</strong>：分为主SRAM（256KB）和Tightly Coupled Memory（TCM，64KB），满足高速数据访问需求。</li>
@@ -358,7 +361,7 @@
 <h2 id="5-安全与系统管理"><a href="#5-安全与系统管理" class="headerlink" title="5. 安全与系统管理"></a>5. 安全与系统管理</h2><ul>
 <li><strong>看门狗</strong>、<strong>低功耗管理</strong>、<strong>时钟安全系统</strong>等，提升系统可靠性。</li>
 </ul>
-<h2 id="6-典型系统架构图"><a href="#6-典型系统架构图" class="headerlink" title="6. 典型系统架构图"></a>6. 典型系统架构图</h2><p>![GD32F4xx 器件的系统架构示意图](<a target="_blank" rel="noopener" href="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/GD32F4xx">https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/GD32F4xx</a> 12213ssa.png)</p>
+<h2 id="6-典型系统架构图"><a href="#6-典型系统架构图" class="headerlink" title="6. 典型系统架构图"></a>6. 典型系统架构图</h2><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/GD32F4xx854642213ssa.png" alt="GD32F4xx 器件的系统架构示意图"></p>
 <p>通过上述架构，GD32F470实现了高性能、低功耗和丰富的外设扩展能力，适合多种嵌入式应用场景。</p>
 
         
@@ -374,25 +377,25 @@
 <nav id="article-nav">
   <a class="article-nav-btn left "
     
-      href="/2026/02/11/GD32F470-3-GPIO-/"
-      title="GD32F470入门教程（三）GPIO"
+      href="/2026/02/11/GD32F470-2-clock/"
+      title="GD32F470入门教程（二）时钟系统"
      >
     <i class="fa-solid fa-angle-left"></i>
     <p class="title-text">
       
-        GD32F470入门教程（三）GPIO
+        GD32F470入门教程（二）时钟系统
         
     </p>
   </a>
   <a class="article-nav-btn right "
     
-      href="/2026/02/10/GD32F470-2-clock/"
-      title="GD32F470入门教程（二）时钟系统"
+      href="/2025/12/20/STM32Cube_HAL-11-/"
+      title="STM32Cube_HAL库笔记（十一）-RTC"
      >
 
     <p class="title-text">
       
-        GD32F470入门教程（二）时钟系统
+        STM32Cube_HAL库笔记（十一）-RTC
         
     </p>
     <i class="fa-solid fa-angle-right"></i>
