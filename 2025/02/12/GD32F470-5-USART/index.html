@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+
+
+<html theme="light" showBanner="true" hasBanner="true" > 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+<!-- Gaug.es Analytics -->
+<script>
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', 'true');
+    t.setAttribute('data-track-path', 'https://track.gaug.es/track.gif');
+    t.src = 'https://d36ee2fcip1434.cloudfront.net/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+<!-- End Gaug.es Analytics -->
+
+
+  
+  <title>GD32F470入门教程（五）串口 | 超小韓の个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="本文介绍了GD32F470的USART串口通信，包括配置方法、数据收发、printf重定向及详细的固件库函数说明，帮助开发者快速实现串口应用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GD32F470入门教程（五）串口">
+<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2025/02/12/GD32F470-5-USART/index.html">
+<meta property="og:site_name" content="超小韓の个人博客">
+<meta property="og:description" content="本文介绍了GD32F470的USART串口通信，包括配置方法、数据收发、printf重定向及详细的固件库函数说明，帮助开发者快速实现串口应用。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212155009513.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212155026249.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212155824675.png">
+<meta property="article:published_time" content="2025-02-12T07:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-12T08:49:46.363Z">
+<meta property="article:author" content="超小韓">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212155009513.png">
+  
+    <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+<link rel="stylesheet" href="/css/search.css">
+
+  
+<link rel="stylesheet" href="/css/toc-fix.css">
+
+  
+<link rel="stylesheet" href="/css/code-copy.css">
+
+  
+<link rel="stylesheet" href="/css/mobile-warning.css">
+
+  
+<link rel="stylesheet" href="/css/image-viewer.css">
+
+  
+<link rel="stylesheet" href="/css/context-menu.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/xiaoxin7284678236.png" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>超小韓の个人博客 </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">主页</a>
+    
+      <a class="main-nav-link" href="/archives">文章</a>
+    
+      <a class="main-nav-link" href="/resources">资料</a>
+    
+      <a class="main-nav-link" href="/about">关于我的</a>
+    
+  </nav>
+  <nav id="search-nav">
+    <div id="search-container">
+      <select id="search-mode-selector" name="search-mode">
+        <option value="exact">精确</option>
+        <option value="fuzzy">模糊</option>
+      </select>
+      <input type="text" id="search-input" placeholder="搜索文章..." autocomplete="off">
+      <div id="search-results" class="hidden">
+        <div id="search-results-content"></div>
+      </div>
+    </div>
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">主页</a>
+    
+      <a class="nav-dropdown-link" href="/archives">文章</a>
+    
+      <a class="nav-dropdown-link" href="/resources">资料</a>
+    
+      <a class="nav-dropdown-link" href="/about">关于我的</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/head.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">超小韓 </div>
+      <div class="dot"></div>
+      <div class="subtitle">生活明朗，万物可爱！ </div>
+      <div class="link-list">
+        
+          <a class="link-btn" href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2537037482&website=www.oicqzone.com" title="QQ"><i class="fa-brands fa-qq"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/353687950" title="哔哩哔哩"><i class="fa-brands fa-bilibili"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/chaoxiaohan/" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        
+          <a class="link-btn" href="mailto:chaoxiaohan@chaoxiaohan.cyou" title="Email"><i class="fa-solid fa-envelope"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+    
+
+
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">分类</h3>
+      <div class="category-box">
+            <a class="category-link" href="/categories/HAL/">
+                HAL
+                <div class="category-count">14</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Android/">
+                Android
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Standard/">
+                Standard
+                <div class="category-count">4</div>
+            </a>
+        
+            <a class="category-link" href="/categories/YOLO/">
+                YOLO
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/C/">
+                C
+                <div class="category-count">8</div>
+            </a>
+        
+            <a class="category-link" href="/categories/computer/">
+                computer
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/siemens-cup/">
+                siemens-cup
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Python/">
+                Python
+                <div class="category-count">2</div>
+            </a>
+        
+            <a class="category-link" href="/categories/OpenCv/">
+                OpenCv
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/test/">
+                test
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/GD32F470xx/">
+                GD32F470xx
+                <div class="category-count">6</div>
+            </a>
+        </div>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">标签</h3>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/ADC/" rel="tag">ADC</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Analog/" rel="tag">Analog</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Buzzer/" rel="tag">Buzzer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CAN/" rel="tag">CAN</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Compose/" rel="tag">Compose</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Converter/" rel="tag">Converter</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CubeMx/" rel="tag">CubeMx</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/DAC/" rel="tag">DAC</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/DMA/" rel="tag">DMA</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/EEPROM/" rel="tag">EEPROM</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Flash/" rel="tag">Flash</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/I2C/" rel="tag">I2C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/IIC/" rel="tag">IIC</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Interrupt/" rel="tag">Interrupt</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Motor/" rel="tag">Motor</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCV/" rel="tag">OpenCV</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCv/" rel="tag">OpenCv</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/PWM/" rel="tag">PWM</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Pytorch/" rel="tag">Pytorch</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/SPI/" rel="tag">SPI</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Serial/" rel="tag">Serial</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Servo/" rel="tag">Servo</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Standard/" rel="tag">Standard</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/TIM/" rel="tag">TIM</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Timer/" rel="tag">Timer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/UART/" rel="tag">UART</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/W25Q128/" rel="tag">W25Q128</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/YOLOV5/" rel="tag">YOLOV5</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/computer/" rel="tag">computer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/resourse/" rel="tag">resourse</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/teach/" rel="tag">teach</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%8D%9A%E5%9B%BE/" rel="tag">博图</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" rel="tag">工程实践</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%A5%BF%E9%97%A8%E5%AD%90%E6%9D%AF/" rel="tag">西门子杯</a></li></ul>
+    </div>
+  </div>
+
+
+  
+  <div class="sticky">
+    
+      
+        
+          <div class="toc-widget">
+  <h3 class="toc-title">目录</h3>
+  <div class="toc-content">
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#USART"><span class="toc-list-text">USART</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%B2%E5%8F%A3%E5%BA%93%E5%87%BD%E6%95%B0%E9%85%8D%E7%BD%AE"><span class="toc-list-text">串口库函数配置</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-%E5%BC%80%E5%90%AF%E6%97%B6%E9%92%9F"><span class="toc-list-text">1.开启时钟</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-%E9%85%8D%E7%BD%AE-GPIO-%E5%A4%8D%E7%94%A8%E6%A8%A1%E5%BC%8F"><span class="toc-list-text">2.配置 GPIO 复用模式</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-%E9%85%8D%E7%BD%AE-GPIO-%E7%9A%84%E6%A8%A1%E5%BC%8F"><span class="toc-list-text">3.配置 GPIO 的模式</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-%E9%85%8D%E7%BD%AE-GPIO-%E7%9A%84%E8%BE%93%E5%87%BA"><span class="toc-list-text">4.配置 GPIO 的输出</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-%E9%85%8D%E7%BD%AE%E4%B8%B2%E5%8F%A3"><span class="toc-list-text">5.配置串口</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%B2%E5%8F%A3%E5%8F%91%E9%80%81%E6%95%B0%E6%8D%AE"><span class="toc-list-text">串口发送数据</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#printf-%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-list-text">printf 重定向</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#USART%E7%9B%B8%E5%85%B3%E5%BA%93%E5%87%BD%E6%95%B0"><span class="toc-list-text">USART相关库函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-USART%E5%88%9D%E5%A7%8B%E5%8C%96%E5%92%8C%E9%85%8D%E7%BD%AE%E5%87%BD%E6%95%B0"><span class="toc-list-text">1. USART初始化和配置函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#usart-deinit"><span class="toc-list-text">usart_deinit</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#usart-baudrate-set"><span class="toc-list-text">usart_baudrate_set</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#usart-parity-config"><span class="toc-list-text">usart_parity_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#usart-word-length-set"><span class="toc-list-text">usart_word_length_set</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#usart-stop-bit-set"><span class="toc-list-text">usart_stop_bit_set</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#usart-enable"><span class="toc-list-text">usart_enable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#usart-disable"><span class="toc-list-text">usart_disable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#usart-transmit-config"><span class="toc-list-text">usart_transmit_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#usart-receive-config"><span class="toc-list-text">usart_receive_config</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-USART%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E5%87%BD%E6%95%B0"><span class="toc-list-text">2. USART数据传输函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#usart-data-transmit"><span class="toc-list-text">usart_data_transmit</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#usart-data-receive"><span class="toc-list-text">usart_data_receive</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-USART%E7%8A%B6%E6%80%81%E5%92%8C%E6%A0%87%E5%BF%97%E5%87%BD%E6%95%B0"><span class="toc-list-text">3. USART状态和标志函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#usart-flag-get"><span class="toc-list-text">usart_flag_get</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#usart-flag-clear"><span class="toc-list-text">usart_flag_clear</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-USART%E4%B8%AD%E6%96%AD%E5%87%BD%E6%95%B0"><span class="toc-list-text">4. USART中断函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#usart-interrupt-enable"><span class="toc-list-text">usart_interrupt_enable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#usart-interrupt-disable"><span class="toc-list-text">usart_interrupt_disable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#usart-interrupt-flag-get"><span class="toc-list-text">usart_interrupt_flag_get</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#usart-interrupt-flag-clear"><span class="toc-list-text">usart_interrupt_flag_clear</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-%E5%85%B6%E4%BB%96USART%E5%87%BD%E6%95%B0"><span class="toc-list-text">5. 其他USART函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#usart-hardware-flow-rts-config"><span class="toc-list-text">usart_hardware_flow_rts_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#usart-hardware-flow-cts-config"><span class="toc-list-text">usart_hardware_flow_cts_config</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-%E7%9B%B8%E5%85%B3%E5%AE%8F%E5%AE%9A%E4%B9%89%E5%92%8C%E6%9E%9A%E4%B8%BE"><span class="toc-list-text">6. 相关宏定义和枚举</span></a></li></ol></li></ol></li></ol>
+  </div>
+</div>
+
+        
+      
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-GD32F470-5-USART" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        GD32F470入门教程（五）串口
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2025-02-12T07:00:00.000Z" itemprop="datePublished">2025-02-12</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+  <a class="meta-cate-link" href="/categories/GD32F470xx/">GD32F470xx</a>
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            8k 词 
+          </div>
+        </div>
+        
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <h1 id="USART"><a href="#USART" class="headerlink" title="USART"></a>USART</h1><p>对于GD32F4来说，通用同步异步收发器（USART）提供了一个灵活方便的串行数据交换接口，数据帧可以通过全双工或半双工，同步或异步的方式进行传输。USART提供了可编程的波特率发生器，能对UCLK（PCLK1, PCLK2）进行分频产生USART发送和接收所需的特定频率。USART不仅支持标准的异步收发模式，还实现了一些其他类型的串行数据交换模式，如红外编码规范，SIR，智能卡协议，LIN，以及同步单双工模式。它还支持多处理器通信和Modem流控操作（CTS&#x2F;RTS）。数据帧支持从LSB或者MSB开始传输。数据位的极性和TX&#x2F;RX引脚都可以灵活配置。<br>所有USART都支持DMA功能，以实现高速率的数据通信。</p>
+<p><strong>主要特性</strong></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212155009513.png" alt="image-20260212155009513"></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212155026249.png" alt="image-20260212155026249"></p>
+<h2 id="串口库函数配置"><a href="#串口库函数配置" class="headerlink" title="串口库函数配置"></a>串口库函数配置</h2><p>一般我们使用串口，都需要有以下几个步骤。</p>
+<ul>
+<li>开启时钟（包括串口时钟和 GPIO 时钟）</li>
+<li>配置 GPIO 复用模式</li>
+<li>配置 GPIO 的模式</li>
+<li>配置 GPIO 的输出</li>
+<li>配置串口（配置一些参数）</li>
+<li>使能串口（串口使能和发送使能）</li>
+</ul>
+<h3 id="1-开启时钟"><a href="#1-开启时钟" class="headerlink" title="1.开启时钟"></a>1.开启时钟</h3><p>使用串口 0 的话就是 PA9 和 PA10 引脚。那第一步就是先开启端口 A 的时钟，在库函数点灯那一章节给大家介绍了使能时钟的函数 rcu_periph_clock_enable，只需要传入对应的参数即可。使能端口 A 的时钟就把 RCU_GPIOA 当做参数传入。第二步就是开启串口的时钟，把对应的串口 0 的时钟 RCU_USART0 传入即可。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C">rcu_periph_clock_enable(BSP_USART_RCU); <span class="hljs-comment">// 开启串口时钟</span><br>rcu_periph_clock_enable(RCU_GPIOA); <span class="hljs-comment">// 开启端口时钟</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-配置-GPIO-复用模式"><a href="#2-配置-GPIO-复用模式" class="headerlink" title="2.配置 GPIO 复用模式"></a>2.配置 GPIO 复用模式</h3><p>GD32的引脚大部分默认并不是串口引脚，所以我们需要复用GPIO</p>
+<p>找到设置复用的函数</p>
+<p><code>void gpio_af_set(uint32_t gpio_periph, uint32_t alt_func_num, uint32_t pin);</code></p>
+<p>这个函数有三个参数，第一个参数就是要配置的引脚端口，第二个参数就是要复用的功能，第三个参数就是要配置的引脚。第一个参数和第三个参数我们知道分别为 GPIOA，GPIO_PIN_9，GPIOA，GPIO_PIN_10。关于第二个参数可以到数据手册找到</p>
+<p>附GD32F470xx pin alternate functions</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212155824675.png" alt="image-20260212155824675"></p>
+<p>根据上述表格，我们得到复用代码为</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C">gpio_af_set(GPIOA,BSP_USART_AF,GPIO_PIN_9);<br>gpio_af_set（GPIOA,BSP_USART_AF,GPIO_PIN_10);<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-配置-GPIO-的模式"><a href="#3-配置-GPIO-的模式" class="headerlink" title="3.配置 GPIO 的模式"></a>3.配置 GPIO 的模式</h3><p>配置 GPIO 的模式还是使用 gpio_mode_set 这个函数，不同的是第二个参数要配置为复用功能而不是输出功能，第三个参数要配置为上拉</p>
+<h3 id="4-配置-GPIO-的输出"><a href="#4-配置-GPIO-的输出" class="headerlink" title="4.配置 GPIO 的输出"></a>4.配置 GPIO 的输出</h3><p>配置 GPIO 的输出也还是用 gpio_output_options_set 这个函数，这个和之前库函数点灯配置的一样，修改一下引脚就可以直接套用。</p>
+<h3 id="5-配置串口"><a href="#5-配置串口" class="headerlink" title="5.配置串口"></a>5.配置串口</h3><p>在使用一个外设之前，可以先复位一下，防止一些不必要的事情发生。在对应的外设库文件中一般都会有这个函数。</p>
+<p>配置串口的大致流程：</p>
+<p>复位对应串口-&gt;设置串口比特率-&gt;设置串口校验-&gt;设置数据位长度-&gt;设置停止位的位数</p>
+<p>对应函数可查阅本文档末尾的函数库或参考手册固件库</p>
+<p>6.使能串口</p>
+<p>串口配置好之后并不能开始工作，还需要去使能，就是相当于有一个开关可以打开关闭。值得注意的是发送和接收也需要分别去使能，串口使能相当于一个总开关，发送和接收相当于分别控制的开关。要使用串口，首先要打开总开关，</p>
+<p><code>void usart_enable(uint32_t usart_periph);</code></p>
+<p>这个函数使能串口，有一个参数，就是要使能的串口。</p>
+<p>然后如果要发送数据的话还需要使能发送功能。</p>
+<p><code>void usart_transmit_config(uint32_t usart_periph, uint32_t txconfig);</code></p>
+<p>如果要接收数据的话还需要使能接收功能。</p>
+<p><code>void usart_receive_config(uint32_t usart_periph, uint32_t rxconfig);</code></p>
+<h2 id="串口发送数据"><a href="#串口发送数据" class="headerlink" title="串口发送数据"></a>串口发送数据</h2><p>配置好串口之后，下一步的操作就是要发送数据。</p>
+<p><code>void usart_data_transmit(uint32_t usart_periph, uint32_t data);</code></p>
+<p>这个函数可以发送数据，有两个参数，第一个参数是要使用的串口，第二个参数是要发送的数据，不过需要注意的是这个函数一次只能发送一个字节。要保证串口稳定的传输，就需要在发送完一个字节之后再发送下一个字节。需要去检测数据发送完成。</p>
+<p><code>FlagStatus usart_flag_get(uint32_t usart_periph, usart_flag_enum flag);</code></p>
+<p>这个函数是获取状态寄存器的标志。有两个参数，第一个参数是要使用的串口，第二个参数是要获取的状态位</p>
+<h2 id="printf-重定向"><a href="#printf-重定向" class="headerlink" title="printf 重定向"></a>printf 重定向</h2><p><strong>在 keil 中使用 printf 一定要勾选“微库”选项</strong></p>
+<p>首先 c 语言的 printf 函数中不断循环调用 fputc 函数，所以需要重写 fputc 函数，这个函数的功能就是打印输出一个字符，这不正和我们编写的 usart_send_data 函数功能一样。fputc 函数可写为</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">int</span> <span class="hljs-title function_">fputc</span><span class="hljs-params">(<span class="hljs-type">int</span> ch, FILE *f)</span><br>&#123;<br>    usart_data_transmit(BSP_USART, (<span class="hljs-type">uint8_t</span>)ch);<br>    <span class="hljs-keyword">while</span>(RESET == usart_flag_get(BSP_USART, USART_FLAG_TBE)); <span class="hljs-comment">// 等待发送数据缓冲区标志置位</span><br>    <span class="hljs-keyword">return</span> ch;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="USART相关库函数"><a href="#USART相关库函数" class="headerlink" title="USART相关库函数"></a>USART相关库函数</h2><p>GD32F4xx固件库提供了丰富的USART（通用同步异步收发器）函数，用于配置和管理串行通信。以下是主要USART函数的详细介绍，基于GD32F4xx_固件库使用指南_Rev1.2。</p>
+<h3 id="1-USART初始化和配置函数"><a href="#1-USART初始化和配置函数" class="headerlink" title="1. USART初始化和配置函数"></a>1. USART初始化和配置函数</h3><h4 id="usart-deinit"><a href="#usart-deinit" class="headerlink" title="usart_deinit"></a>usart_deinit</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">usart_deinit</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> usart_periph)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>将指定的USART重置为默认状态。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>usart_periph</code>: USART外设（USART0, USART1等）。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">usart_deinit(USART0); <span class="hljs-comment">// 重置USART0</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="usart-baudrate-set"><a href="#usart-baudrate-set" class="headerlink" title="usart_baudrate_set"></a>usart_baudrate_set</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">usart_baudrate_set</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> usart_periph, <span class="hljs-type">uint32_t</span> baudval)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>设置USART波特率。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>usart_periph</code>: USART外设。</li>
+<li><code>baudval</code>: 波特率值（例如9600, 115200）。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">usart_baudrate_set(USART0, <span class="hljs-number">115200</span>); <span class="hljs-comment">// 设置USART0波特率为115200</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="usart-parity-config"><a href="#usart-parity-config" class="headerlink" title="usart_parity_config"></a>usart_parity_config</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">usart_parity_config</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> usart_periph, <span class="hljs-type">uint32_t</span> paritycfg)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>配置USART校验位。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>usart_periph</code>: USART外设。</li>
+<li><code>paritycfg</code>: 校验配置（USART_PM_NONE: 无校验, USART_PM_EVEN: 偶校验, USART_PM_ODD: 奇校验）。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">usart_parity_config(USART0, USART_PM_NONE); <span class="hljs-comment">// 无校验</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="usart-word-length-set"><a href="#usart-word-length-set" class="headerlink" title="usart_word_length_set"></a>usart_word_length_set</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">usart_word_length_set</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> usart_periph, <span class="hljs-type">uint32_t</span> wlen)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>设置USART数据字长度。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>usart_periph</code>: USART外设。</li>
+<li><code>wlen</code>: 字长度（USART_WL_8BIT: 8位, USART_WL_9BIT: 9位）。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">usart_word_length_set(USART0, USART_WL_8BIT); <span class="hljs-comment">// 8位数据</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="usart-stop-bit-set"><a href="#usart-stop-bit-set" class="headerlink" title="usart_stop_bit_set"></a>usart_stop_bit_set</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">usart_stop_bit_set</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> usart_periph, <span class="hljs-type">uint32_t</span> stblen)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>设置USART停止位长度。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>usart_periph</code>: USART外设。</li>
+<li><code>stblen</code>: 停止位长度（USART_STB_1BIT: 1位, USART_STB_0_5BIT: 0.5位, USART_STB_2BIT: 2位, USART_STB_1_5BIT: 1.5位）。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">usart_stop_bit_set(USART0, USART_STB_1BIT); <span class="hljs-comment">// 1位停止位</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="usart-enable"><a href="#usart-enable" class="headerlink" title="usart_enable"></a>usart_enable</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">usart_enable</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> usart_periph)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>使能USART。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>usart_periph</code>: USART外设。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">usart_enable(USART0); <span class="hljs-comment">// 使能USART0</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="usart-disable"><a href="#usart-disable" class="headerlink" title="usart_disable"></a>usart_disable</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">usart_disable</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> usart_periph)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>禁用USART。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>usart_periph</code>: USART外设。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">usart_disable(USART0); <span class="hljs-comment">// 禁用USART0</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="usart-transmit-config"><a href="#usart-transmit-config" class="headerlink" title="usart_transmit_config"></a>usart_transmit_config</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">usart_transmit_config</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> usart_periph, <span class="hljs-type">uint32_t</span> txconfig)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>配置USART发送功能。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>usart_periph</code>: USART外设。</li>
+<li><code>txconfig</code>: 发送配置（USART_TRANSMIT_ENABLE: 使能发送, USART_TRANSMIT_DISABLE: 禁用发送）。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">usart_transmit_config(USART0, USART_TRANSMIT_ENABLE); <span class="hljs-comment">// 使能发送</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="usart-receive-config"><a href="#usart-receive-config" class="headerlink" title="usart_receive_config"></a>usart_receive_config</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">usart_receive_config</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> usart_periph, <span class="hljs-type">uint32_t</span> rxconfig)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>配置USART接收功能。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>usart_periph</code>: USART外设。</li>
+<li><code>rxconfig</code>: 接收配置（USART_RECEIVE_ENABLE: 使能接收, USART_RECEIVE_DISABLE: 禁用接收）。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">usart_receive_config(USART0, USART_RECEIVE_ENABLE); <span class="hljs-comment">// 使能接收</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-USART数据传输函数"><a href="#2-USART数据传输函数" class="headerlink" title="2. USART数据传输函数"></a>2. USART数据传输函数</h3><h4 id="usart-data-transmit"><a href="#usart-data-transmit" class="headerlink" title="usart_data_transmit"></a>usart_data_transmit</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">usart_data_transmit</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> usart_periph, <span class="hljs-type">uint32_t</span> data)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>发送一个字节数据。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>usart_periph</code>: USART外设。</li>
+<li><code>data</code>: 要发送的数据（8位或9位）。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">usart_data_transmit(USART0, <span class="hljs-string">&#x27;A&#x27;</span>); <span class="hljs-comment">// 发送字符&#x27;A&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="usart-data-receive"><a href="#usart-data-receive" class="headerlink" title="usart_data_receive"></a>usart_data_receive</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">uint16_t</span> <span class="hljs-title function_">usart_data_receive</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> usart_periph)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>接收一个字节数据。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>usart_periph</code>: USART外设。</li>
+</ul>
+<p><strong>返回值：</strong> 接收到的数据。</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">uint16_t</span> data = usart_data_receive(USART0); <span class="hljs-comment">// 接收数据</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-USART状态和标志函数"><a href="#3-USART状态和标志函数" class="headerlink" title="3. USART状态和标志函数"></a>3. USART状态和标志函数</h3><h4 id="usart-flag-get"><a href="#usart-flag-get" class="headerlink" title="usart_flag_get"></a>usart_flag_get</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">FlagStatus <span class="hljs-title function_">usart_flag_get</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> usart_periph, usart_flag_enum flag)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>获取USART状态标志位。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>usart_periph</code>: USART外设。</li>
+<li><code>flag</code>: 标志位（USART_FLAG_CTS: CTS, USART_FLAG_LBD: LIN断开, USART_FLAG_TBE: 发送缓冲区空, USART_FLAG_TC: 发送完成, USART_FLAG_RBNE: 接收缓冲区非空, USART_FLAG_IDLE: 空闲, USART_FLAG_ORERR: 过载错误, USART_FLAG_NERR: 噪声错误, USART_FLAG_FERR: 帧错误, USART_FLAG_PERR: 校验错误）。</li>
+</ul>
+<p><strong>返回值：</strong> SET或RESET。</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">if</span> (usart_flag_get(USART0, USART_FLAG_RBNE) == SET) &#123;<br>    <span class="hljs-comment">// 有数据可读</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="usart-flag-clear"><a href="#usart-flag-clear" class="headerlink" title="usart_flag_clear"></a>usart_flag_clear</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">usart_flag_clear</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> usart_periph, usart_flag_enum flag)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>清除USART状态标志位。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>usart_periph</code>: USART外设。</li>
+<li><code>flag</code>: 标志位。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">usart_flag_clear(USART0, USART_FLAG_ORERR); <span class="hljs-comment">// 清除过载错误标志</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-USART中断函数"><a href="#4-USART中断函数" class="headerlink" title="4. USART中断函数"></a>4. USART中断函数</h3><h4 id="usart-interrupt-enable"><a href="#usart-interrupt-enable" class="headerlink" title="usart_interrupt_enable"></a>usart_interrupt_enable</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">usart_interrupt_enable</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> usart_periph, <span class="hljs-type">uint32_t</span> interrupt)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>使能USART中断。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>usart_periph</code>: USART外设。</li>
+<li><code>interrupt</code>: 中断类型（USART_INT_PERR: 校验错误, USART_INT_TBE: 发送缓冲区空, USART_INT_TC: 发送完成, USART_INT_RBNE: 接收缓冲区非空, USART_INT_IDLE: 空闲, USART_INT_LBD: LIN断开, USART_INT_CTS: CTS, USART_INT_ERR: 错误）。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">usart_interrupt_enable(USART0, USART_INT_RBNE); <span class="hljs-comment">// 使能接收中断</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="usart-interrupt-disable"><a href="#usart-interrupt-disable" class="headerlink" title="usart_interrupt_disable"></a>usart_interrupt_disable</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">usart_interrupt_disable</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> usart_periph, <span class="hljs-type">uint32_t</span> interrupt)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>禁用USART中断。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>usart_periph</code>: USART外设。</li>
+<li><code>interrupt</code>: 中断类型。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">usart_interrupt_disable(USART0, USART_INT_RBNE); <span class="hljs-comment">// 禁用接收中断</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="usart-interrupt-flag-get"><a href="#usart-interrupt-flag-get" class="headerlink" title="usart_interrupt_flag_get"></a>usart_interrupt_flag_get</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">FlagStatus <span class="hljs-title function_">usart_interrupt_flag_get</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> usart_periph, <span class="hljs-type">uint32_t</span> int_flag)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>获取USART中断标志位。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>usart_periph</code>: USART外设。</li>
+<li><code>int_flag</code>: 中断标志（USART_INT_FLAG_PERR: 校验错误, USART_INT_FLAG_TBE: 发送缓冲区空, USART_INT_FLAG_TC: 发送完成, USART_INT_FLAG_RBNE: 接收缓冲区非空, USART_INT_FLAG_IDLE: 空闲, USART_INT_FLAG_LBD: LIN断开, USART_INT_FLAG_CTS: CTS, USART_INT_FLAG_ORERR: 过载错误, USART_INT_FLAG_NERR: 噪声错误, USART_INT_FLAG_FERR: 帧错误, USART_INT_FLAG_PERR: 校验错误）。</li>
+</ul>
+<p><strong>返回值：</strong> SET或RESET。</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">if</span> (usart_interrupt_flag_get(USART0, USART_INT_FLAG_RBNE) == SET) &#123;<br>    <span class="hljs-comment">// 处理接收中断</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="usart-interrupt-flag-clear"><a href="#usart-interrupt-flag-clear" class="headerlink" title="usart_interrupt_flag_clear"></a>usart_interrupt_flag_clear</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">usart_interrupt_flag_clear</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> usart_periph, <span class="hljs-type">uint32_t</span> int_flag)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>清除USART中断标志位。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>usart_periph</code>: USART外设。</li>
+<li><code>int_flag</code>: 中断标志。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">usart_interrupt_flag_clear(USART0, USART_INT_FLAG_RBNE); <span class="hljs-comment">// 清除接收中断标志</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="5-其他USART函数"><a href="#5-其他USART函数" class="headerlink" title="5. 其他USART函数"></a>5. 其他USART函数</h3><h4 id="usart-hardware-flow-rts-config"><a href="#usart-hardware-flow-rts-config" class="headerlink" title="usart_hardware_flow_rts_config"></a>usart_hardware_flow_rts_config</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">usart_hardware_flow_rts_config</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> usart_periph, <span class="hljs-type">uint32_t</span> rtsconfig)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>配置RTS硬件流控。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>usart_periph</code>: USART外设。</li>
+<li><code>rtsconfig</code>: RTS配置（USART_RTS_ENABLE: 使能, USART_RTS_DISABLE: 禁用）。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">usart_hardware_flow_rts_config(USART0, USART_RTS_ENABLE);<br></code></pre></td></tr></table></figure>
+
+<h4 id="usart-hardware-flow-cts-config"><a href="#usart-hardware-flow-cts-config" class="headerlink" title="usart_hardware_flow_cts_config"></a>usart_hardware_flow_cts_config</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">usart_hardware_flow_cts_config</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> usart_periph, <span class="hljs-type">uint32_t</span> ctsconfig)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>配置CTS硬件流控。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>usart_periph</code>: USART外设。</li>
+<li><code>ctsconfig</code>: CTS配置（USART_CTS_ENABLE: 使能, USART_CTS_DISABLE: 禁用）。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">usart_hardware_flow_cts_config(USART0, USART_CTS_ENABLE);<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-相关宏定义和枚举"><a href="#6-相关宏定义和枚举" class="headerlink" title="6. 相关宏定义和枚举"></a>6. 相关宏定义和枚举</h3><ul>
+<li><strong>USART外设：</strong> USART0, USART1, …, USART5</li>
+<li><strong>校验配置：</strong> USART_PM_NONE, USART_PM_EVEN, USART_PM_ODD</li>
+<li><strong>字长度：</strong> USART_WL_8BIT, USART_WL_9BIT</li>
+<li><strong>停止位：</strong> USART_STB_1BIT, USART_STB_0_5BIT, USART_STB_2BIT, USART_STB_1_5BIT</li>
+<li><strong>发送&#x2F;接收配置：</strong> USART_TRANSMIT_ENABLE, USART_TRANSMIT_DISABLE, USART_RECEIVE_ENABLE, USART_RECEIVE_DISABLE</li>
+<li><strong>标志位：</strong> USART_FLAG_CTS, USART_FLAG_LBD, USART_FLAG_TBE, USART_FLAG_TC, USART_FLAG_RBNE, USART_FLAG_IDLE, USART_FLAG_ORERR, USART_FLAG_NERR, USART_FLAG_FERR, USART_FLAG_PERR</li>
+<li><strong>中断类型：</strong> USART_INT_PERR, USART_INT_TBE, USART_INT_TC, USART_INT_RBNE, USART_INT_IDLE, USART_INT_LBD, USART_INT_CTS, USART_INT_ERR</li>
+</ul>
+<p>在使用USART时，先开启时钟，配置GPIO复用，然后初始化USART参数，使能USART，最后进行数据收发。所有函数都在gd32f4xx_usart.h头文件中声明。</p>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left "
+    
+      href="/2025/03/01/hal-notes-chaoxiaohan/"
+      title="HAL库函数"
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+      
+        HAL库函数
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2024/10/25/c-notes-enum-io-file-6/"
+      title="C语言学习笔记-枚举、输入输出、文件(六)"
+     >
+
+    <p class="title-text">
+      
+        C语言学习笔记-枚举、输入输出、文件(六)
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+
+  <div id="comment-card" class="comment-card">
+    <div class="main-title-bar">
+      <div class="main-title-dot"></div>
+      <div class="main-title">留言 </div>
+    </div>
+    <div id="giscus-container"></div>
+  </div>
+  <script src="https://giscus.app/client.js"
+    data-repo="chaoxiaohan/myblog"
+    data-repo-id="R_kgDOPe4zOQ"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOPe4zOc4CuRDG"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="noborder_light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async>
+  </script>
+  
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2026 超小韓<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+  <script src="/js/toc.js"></script>
+  
+  <script src="/js/search.js"></script>
+  <script src="/js/code-copy.js"></script>
+  <script src="/js/mobile-warning.js"></script>
+  <script src="/js/image-viewer.js"></script>
+  <script src="/js/context-menu.js"></script>
+</body>
+</html>
