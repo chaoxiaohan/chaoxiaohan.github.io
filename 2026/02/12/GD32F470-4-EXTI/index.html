@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+
+
+<html theme="light" showBanner="true" hasBanner="true" > 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+<!-- Gaug.es Analytics -->
+<script>
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', 'true');
+    t.setAttribute('data-track-path', 'https://track.gaug.es/track.gif');
+    t.src = 'https://d36ee2fcip1434.cloudfront.net/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+<!-- End Gaug.es Analytics -->
+
+
+  
+  <title>GD32F470入门教程（四）中断（EXTI） | 超小韓の个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="该教程包括了GD32F470xx的中断配置、外部中断的使用、EXTI相关函数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GD32F470入门教程（四）中断（EXTI）">
+<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2026/02/12/GD32F470-4-EXTI/index.html">
+<meta property="og:site_name" content="超小韓の个人博客">
+<meta property="og:description" content="该教程包括了GD32F470xx的中断配置、外部中断的使用、EXTI相关函数">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212105823589.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212105912893.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212105929109.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212133136765.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212133833950.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212133849313.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212133906991.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212142934569.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212143234345.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212143254293.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/interrupt_20240809_233101.jpeg">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212143503808.png">
+<meta property="article:published_time" content="2026-02-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-12T08:49:46.363Z">
+<meta property="article:author" content="超小韓">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212105823589.png">
+  
+    <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+<link rel="stylesheet" href="/css/search.css">
+
+  
+<link rel="stylesheet" href="/css/toc-fix.css">
+
+  
+<link rel="stylesheet" href="/css/code-copy.css">
+
+  
+<link rel="stylesheet" href="/css/mobile-warning.css">
+
+  
+<link rel="stylesheet" href="/css/image-viewer.css">
+
+  
+<link rel="stylesheet" href="/css/context-menu.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/xiaoxin7284678236.png" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>超小韓の个人博客 </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">主页</a>
+    
+      <a class="main-nav-link" href="/archives">文章</a>
+    
+      <a class="main-nav-link" href="/resources">资料</a>
+    
+      <a class="main-nav-link" href="/about">关于我的</a>
+    
+  </nav>
+  <nav id="search-nav">
+    <div id="search-container">
+      <select id="search-mode-selector" name="search-mode">
+        <option value="exact">精确</option>
+        <option value="fuzzy">模糊</option>
+      </select>
+      <input type="text" id="search-input" placeholder="搜索文章..." autocomplete="off">
+      <div id="search-results" class="hidden">
+        <div id="search-results-content"></div>
+      </div>
+    </div>
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">主页</a>
+    
+      <a class="nav-dropdown-link" href="/archives">文章</a>
+    
+      <a class="nav-dropdown-link" href="/resources">资料</a>
+    
+      <a class="nav-dropdown-link" href="/about">关于我的</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/head.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">超小韓 </div>
+      <div class="dot"></div>
+      <div class="subtitle">生活明朗，万物可爱！ </div>
+      <div class="link-list">
+        
+          <a class="link-btn" href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2537037482&website=www.oicqzone.com" title="QQ"><i class="fa-brands fa-qq"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/353687950" title="哔哩哔哩"><i class="fa-brands fa-bilibili"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/chaoxiaohan/" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        
+          <a class="link-btn" href="mailto:chaoxiaohan@chaoxiaohan.cyou" title="Email"><i class="fa-solid fa-envelope"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+    
+
+
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">分类</h3>
+      <div class="category-box">
+            <a class="category-link" href="/categories/HAL/">
+                HAL
+                <div class="category-count">14</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Android/">
+                Android
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Standard/">
+                Standard
+                <div class="category-count">4</div>
+            </a>
+        
+            <a class="category-link" href="/categories/YOLO/">
+                YOLO
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/C/">
+                C
+                <div class="category-count">8</div>
+            </a>
+        
+            <a class="category-link" href="/categories/computer/">
+                computer
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/siemens-cup/">
+                siemens-cup
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Python/">
+                Python
+                <div class="category-count">2</div>
+            </a>
+        
+            <a class="category-link" href="/categories/OpenCv/">
+                OpenCv
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/test/">
+                test
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/GD32F470xx/">
+                GD32F470xx
+                <div class="category-count">6</div>
+            </a>
+        </div>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">标签</h3>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/ADC/" rel="tag">ADC</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Analog/" rel="tag">Analog</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Buzzer/" rel="tag">Buzzer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CAN/" rel="tag">CAN</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Compose/" rel="tag">Compose</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Converter/" rel="tag">Converter</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/CubeMx/" rel="tag">CubeMx</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/DAC/" rel="tag">DAC</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/DMA/" rel="tag">DMA</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/EEPROM/" rel="tag">EEPROM</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Flash/" rel="tag">Flash</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/HAL/" rel="tag">HAL</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/I2C/" rel="tag">I2C</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/IIC/" rel="tag">IIC</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Interrupt/" rel="tag">Interrupt</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Motor/" rel="tag">Motor</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCV/" rel="tag">OpenCV</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/OpenCv/" rel="tag">OpenCv</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/PWM/" rel="tag">PWM</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Pytorch/" rel="tag">Pytorch</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/SPI/" rel="tag">SPI</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/STM32/" rel="tag">STM32</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Serial/" rel="tag">Serial</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Servo/" rel="tag">Servo</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Standard/" rel="tag">Standard</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/TIM/" rel="tag">TIM</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Timer/" rel="tag">Timer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/UART/" rel="tag">UART</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/Virual-Studio/" rel="tag">Virual Studio</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/W25Q128/" rel="tag">W25Q128</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/YOLOV5/" rel="tag">YOLOV5</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/computer/" rel="tag">computer</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/learn/" rel="tag">learn</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/resourse/" rel="tag">resourse</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/teach/" rel="tag">teach</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%8D%9A%E5%9B%BE/" rel="tag">博图</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" rel="tag">工程实践</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/%E8%A5%BF%E9%97%A8%E5%AD%90%E6%9D%AF/" rel="tag">西门子杯</a></li></ul>
+    </div>
+  </div>
+
+
+  
+  <div class="sticky">
+    
+      
+        
+          <div class="toc-widget">
+  <h3 class="toc-title">目录</h3>
+  <div class="toc-content">
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#%E4%B8%AD%E6%96%AD"><span class="toc-list-text">中断</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8"><span class="toc-list-text">中断向量表</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD%E6%8C%89%E9%94%AE%E7%82%B9%E7%81%AF"><span class="toc-list-text">外部中断按键点灯</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-%E5%BC%80%E5%90%AF%E6%97%B6%E9%92%9F"><span class="toc-list-text">1.开启时钟</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-%E9%85%8D%E7%BD%AE-GPIO-%E6%A8%A1%E5%BC%8F"><span class="toc-list-text">2.配置 GPIO 模式</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-%E4%BD%BF%E8%83%BD-NVIC-%E4%B8%AD%E6%96%AD%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-list-text">3.使能 NVIC 中断并配置优先级</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E8%AE%BE%E7%BD%AE%E4%B8%AD%E6%96%AD%E4%BC%98%E5%85%88%E7%BA%A7%E5%88%86%E7%BB%84"><span class="toc-list-text">设置中断优先级分组</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#%E9%85%8D%E7%BD%AE%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-list-text">配置优先级</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-%E9%85%8D%E7%BD%AE-GPIO-%E4%B8%AD%E6%96%AD"><span class="toc-list-text">4.配置 GPIO 中断</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-%E4%BD%BF%E8%83%BD%E4%B8%AD%E6%96%AD%E5%92%8C%E6%B8%85%E9%99%A4%E4%B8%AD%E6%96%AD%E6%A0%87%E5%BF%97%E4%BD%8D"><span class="toc-list-text">5.使能中断和清除中断标志位</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-1-6-%E7%BC%96%E5%86%99%E4%B8%AD%E6%96%AD%E6%9C%8D%E5%8A%A1%E5%87%BD%E6%95%B0"><span class="toc-list-text">1.1.6.编写中断服务函数</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#EXTI%E7%9B%B8%E5%85%B3%E5%9B%BA%E4%BB%B6%E5%BA%93%E5%87%BD%E6%95%B0"><span class="toc-list-text">EXTI相关固件库函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-NVIC%E4%B8%AD%E6%96%AD%E6%8E%A7%E5%88%B6%E5%99%A8%E5%87%BD%E6%95%B0"><span class="toc-list-text">1. NVIC中断控制器函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#nvic-priority-group-set"><span class="toc-list-text">nvic_priority_group_set</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#nvic-irq-enable"><span class="toc-list-text">nvic_irq_enable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#nvic-irq-disable"><span class="toc-list-text">nvic_irq_disable</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-SYSCFG%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE%E5%87%BD%E6%95%B0"><span class="toc-list-text">2. SYSCFG系统配置函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#syscfg-exti-line-config"><span class="toc-list-text">syscfg_exti_line_config</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-EXTI%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD%E5%87%BD%E6%95%B0"><span class="toc-list-text">3. EXTI外部中断函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#exti-init"><span class="toc-list-text">exti_init</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#exti-interrupt-enable"><span class="toc-list-text">exti_interrupt_enable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#exti-interrupt-disable"><span class="toc-list-text">exti_interrupt_disable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#exti-interrupt-flag-get"><span class="toc-list-text">exti_interrupt_flag_get</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#exti-interrupt-flag-clear"><span class="toc-list-text">exti_interrupt_flag_clear</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#exti-event-enable"><span class="toc-list-text">exti_event_enable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#exti-event-disable"><span class="toc-list-text">exti_event_disable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#exti-event-flag-get"><span class="toc-list-text">exti_event_flag_get</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#exti-event-flag-clear"><span class="toc-list-text">exti_event_flag_clear</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-%E7%9B%B8%E5%85%B3%E5%AE%8F%E5%AE%9A%E4%B9%89%E5%92%8C%E6%9E%9A%E4%B8%BE"><span class="toc-list-text">4. 相关宏定义和枚举</span></a></li></ol></li></ol></li></ol>
+  </div>
+</div>
+
+        
+      
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-GD32F470-4-EXTI" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        GD32F470入门教程（四）中断（EXTI）
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2026-02-11T16:00:00.000Z" itemprop="datePublished">2026-02-12</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+  <a class="meta-cate-link" href="/categories/GD32F470xx/">GD32F470xx</a>
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            9.3k 词 
+          </div>
+        </div>
+        
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <h1 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h1><p>Cortex®-M4 集成了嵌套式矢量型中断控制器（Nested Vectored Interrupt Controller （NVIC））来实现高效的异常和中断处理。NVIC 实现了低延迟的异常和中断处理，以及电源管理控制。它和内核是紧密耦合的。更多关于NVIC 的说明请参考《Cortex®-M4 技术参考手册》。</p>
+<p>EXTI（中断&#x2F;事件控制器）包括23 个相互独立的边沿检测电路并且能够向处理器内核产生中断请求或唤醒事件。EXTI 有三种触发类型：上升沿触发、下降沿触发和任意沿触发。EXTI 中的每一个边沿检测电路都可以独立配置和屏蔽。</p>
+<h2 id="中断向量表"><a href="#中断向量表" class="headerlink" title="中断向量表"></a>中断向量表</h2><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212105823589.png" alt="image-20260212105823589"></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212105912893.png" alt="image-20260212105912893"></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212105929109.png" alt="image-20260212105929109"></p>
+<h2 id="外部中断按键点灯"><a href="#外部中断按键点灯" class="headerlink" title="外部中断按键点灯"></a>外部中断按键点灯</h2><h3 id="1-开启时钟"><a href="#1-开启时钟" class="headerlink" title="1.开启时钟"></a>1.开启时钟</h3><p>需要开启GPIO时钟和系统配置时钟</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/* 开启时钟 */</span><br>rcu_periph_clock_enable(RCU_GPIOA);<br>rcu_periph_clock_enable(RCU_SYSCFG); <br></code></pre></td></tr></table></figure>
+
+<h3 id="2-配置-GPIO-模式"><a href="#2-配置-GPIO-模式" class="headerlink" title="2.配置 GPIO 模式"></a>2.配置 GPIO 模式</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/* 配置为输入模式 下拉模式 */</span><br>gpio_mode_set(BSP_KEY_PORT, GPIO_MODE_INPUT, GPIO_PUPD_PULLDOWN, BSP_KEY_PIN);<br><span class="hljs-comment">// 按键默认状态是低电平，配置为下拉</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-使能-NVIC-中断并配置优先级"><a href="#3-使能-NVIC-中断并配置优先级" class="headerlink" title="3.使能 NVIC 中断并配置优先级"></a>3.使能 NVIC 中断并配置优先级</h3><h4 id="设置中断优先级分组"><a href="#设置中断优先级分组" class="headerlink" title="设置中断优先级分组"></a>设置中断优先级分组</h4><p>使用<code>void nvic_priority_group_set(uint32_t nvic_prigroup);</code></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212133136765.png" alt="image-20260212133136765"></p>
+<p>关于优先级的选择根据系统功能的不同配置不同，选择一个合适的即可。这里就选择中间的作为讲解。</p>
+<p>设置优先级分组代码为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C">nvic_priority_group_set(NVIC_PRIGROUP_PRE2_SUB2);<br>    <span class="hljs-comment">// 设置中断优先级组  2位用于抢占优先级，2位用于响应优先级</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="配置优先级"><a href="#配置优先级" class="headerlink" title="配置优先级"></a>配置优先级</h4><p>中断分组设置完成还需要配置中断的抢占优先级和响应优先级。</p>
+<p><code>void nvic_irq_enable(uint8_t nvic_irq, uint8_t nvic_irq_pre_priority, uint8_t nvic_irq_sub_priority);</code></p>
+<p>这个函数配置中断的优先级。有三个参数，第一个参数就是要配置的中断类型，第二个参数是抢占优先级，第三个参数是响应优先级。</p>
+<p>翻阅固件库手册，我们可以找到中断类型的枚举</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212133833950.png" alt="image-20260212133833950"></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212133849313.png" alt="image-20260212133849313"></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212133906991.png" alt="image-20260212133906991"></p>
+<blockquote>
+<p>这里需要注意一下，关于 16 个 IO 中断的中断类型为 0-4 引脚配置为 EXTIx_IRQn(x&#x3D;可取 1-4)，</p>
+<p>5-9 引脚配置为 EXTI5_9_IRQn，10-15 引脚配置为 EXTI10_15_IRQn 。</p>
+</blockquote>
+<p>上一步中断分组设置了 2 位抢占优先级，2 位响应优先级，那对应的抢占优先级等级为 0-3，响应优先级等级为 0-3，按键检测事件属于不是很紧急的任务，我们配置为最低优先级。配置代码为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/* 使能NVIC中断 中断分组为2位抢占优先级，2位子优先级</span><br><span class="hljs-comment">*/</span>nvic_irq_enable(EXTI0_IRQn,<span class="hljs-number">3U</span>,<span class="hljs-number">3U</span>);  <span class="hljs-comment">// 抢占优先级3，子优先级3</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-配置-GPIO-中断"><a href="#4-配置-GPIO-中断" class="headerlink" title="4.配置 GPIO 中断"></a>4.配置 GPIO 中断</h3><p>在配置中断优先级之后，需要将中断线和 gpio 进行连接。</p>
+<p>我们需要使用<code>void syscfg_exti_line_config(uint8_t exti_port, uint8_t exti_pin);</code></p>
+<p>这个函数配置 GPIO 作为中断使用，有两个参数，第一个参数就是对应的中断引脚资源端口，第二个参数就是对应的中断引脚。关于中断资源引脚定义，如下</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212142934569.png" alt="image-20260212142934569"></p>
+<p>配置中断到 GPIO 可写为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/* 连接中断线到GPIO */</span><br>syscfg_exti_line_config( EXTI_SOURCE_GPIOA,EXTI_SOURCE_PIN0);<br></code></pre></td></tr></table></figure>
+
+<p>配置好中断和 GPIO 连接之后，还需要对中断进行初始化，配置一些参数。在 gd32f4xx_exti.h 中有</p>
+<p><code>void exti_init(exti_line_enum linex, exti_mode_enum mode, exti_trig_type_enum trig_type);</code></p>
+<p>这个函数初始化中断配置。有三个参数，第一个参数是中断线，第二个参数是中断模式，第三个参数是触发类型。</p>
+<p>关于中断线一共有 23 个，查阅手册我们得知</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212143234345.png" alt="image-20260212143234345"></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212143254293.png" alt="image-20260212143254293"></p>
+<p>关于每个中断线对应的功能</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/interrupt_20240809_233101.jpeg" alt="img"></p>
+<p>我们可知PA0 的中断线就是 EXTI_0。</p>
+<p>关于中断模式的可选选项和触发类型的可选选项</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260212143503808.png" alt="image-20260212143503808"></p>
+<p>最终初始化中断线配置为中断模式，上升沿和下降沿均触发。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/* 初始化中断线 */</span><br>exti_init(EXTI_0,EXTI_INTERRUPT,EXTI_TRIG_BOTH);<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-使能中断和清除中断标志位"><a href="#5-使能中断和清除中断标志位" class="headerlink" title="5.使能中断和清除中断标志位"></a>5.使能中断和清除中断标志位</h3><p>配置好中断之后，就可以开启中断了。</p>
+<p><code>void exti_interrupt_enable(exti_line_enum linex);</code></p>
+<p>这个函数使能中断，有一个参数就是中断线。</p>
+<p>配置如下：</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs scss"><span class="hljs-comment">/* 使能中断 */</span><br><span class="hljs-built_in">exti_interrupt_enable</span>(BSP_KEY_EXTI_LINE);<br></code></pre></td></tr></table></figure>
+
+<p>在使用中断的时候先清一下中断标志位，确保中断是有效的。</p>
+<p><code>void exti_interrupt_flag_clear(exti_line_enum linex);</code></p>
+<p>这个函数是清除中断标志位，有一个参数就是中断线。</p>
+<p>配置如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/* 清除中断标志位 */</span><br>exti_interrupt_flag_clear(EXTI_0);<br></code></pre></td></tr></table></figure>
+
+<h3 id="1-1-6-编写中断服务函数"><a href="#1-1-6-编写中断服务函数" class="headerlink" title="1.1.6.编写中断服务函数"></a>1.1.6.编写中断服务函数</h3><p>使能中断之后，如果有中断触发，就会跳转到中断处理函数里面执行。需要编写中断处理函数。首先是中断函数名， 这个是固定的，在 startup_gd32f450_470.s 启动文件中有定义</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><code class="hljs C"><br>;               <span class="hljs-comment">/* external interrupts handler */</span><br>                DCD     WWDGT_IRQHandler                  ; <span class="hljs-number">16</span>:Window Watchdog Timer<br>                DCD     LVD_IRQHandler                    ; <span class="hljs-number">17</span>:LVD through EXTI Line detect<br>                DCD     TAMPER_STAMP_IRQHandler           ; <span class="hljs-number">18</span>:Tamper and TimeStamp through EXTI Line detect<br>                DCD     RTC_WKUP_IRQHandler               ; <span class="hljs-number">19</span>:RTC Wakeup through EXTI Line<br>                DCD     FMC_IRQHandler                    ; <span class="hljs-number">20</span>:FMC<br>                DCD     RCU_CTC_IRQHandler                ; <span class="hljs-number">21</span>:RCU and CTC<br>                DCD     EXTI0_IRQHandler                  ; <span class="hljs-number">22</span>:EXTI Line <span class="hljs-number">0</span><br>                DCD     EXTI1_IRQHandler                  ; <span class="hljs-number">23</span>:EXTI Line <span class="hljs-number">1</span><br>                DCD     EXTI2_IRQHandler                  ; <span class="hljs-number">24</span>:EXTI Line <span class="hljs-number">2</span><br>                DCD     EXTI3_IRQHandler                  ; <span class="hljs-number">25</span>:EXTI Line <span class="hljs-number">3</span><br>                DCD     EXTI4_IRQHandler                  ; <span class="hljs-number">26</span>:EXTI Line <span class="hljs-number">4</span><br>                DCD     DMA0_Channel0_IRQHandler          ; <span class="hljs-number">27</span>:DMA0 Channel0<br>                DCD     DMA0_Channel1_IRQHandler          ; <span class="hljs-number">28</span>:DMA0 Channel1<br>                DCD     DMA0_Channel2_IRQHandler          ; <span class="hljs-number">29</span>:DMA0 Channel2<br>                DCD     DMA0_Channel3_IRQHandler          ; <span class="hljs-number">30</span>:DMA0 Channel3<br>                DCD     DMA0_Channel4_IRQHandler          ; <span class="hljs-number">31</span>:DMA0 Channel4<br>                DCD     DMA0_Channel5_IRQHandler          ; <span class="hljs-number">32</span>:DMA0 Channel5<br>                DCD     DMA0_Channel6_IRQHandler          ; <span class="hljs-number">33</span>:DMA0 Channel6<br>                DCD     ADC_IRQHandler                    ; <span class="hljs-number">34</span>:ADC<br>                DCD     CAN0_TX_IRQHandler                ; <span class="hljs-number">35</span>:CAN0 TX<br>                DCD     CAN0_RX0_IRQHandler               ; <span class="hljs-number">36</span>:CAN0 RX0<br>                DCD     CAN0_RX1_IRQHandler               ; <span class="hljs-number">37</span>:CAN0 RX1<br>                DCD     CAN0_EWMC_IRQHandler              ; <span class="hljs-number">38</span>:CAN0 EWMC<br>                DCD     EXTI5_9_IRQHandler                ; <span class="hljs-number">39</span>:EXTI5 to EXTI9<br>                DCD     TIMER0_BRK_TIMER8_IRQHandler      ; <span class="hljs-number">40</span>:TIMER0 Break and TIMER8<br>                DCD     TIMER0_UP_TIMER9_IRQHandler       ; <span class="hljs-number">41</span>:TIMER0 Update and TIMER9<br>                DCD     TIMER0_TRG_CMT_TIMER10_IRQHandler ; <span class="hljs-number">42</span>:TIMER0 Trigger and Commutation and TIMER10<br>                DCD     TIMER0_Channel_IRQHandler         ; <span class="hljs-number">43</span>:TIMER0 Capture Compare<br>                DCD     TIMER1_IRQHandler                 ; <span class="hljs-number">44</span>:TIMER1<br>                DCD     TIMER2_IRQHandler                 ; <span class="hljs-number">45</span>:TIMER2<br>                DCD     TIMER3_IRQHandler                 ; <span class="hljs-number">46</span>:TIMER3<br>                DCD     I2C0_EV_IRQHandler                ; <span class="hljs-number">47</span>:I2C0 Event<br>                DCD     I2C0_ER_IRQHandler                ; <span class="hljs-number">48</span>:I2C0 Error<br>                DCD     I2C1_EV_IRQHandler                ; <span class="hljs-number">49</span>:I2C1 Event<br>                DCD     I2C1_ER_IRQHandler                ; <span class="hljs-number">50</span>:I2C1 Error<br>                DCD     SPI0_IRQHandler                   ; <span class="hljs-number">51</span>:SPI0<br>                DCD     SPI1_IRQHandler                   ; <span class="hljs-number">52</span>:SPI1<br>                DCD     USART0_IRQHandler                 ; <span class="hljs-number">53</span>:USART0<br>                DCD     USART1_IRQHandler                 ; <span class="hljs-number">54</span>:USART1<br>                DCD     USART2_IRQHandler                 ; <span class="hljs-number">55</span>:USART2<br>                DCD     EXTI10_15_IRQHandler              ; <span class="hljs-number">56</span>:EXTI10 to EXTI15<br>                DCD     RTC_Alarm_IRQHandler              ; <span class="hljs-number">57</span>:RTC Alarm<br>                DCD     USBFS_WKUP_IRQHandler             ; <span class="hljs-number">58</span>:USBFS Wakeup<br>                DCD     TIMER7_BRK_TIMER11_IRQHandler     ; <span class="hljs-number">59</span>:TIMER7 Break and TIMER11<br>                DCD     TIMER7_UP_TIMER12_IRQHandler      ; <span class="hljs-number">60</span>:TIMER7 Update and TIMER12<br>                DCD     TIMER7_TRG_CMT_TIMER13_IRQHandler ; <span class="hljs-number">61</span>:TIMER7 Trigger and Commutation and TIMER13<br>                DCD     TIMER7_Channel_IRQHandler         ; <span class="hljs-number">62</span>:TIMER7 Channel Capture Compare<br>                DCD     DMA0_Channel7_IRQHandler          ; <span class="hljs-number">63</span>:DMA0 Channel7<br>                DCD     EXMC_IRQHandler                   ; <span class="hljs-number">64</span>:EXMC<br>                DCD     SDIO_IRQHandler                   ; <span class="hljs-number">65</span>:SDIO<br>                DCD     TIMER4_IRQHandler                 ; <span class="hljs-number">66</span>:TIMER4<br>                DCD     SPI2_IRQHandler                   ; <span class="hljs-number">67</span>:SPI2<br>                DCD     UART3_IRQHandler                  ; <span class="hljs-number">68</span>:UART3<br>                DCD     UART4_IRQHandler                  ; <span class="hljs-number">69</span>:UART4<br>                DCD     TIMER5_DAC_IRQHandler             ; <span class="hljs-number">70</span>:TIMER5 and DAC0 DAC1 Underrun error<br>                DCD     TIMER6_IRQHandler                 ; <span class="hljs-number">71</span>:TIMER6<br>                DCD     DMA1_Channel0_IRQHandler          ; <span class="hljs-number">72</span>:DMA1 Channel0<br>                DCD     DMA1_Channel1_IRQHandler          ; <span class="hljs-number">73</span>:DMA1 Channel1<br>                DCD     DMA1_Channel2_IRQHandler          ; <span class="hljs-number">74</span>:DMA1 Channel2<br>                DCD     DMA1_Channel3_IRQHandler          ; <span class="hljs-number">75</span>:DMA1 Channel3<br>                DCD     DMA1_Channel4_IRQHandler          ; <span class="hljs-number">76</span>:DMA1 Channel4<br>                DCD     ENET_IRQHandler                   ; <span class="hljs-number">77</span>:Ethernet<br>                DCD     ENET_WKUP_IRQHandler              ; <span class="hljs-number">78</span>:Ethernet Wakeup through EXTI Line<br>                DCD     CAN1_TX_IRQHandler                ; <span class="hljs-number">79</span>:CAN1 TX<br>                DCD     CAN1_RX0_IRQHandler               ; <span class="hljs-number">80</span>:CAN1 RX0<br>                DCD     CAN1_RX1_IRQHandler               ; <span class="hljs-number">81</span>:CAN1 RX1<br>                DCD     CAN1_EWMC_IRQHandler              ; <span class="hljs-number">82</span>:CAN1 EWMC<br>                DCD     USBFS_IRQHandler                  ; <span class="hljs-number">83</span>:USBFS<br>                DCD     DMA1_Channel5_IRQHandler          ; <span class="hljs-number">84</span>:DMA1 Channel5<br>                DCD     DMA1_Channel6_IRQHandler          ; <span class="hljs-number">85</span>:DMA1 Channel6<br>                DCD     DMA1_Channel7_IRQHandler          ; <span class="hljs-number">86</span>:DMA1 Channel7<br>                DCD     USART5_IRQHandler                 ; <span class="hljs-number">87</span>:USART5<br>                DCD     I2C2_EV_IRQHandler                ; <span class="hljs-number">88</span>:I2C2 Event<br>                DCD     I2C2_ER_IRQHandler                ; <span class="hljs-number">89</span>:I2C2 Error<br>                DCD     USBHS_EP1_Out_IRQHandler          ; <span class="hljs-number">90</span>:USBHS Endpoint <span class="hljs-number">1</span> Out <br>                DCD     USBHS_EP1_In_IRQHandler           ; <span class="hljs-number">91</span>:USBHS Endpoint <span class="hljs-number">1</span> in<br>                DCD     USBHS_WKUP_IRQHandler             ; <span class="hljs-number">92</span>:USBHS Wakeup through EXTI Line<br>                DCD     USBHS_IRQHandler                  ; <span class="hljs-number">93</span>:USBHS<br>                DCD     DCI_IRQHandler                    ; <span class="hljs-number">94</span>:DCI<br>                DCD     <span class="hljs-number">0</span>                                 ; <span class="hljs-number">95</span>:Reserved<br>                DCD     TRNG_IRQHandler                   ; <span class="hljs-number">96</span>:TRNG<br>                DCD     FPU_IRQHandler                    ; <span class="hljs-number">97</span>:FPU<br>                DCD     UART6_IRQHandler                  ; <span class="hljs-number">98</span>:UART6<br>                DCD     UART7_IRQHandler                  ; <span class="hljs-number">99</span>:UART7<br>                DCD     SPI3_IRQHandler                   ; <span class="hljs-number">100</span>:SPI3<br>                DCD     SPI4_IRQHandler                   ; <span class="hljs-number">101</span>:SPI4<br>                DCD     SPI5_IRQHandler                   ; <span class="hljs-number">102</span>:SPI5<br>                DCD     <span class="hljs-number">0</span>                                 ; <span class="hljs-number">103</span>:Reserved<br>                DCD     TLI_IRQHandler                    ; <span class="hljs-number">104</span>:TLI<br>                DCD     TLI_ER_IRQHandler                 ; <span class="hljs-number">105</span>:TLI Error<br>                DCD     IPA_IRQHandler                    ; <span class="hljs-number">106</span>:IPA<br><br>__Vectors_End<br></code></pre></td></tr></table></figure>
+
+<p>在中断处理函数里需要检测中断标志位是否被置位。</p>
+<p><code>FlagStatus exti_interrupt_flag_get(exti_line_enum linex);</code></p>
+<p>这个函数是获取中断标志位。只有一个参数就是中断线。有一个返回值 FlagStatus，返回值的状态为 SET 和 RESET。需要注意的是每次中断执行完毕之后都需要清除一下中断标志位等待下一次中断发生。</p>
+<p>中断服务函数编写代码格式实例：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">EXTI0_IRQHandler</span> <span class="hljs-params">()</span> &#123;<br><span class="hljs-comment">//中断代码</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="EXTI相关固件库函数"><a href="#EXTI相关固件库函数" class="headerlink" title="EXTI相关固件库函数"></a>EXTI相关固件库函数</h2><p>GD32F4xx固件库提供了丰富的EXTI（外部中断&#x2F;事件控制器）和NVIC（嵌套向量中断控制器）函数，用于配置和管理中断系统。以下是主要EXTI和NVIC函数的详细介绍，基于GD32F4xx_固件库使用指南_Rev1.2。</p>
+<h3 id="1-NVIC中断控制器函数"><a href="#1-NVIC中断控制器函数" class="headerlink" title="1. NVIC中断控制器函数"></a>1. NVIC中断控制器函数</h3><h4 id="nvic-priority-group-set"><a href="#nvic-priority-group-set" class="headerlink" title="nvic_priority_group_set"></a>nvic_priority_group_set</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">nvic_priority_group_set</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> nvic_prigroup)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>设置NVIC中断优先级分组。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>nvic_prigroup</code>: 优先级分组（NVIC_PRIGROUP_PRE0_SUB4 ~ NVIC_PRIGROUP_PRE4_SUB0）。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">nvic_priority_group_set(NVIC_PRIGROUP_PRE2_SUB2); <span class="hljs-comment">// 2位抢占优先级，2位子优先级</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="nvic-irq-enable"><a href="#nvic-irq-enable" class="headerlink" title="nvic_irq_enable"></a>nvic_irq_enable</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">nvic_irq_enable</span><span class="hljs-params">(<span class="hljs-type">uint8_t</span> nvic_irq, <span class="hljs-type">uint8_t</span> nvic_irq_pre_priority, <span class="hljs-type">uint8_t</span> nvic_irq_sub_priority)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>使能指定中断并设置优先级。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>nvic_irq</code>: 中断类型（EXTI0_IRQn, EXTI1_IRQn等）。</li>
+<li><code>nvic_irq_pre_priority</code>: 抢占优先级。</li>
+<li><code>nvic_irq_sub_priority</code>: 子优先级。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">nvic_irq_enable(EXTI0_IRQn, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>); <span class="hljs-comment">// 使能EXTI0中断，抢占优先级2，子优先级1</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="nvic-irq-disable"><a href="#nvic-irq-disable" class="headerlink" title="nvic_irq_disable"></a>nvic_irq_disable</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">nvic_irq_disable</span><span class="hljs-params">(<span class="hljs-type">uint8_t</span> nvic_irq)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>禁用指定中断。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>nvic_irq</code>: 中断类型。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">nvic_irq_disable(EXTI0_IRQn); <span class="hljs-comment">// 禁用EXTI0中断</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-SYSCFG系统配置函数"><a href="#2-SYSCFG系统配置函数" class="headerlink" title="2. SYSCFG系统配置函数"></a>2. SYSCFG系统配置函数</h3><h4 id="syscfg-exti-line-config"><a href="#syscfg-exti-line-config" class="headerlink" title="syscfg_exti_line_config"></a>syscfg_exti_line_config</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">syscfg_exti_line_config</span><span class="hljs-params">(<span class="hljs-type">uint8_t</span> exti_port, <span class="hljs-type">uint8_t</span> exti_pin)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>将EXTI线连接到指定的GPIO引脚。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>exti_port</code>: GPIO端口源（EXTI_SOURCE_GPIOA ~ EXTI_SOURCE_GPIOI）。</li>
+<li><code>exti_pin</code>: 引脚源（EXTI_SOURCE_PIN0 ~ EXTI_SOURCE_PIN15）。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">syscfg_exti_line_config(EXTI_SOURCE_GPIOA, EXTI_SOURCE_PIN0); <span class="hljs-comment">// 将EXTI0连接到PA0</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-EXTI外部中断函数"><a href="#3-EXTI外部中断函数" class="headerlink" title="3. EXTI外部中断函数"></a>3. EXTI外部中断函数</h3><h4 id="exti-init"><a href="#exti-init" class="headerlink" title="exti_init"></a>exti_init</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">exti_init</span><span class="hljs-params">(exti_line_enum linex, exti_mode_enum mode, exti_trig_type_enum trig_type)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>初始化EXTI线配置。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>linex</code>: EXTI线（EXTI_0 ~ EXTI_22）。</li>
+<li><code>mode</code>: 模式（EXTI_INTERRUPT: 中断模式, EXTI_EVENT: 事件模式）。</li>
+<li><code>trig_type</code>: 触发类型（EXTI_TRIG_RISING: 上升沿, EXTI_TRIG_FALLING: 下降沿, EXTI_TRIG_BOTH: 双边沿）。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">exti_init(EXTI_0, EXTI_INTERRUPT, EXTI_TRIG_RISING); <span class="hljs-comment">// EXTI0上升沿中断</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="exti-interrupt-enable"><a href="#exti-interrupt-enable" class="headerlink" title="exti_interrupt_enable"></a>exti_interrupt_enable</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">exti_interrupt_enable</span><span class="hljs-params">(exti_line_enum linex)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>使能EXTI中断。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>linex</code>: EXTI线。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">exti_interrupt_enable(EXTI_0); <span class="hljs-comment">// 使能EXTI0中断</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="exti-interrupt-disable"><a href="#exti-interrupt-disable" class="headerlink" title="exti_interrupt_disable"></a>exti_interrupt_disable</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">exti_interrupt_disable</span><span class="hljs-params">(exti_line_enum linex)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>禁用EXTI中断。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>linex</code>: EXTI线。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">exti_interrupt_disable(EXTI_0); <span class="hljs-comment">// 禁用EXTI0中断</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="exti-interrupt-flag-get"><a href="#exti-interrupt-flag-get" class="headerlink" title="exti_interrupt_flag_get"></a>exti_interrupt_flag_get</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">FlagStatus <span class="hljs-title function_">exti_interrupt_flag_get</span><span class="hljs-params">(exti_line_enum linex)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>获取EXTI中断标志位状态。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>linex</code>: EXTI线。</li>
+</ul>
+<p><strong>返回值：</strong> SET（置位）或RESET（复位）。</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">if</span> (exti_interrupt_flag_get(EXTI_0) == SET) &#123;<br>    <span class="hljs-comment">// 处理中断</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="exti-interrupt-flag-clear"><a href="#exti-interrupt-flag-clear" class="headerlink" title="exti_interrupt_flag_clear"></a>exti_interrupt_flag_clear</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">exti_interrupt_flag_clear</span><span class="hljs-params">(exti_line_enum linex)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>清除EXTI中断标志位。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>linex</code>: EXTI线。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">exti_interrupt_flag_clear(EXTI_0); <span class="hljs-comment">// 清除EXTI0中断标志</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="exti-event-enable"><a href="#exti-event-enable" class="headerlink" title="exti_event_enable"></a>exti_event_enable</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">exti_event_enable</span><span class="hljs-params">(exti_line_enum linex)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>使能EXTI事件。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>linex</code>: EXTI线。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">exti_event_enable(EXTI_0); <span class="hljs-comment">// 使能EXTI0事件</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="exti-event-disable"><a href="#exti-event-disable" class="headerlink" title="exti_event_disable"></a>exti_event_disable</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">exti_event_disable</span><span class="hljs-params">(exti_line_enum linex)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>禁用EXTI事件。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>linex</code>: EXTI线。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">exti_event_disable(EXTI_0); <span class="hljs-comment">// 禁用EXTI0事件</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="exti-event-flag-get"><a href="#exti-event-flag-get" class="headerlink" title="exti_event_flag_get"></a>exti_event_flag_get</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">FlagStatus <span class="hljs-title function_">exti_event_flag_get</span><span class="hljs-params">(exti_line_enum linex)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>获取EXTI事件标志位状态。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>linex</code>: EXTI线。</li>
+</ul>
+<p><strong>返回值：</strong> SET或RESET。</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">FlagStatus flag = exti_event_flag_get(EXTI_0);<br></code></pre></td></tr></table></figure>
+
+<h4 id="exti-event-flag-clear"><a href="#exti-event-flag-clear" class="headerlink" title="exti_event_flag_clear"></a>exti_event_flag_clear</h4><p><strong>函数原型：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">exti_event_flag_clear</span><span class="hljs-params">(exti_line_enum linex)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>功能描述：</strong><br>清除EXTI事件标志位。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>linex</code>: EXTI线。</li>
+</ul>
+<p><strong>返回值：</strong> 无</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">exti_event_flag_clear(EXTI_0);<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-相关宏定义和枚举"><a href="#4-相关宏定义和枚举" class="headerlink" title="4. 相关宏定义和枚举"></a>4. 相关宏定义和枚举</h3><ul>
+<li><strong>NVIC优先级分组：</strong> NVIC_PRIGROUP_PRE0_SUB4, NVIC_PRIGROUP_PRE1_SUB3, …, NVIC_PRIGROUP_PRE4_SUB0</li>
+<li><strong>中断类型：</strong> EXTI0_IRQn ~ EXTI15_IRQn, EXTI5_9_IRQn, EXTI10_15_IRQn等</li>
+<li><strong>EXTI线：</strong> EXTI_0 ~ EXTI_22</li>
+<li><strong>EXTI模式：</strong> EXTI_INTERRUPT, EXTI_EVENT</li>
+<li><strong>触发类型：</strong> EXTI_TRIG_RISING, EXTI_TRIG_FALLING, EXTI_TRIG_BOTH</li>
+<li><strong>GPIO端口源：</strong> EXTI_SOURCE_GPIOA ~ EXTI_SOURCE_GPIOI</li>
+<li><strong>引脚源：</strong> EXTI_SOURCE_PIN0 ~ EXTI_SOURCE_PIN15</li>
+</ul>
+<p>在使用EXTI中断时，需要先配置NVIC优先级分组，使能NVIC中断，然后配置SYSCFG连接EXTI线到GPIO，最后初始化EXTI并使能中断。所有函数都在gd32f4xx_exti.h和gd32f4xx_misc.h头文件中声明。</p>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left "
+    
+      href="/2026/02/12/GD32F470-5-USART/"
+      title="GD32F470入门教程（五）串口"
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+      
+        GD32F470入门教程（五）串口
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2026/02/11/GD32F470-3-GPIO-/"
+      title="GD32F470入门教程（三）GPIO"
+     >
+
+    <p class="title-text">
+      
+        GD32F470入门教程（三）GPIO
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+
+  <div id="comment-card" class="comment-card">
+    <div class="main-title-bar">
+      <div class="main-title-dot"></div>
+      <div class="main-title">留言 </div>
+    </div>
+    <div id="giscus-container"></div>
+  </div>
+  <script src="https://giscus.app/client.js"
+    data-repo="chaoxiaohan/myblog"
+    data-repo-id="R_kgDOPe4zOQ"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOPe4zOc4CuRDG"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="noborder_light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async>
+  </script>
+  
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2026 超小韓<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+  <script src="/js/toc.js"></script>
+  
+  <script src="/js/search.js"></script>
+  <script src="/js/code-copy.js"></script>
+  <script src="/js/mobile-warning.js"></script>
+  <script src="/js/image-viewer.js"></script>
+  <script src="/js/context-menu.js"></script>
+</body>
+</html>
