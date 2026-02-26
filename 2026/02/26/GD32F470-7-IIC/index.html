@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+
+
+<html theme="light" showBanner="true" hasBanner="true" > 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+<!-- Gaug.es Analytics -->
+<script>
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', 'true');
+    t.setAttribute('data-track-path', 'https://track.gaug.es/track.gif');
+    t.src = 'https://d36ee2fcip1434.cloudfront.net/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+<!-- End Gaug.es Analytics -->
+
+
+  
+  <title>GD32F470入门教程（七）IIC | 超小韓の个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="这是摘要">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GD32F470入门教程（七）IIC">
+<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2026/02/26/GD32F470-7-IIC/index.html">
+<meta property="og:site_name" content="超小韓の个人博客">
+<meta property="og:description" content="这是摘要">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260226224917754.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260226225604969.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260226225651385.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260226225800549.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260226225914700.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260226230042455.png">
+<meta property="article:published_time" content="2026-02-26T15:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-26T15:34:36.768Z">
+<meta property="article:author" content="超小韓">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260226224917754.png">
+  
+    <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+<link rel="stylesheet" href="/css/search.css">
+
+  
+<link rel="stylesheet" href="/css/toc-fix.css">
+
+  
+<link rel="stylesheet" href="/css/code-copy.css">
+
+  
+<link rel="stylesheet" href="/css/mobile-warning.css">
+
+  
+<link rel="stylesheet" href="/css/image-viewer.css">
+
+  
+<link rel="stylesheet" href="/css/context-menu.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/xiaoxin7284678236.png" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>超小韓の个人博客 </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">主页</a>
+    
+      <a class="main-nav-link" href="/archives">文章</a>
+    
+      <a class="main-nav-link" href="/resources">资料</a>
+    
+      <a class="main-nav-link" href="/about">关于我的</a>
+    
+  </nav>
+  <nav id="search-nav">
+    <div id="search-container">
+      <select id="search-mode-selector" name="search-mode">
+        <option value="exact">精确</option>
+        <option value="fuzzy">模糊</option>
+      </select>
+      <input type="text" id="search-input" placeholder="搜索文章..." autocomplete="off">
+      <div id="search-results" class="hidden">
+        <div id="search-results-content"></div>
+      </div>
+    </div>
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">主页</a>
+    
+      <a class="nav-dropdown-link" href="/archives">文章</a>
+    
+      <a class="nav-dropdown-link" href="/resources">资料</a>
+    
+      <a class="nav-dropdown-link" href="/about">关于我的</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/head.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">超小韓 </div>
+      <div class="dot"></div>
+      <div class="subtitle">生活明朗，万物可爱！ </div>
+      <div class="link-list">
+        
+          <a class="link-btn" href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2537037482&website=www.oicqzone.com" title="QQ"><i class="fa-brands fa-qq"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/353687950" title="哔哩哔哩"><i class="fa-brands fa-bilibili"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/chaoxiaohan/" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        
+          <a class="link-btn" href="mailto:chaoxiaohan@chaoxiaohan.cyou" title="Email"><i class="fa-solid fa-envelope"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+    
+
+
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">分类</h3>
+      <div class="category-box">
+            <a class="category-link" href="/categories/GD32F470xx/">
+                GD32F470xx
+                <div class="category-count">8</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Android/">
+                Android
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/HAL/">
+                HAL
+                <div class="category-count">12</div>
+            </a>
+        
+            <a class="category-link" href="/categories/YOLO/">
+                YOLO
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/C/">
+                C
+                <div class="category-count">8</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Standard/">
+                Standard
+                <div class="category-count">4</div>
+            </a>
+        
+            <a class="category-link" href="/categories/computer/">
+                computer
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Python/">
+                Python
+                <div class="category-count">2</div>
+            </a>
+        
+            <a class="category-link" href="/categories/siemens-cup/">
+                siemens-cup
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/OpenCv/">
+                OpenCv
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/test/">
+                test
+                <div class="category-count">1</div>
+            </a>
+        </div>
+    </div>
+  </div>
+
+
+  
+    
+  
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">GD32F470xx 系列文章</h3>
+      <ul class="same-category-posts">
+        
+          <li class="same-category-item current-post">
+            <a href="/2026/02/26/GD32F470-7-IIC/" title="GD32F470入门教程（七）IIC">
+              GD32F470入门教程（七）IIC
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/21/GD32F470-6-TIMERx/" title="GD32F470入门教程（六）定时器">
+              GD32F470入门教程（六）定时器
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/12/GD32F470-5-USART/" title="GD32F470入门教程（五）串口">
+              GD32F470入门教程（五）串口
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/12/GD32F470-3-GPIO-/" title="GD32F470入门教程（四）中断（EXTI）">
+              GD32F470入门教程（四）中断（EXTI）
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/12/GD32F470-4-EXTI/" title="GD32F470入门教程（四）中断（EXTI）">
+              GD32F470入门教程（四）中断（EXTI）
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/11/GD32F470-2-clock/" title="GD32F470入门教程（二）时钟系统">
+              GD32F470入门教程（二）时钟系统
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/10/GD32F470-1-system/" title="GD32F470入门教程（一）系统架构">
+              GD32F470入门教程（一）系统架构
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2023/02/11/GD32F470-%20-/" title="GD32F470入门教程（）">
+              GD32F470入门教程（）
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+  
+  <div class="sticky">
+    
+      
+        
+          <div class="toc-widget">
+  <h3 class="toc-title">目录</h3>
+  <div class="toc-content">
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#IIC"><span class="toc-list-text">IIC</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-list-text">简介</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E8%BD%AF%E4%BB%B6%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B"><span class="toc-list-text">软件控制流程</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%BB%8E%E6%9C%BA%E5%8F%91%E9%80%81%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%9A%84%E8%BD%AF%E4%BB%B6%E6%B5%81%E7%A8%8B"><span class="toc-list-text">从机发送模式下的软件流程</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%BB%8E%E6%9C%BA%E6%8E%A5%E6%94%B6%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%9A%84%E8%BD%AF%E4%BB%B6%E6%B5%81%E7%A8%8B"><span class="toc-list-text">从机接收模式下的软件流程</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%B8%BB%E6%9C%BA%E5%8F%91%E9%80%81%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%9A%84%E8%BD%AF%E4%BB%B6%E6%B5%81%E7%A8%8B"><span class="toc-list-text">主机发送模式下的软件流程</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%B8%BB%E6%9C%BA%E6%8E%A5%E6%94%B6%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%9A%84%E8%BD%AF%E4%BB%B6%E6%B5%81%E7%A8%8B"><span class="toc-list-text">主机接收模式下的软件流程</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%BE%8B%E7%A8%8B%EF%BC%9A%E4%BD%BF%E7%94%A8%E5%BA%93%E5%87%BD%E6%95%B0%E9%85%8D%E7%BD%AEIIC"><span class="toc-list-text">例程：使用库函数配置IIC</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E6%AD%A5%E9%AA%A4%E8%AF%A6%E8%A7%A3"><span class="toc-list-text">步骤详解</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#IIC%E5%BA%93%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3"><span class="toc-list-text">IIC库函数详解</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-IIC-%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="toc-list-text">1. IIC 初始化与配置</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-deinit"><span class="toc-list-text">i2c_deinit</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-clock-config"><span class="toc-list-text">i2c_clock_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-mode-addr-config"><span class="toc-list-text">i2c_mode_addr_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-enable"><span class="toc-list-text">i2c_enable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-disable"><span class="toc-list-text">i2c_disable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-ack-config"><span class="toc-list-text">i2c_ack_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-ackpos-config"><span class="toc-list-text">i2c_ackpos_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-master-addressing"><span class="toc-list-text">i2c_master_addressing</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-dualaddr-enable"><span class="toc-list-text">i2c_dualaddr_enable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-software-reset-config"><span class="toc-list-text">i2c_software_reset_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-stretch-scl-low-config"><span class="toc-list-text">i2c_stretch_scl_low_config</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93"><span class="toc-list-text">2. 数据传输</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-data-transmit"><span class="toc-list-text">i2c_data_transmit</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-data-receive"><span class="toc-list-text">i2c_data_receive</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-start-on-bus"><span class="toc-list-text">i2c_start_on_bus</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-stop-on-bus"><span class="toc-list-text">i2c_stop_on_bus</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-%E7%8A%B6%E6%80%81%E6%A0%87%E5%BF%97%E7%AE%A1%E7%90%86"><span class="toc-list-text">3. 状态标志管理</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-flag-get"><span class="toc-list-text">i2c_flag_get</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-flag-clear"><span class="toc-list-text">i2c_flag_clear</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-%E4%B8%AD%E6%96%AD%E9%85%8D%E7%BD%AE"><span class="toc-list-text">4. 中断配置</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-interrupt-enable"><span class="toc-list-text">i2c_interrupt_enable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-interrupt-disable"><span class="toc-list-text">i2c_interrupt_disable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-interrupt-flag-get"><span class="toc-list-text">i2c_interrupt_flag_get</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-interrupt-flag-clear"><span class="toc-list-text">i2c_interrupt_flag_clear</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-DMA-%E9%85%8D%E7%BD%AE"><span class="toc-list-text">5. DMA 配置</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-dma-enable"><span class="toc-list-text">i2c_dma_enable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-dma-last-transfer-config"><span class="toc-list-text">i2c_dma_last_transfer_config</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-PEC-Packet-Error-Checking-%E9%85%8D%E7%BD%AE"><span class="toc-list-text">6. PEC (Packet Error Checking) 配置</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-pec-enable"><span class="toc-list-text">i2c_pec_enable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-pec-value-get"><span class="toc-list-text">i2c_pec_value_get</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#i2c-pec-transfer-enable"><span class="toc-list-text">i2c_pec_transfer_enable</span></a></li></ol></li></ol></li></ol></li></ol>
+  </div>
+</div>
+
+        
+      
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-GD32F470-7-IIC" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        GD32F470入门教程（七）IIC
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2026-02-26T15:00:00.000Z" itemprop="datePublished">2026-02-26</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+  <a class="meta-cate-link" href="/categories/GD32F470xx/">GD32F470xx</a>
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            13k 词 
+          </div>
+        </div>
+        
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <h1 id="IIC"><a href="#IIC" class="headerlink" title="IIC"></a>IIC</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>I2C（内部集成电路总线）模块提供了符合工业标准的两线串行制接口，可用于MCU 和外部I2C 设备的通讯。I2C 总线使用两条串行线：串行数据线SDA 和串行时钟线SCL。<br>I2C 接口模块实现了I2C 协议的标速模式和快速模式，具备CRC 计算和校验功能、支持SMBus（系统管理总线）、PMBus（电源管理总线）和SAM_V（验证安全控制模块）模式，此外还支持多主机I2C 总线架构。I2C 接口模块也支持DMA 模式，可有效减轻CPU 的负担。</p>
+<p>由数据手册可知，GD32F470支持如下特性</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260226224917754.png" alt="image-20260226224917754"></p>
+<blockquote>
+<p>具体IIC通信流程可详见用户手册524页，这里不再展开</p>
+</blockquote>
+<h2 id="软件控制流程"><a href="#软件控制流程" class="headerlink" title="软件控制流程"></a>软件控制流程</h2><p>I2C具有4种运行状态——主机发送方、主机接收方、从机发送方、从机接收方。</p>
+<h3 id="从机发送模式下的软件流程"><a href="#从机发送模式下的软件流程" class="headerlink" title="从机发送模式下的软件流程"></a>从机发送模式下的软件流程</h3><ol>
+<li>首先，软件应该使能I2C外设时钟，以及配置I2C_CTL1中时钟相关寄存器来确保正确的I2C时序。使能和配置以后，I2C运行在默认的从机模式状态，等待I2C总线上的START信号和地址。</li>
+<li>当接收到一个START信号及随后的地址后，地址可以是7位格式也可以是10位格式，I2C硬件将I2C_STAT0寄存器的ADDSEND位置1，此位应该被软件查询或者中断监视，发现置位后，软件应该读I2C_STAT0寄存器然后读I2C_STAT1寄存器来清除ADDSEND位。如果地址是10位格式，I2C主机应该接着再产生一个START并发送一个地址头到I2C总线。从机在检测到START和紧接着的地址头之后会继续将ADDSEND位置1。软件可以通过读I2C_STAT0寄存器和接着读I2C_STAT1寄存器来第二次清除ADDSEND位。</li>
+<li>现在I2C进入数据发送状态，由于移位寄存器和数据寄存器I2C_DATA都是空的，硬件将TBE位置1。软件此时可以写入第一个字节数据到I2C_DATA寄存器，但是TBE位并没有被清0，因为写入I2C_DATA寄存器的字节被立即移入内部移位寄存器。当移位寄存器非空的时候，I2C开始发送数据到I2C总线。</li>
+<li>第一个字节的发送期间，软件可以写第二个字节到I2C_DATA，此时TBE位被清0，因为I2C_DATA寄存器和移位寄存器都不是空。</li>
+<li>第一个字节的发送完成之后，TBE被再次置起，软件可以写第三个字节到I2C_DATA，同时TBE位被清0。在此之后，任何时候TBE被置1，只要依然有数据待被发送，软件都可以写入一个字节到I2C_DATA寄存器。</li>
+<li>倒数第二个字节发送期间，软件写最后一个数据到I2C_DATA寄存器来清除TBE标志位，之后就再不用关心TBE的状态。TBE位会在倒数第二个字节发送完成后置起，直到检测到STOP信号时被清0。</li>
+<li>根据I2C协议，I2C主机将不会对接收到的最后一个字节发送应答，所以在最后一个字节发送结束后，I2C从机的AERR（应答错误）会置起以通知软件发送结束。软件写0到AERR位可以清除此位。</li>
+</ol>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260226225604969.png" alt="image-20260226225604969"></p>
+<h3 id="从机接收模式下的软件流程"><a href="#从机接收模式下的软件流程" class="headerlink" title="从机接收模式下的软件流程"></a>从机接收模式下的软件流程</h3><ol>
+<li>首先，软件应该使能I2C外设时钟，以及配置I2C_CTL1中时钟相关寄存器来确保正确的I2C时序。使能和配置以后，I2C运行在默认的从机模式状态，等待START信号以及地址。</li>
+<li>在接收到START起始信号和匹配的7位或10地址之后，I2C硬件将I2C状态寄存器0的ADDSEND位置1，此位应该通过软件轮询或者中断来检测，发现置起后，软件通过先读I2C_STAT0寄存器然后读I2C_STAT1寄存器来清除ADDSEND位。当ADDSEND位被清0时，I2C就开始接收来自I2C总线的数据。</li>
+<li>当接收到第一个字节时，RBNE位被硬件置1，软件可以读取I2C_DATA寄存器的第一个字节，此时RBNE位也被清0。</li>
+<li>任何时候RBNE被置1，软件可以从I2C_DATA寄存器读取一个字节。</li>
+<li>接收到最后一个字节后，RBNE被置1，软件可以读取最后的字节。</li>
+<li>当I2C检测到I2C总线上一个STOP信号，STPDET位被置1，软件通过先读I2C_STAT0寄存器再写I2C_CTL0寄存器来清除STPDET位。</li>
+</ol>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260226225651385.png" alt="image-20260226225651385"></p>
+<h3 id="主机发送模式下的软件流程"><a href="#主机发送模式下的软件流程" class="headerlink" title="主机发送模式下的软件流程"></a>主机发送模式下的软件流程</h3><ol>
+<li><p>首先，软件应该使能I2C外设时钟，以及配置I2C_CTL1中时钟相关寄存器来确保正确的I2C时序。使能和配置以后，I2C运行在默认的从机模式状态，等待START信号，随后等待I2C总线寻址。</p>
+</li>
+<li><p>软件将START位置1，在I2C总线上产生一个START信号。</p>
+</li>
+<li><p>发送一个START信号后，I2C硬件将I2C_STAT0的SBSEND位置1然后进入主机模式。现在软件应该读I2C_STAT0寄存器然后写一个7位地址位或10位地址的地址头到I2C_DATA寄存器来清除SBSEND位。当SBSEND位被清0时，I2C就开始发送地址或者地址头到I2C总线。如果发送的地址是10位地址的地址头，硬件在发送地址头的时候会将ADD10SEND位置1 ，软件应该通过读I2C_STAT0寄存器然后写10位低地址到I2C_DATA来清除ADD10SEND位。</p>
+</li>
+<li><p>7位或10位的地址位发送出去之后，I2C硬件将ADDSEND位置1，软件通过读I2C_STAT0寄存器然后读I2C_STAT1寄存器清除ADDSEND位。</p>
+</li>
+<li><p>I2C进入数据发送状态，因为移位寄存器和数据寄存器I2C_DATA都是空的，所以硬件将TBE位置1。此时软件可以写第一个字节数据到I2C_DATA寄存器，但是TBE位此时不会被清零，因为写入I2C_DATA寄存器的字节会被立即移入内部移位寄存器。当移位寄存器非空时，I2C就开始发送数据到总线。</p>
+</li>
+<li><p>在第一个字节的发送过程中，软件可以写第二个字节到I2C_DATA，此时TBE会被清零，因为I2C_DATA寄存器和移位寄存器都不为空。</p>
+</li>
+<li><p>任意时刻TBE被置1，软件都可以向I2C_DATA寄存器写入一个字节，只要还有数据待发送。</p>
+</li>
+<li><p>在倒数第二个字节发送过程中，软件写入最后一个字节数据到I2C_DATA来清除TBE标志位，此后就不用关心TBE位的状态。TBE位会在倒数第二个字节发送完成后被置起，直到发送STOP信号时被清零。</p>
+</li>
+<li><p>最后一个字节发送结束后，I2C主机将BTC位置起，因为移位寄存器和I2C_DATA寄存器此时都为空。软件此时应该配置STOP来发送一个STOP信号，此后TBE和BTC状态位都将被清0。</p>
+</li>
+</ol>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260226225800549.png" alt="image-20260226225800549"></p>
+<h3 id="主机接收模式下的软件流程"><a href="#主机接收模式下的软件流程" class="headerlink" title="主机接收模式下的软件流程"></a>主机接收模式下的软件流程</h3><p>在主机接收模式下，主机需要为最后一个字节接收产生NACK，然后发送STOP信号。因此，需要特别注意以确保最后接收到数据的正确性。下面提供了两种针对主机接收模式的软件编程方案：方案A和B。方案A需要保证软件能对I2C事件进行快速响应，方案B则不需要。<br><strong>方案 A</strong></p>
+<ol>
+<li><p>首先，软件应该使能I2C外设时钟，以及配置I2C_CTL1中时钟相关寄存器来确保正确的I2C时序。使能和配置以后，I2C运行在默认的从机模式状态，等待START信号，随后等待I2C总线寻址。</p>
+</li>
+<li><p>软件将START位置1，从而在I2C总线上产生一个START信号。</p>
+</li>
+<li><p>发送一个START信号后，I2C硬件将I2C_STAT0寄存器的SBSEND位置1然后进入主机模式。现在软件应该读I2C_STAT0寄存器然后写一个7位地址位或10位地址的地址头到I2C_DATA寄存器来清除SBSEND位。当SBSEND位被清0时，I2C就开始发送地址或者地址头到I2C总线。如果发送的地址是10位地址的地址头，硬件在发送地址头的时候会先将ADD10SEND位置1，软件应该通过读I2C_STAT0寄存器然后写10位低地址到I2C_DATA来清除ADD10SEND位。</p>
+</li>
+<li><p>7位或10位的地址位发送出去之后，I2C硬件将ADDSEND位置1，软件应该通过读I2C_STAT0寄存器然后读I2C_STAT1寄存器清除ADDSEND位。如果地址是10位格式，软件应该再次将START位置1来重新产生一个START。在START产生后，SBSEND位会被置1。软件应该通过先读I2C_STAT0然后写地址头到I2C_DATA来清除SBSEND位，然后地址头被发到I2C总线，ADDSEND再次被置1。软件应该再次通过先读I2C_STAT0然后读I2C_STAT1来清除ADDSEND位。</p>
+</li>
+<li><p>当接收到第一个字节时，硬件会将RBNE位置1。此时软件可以从I2C_DATA寄存器读取第一个字节，之后RBNE位被清0。</p>
+</li>
+<li><p>此后任何时候RBNE被置1，软件就可以从I2C_DATA寄存器读取一个字节。</p>
+</li>
+<li><p>接收完倒数第二个字节（N-1）数据之后，软件应该立即将ACKEN位清0，并将STOP位置1，这一过程需要在最后一个字节接收完毕之前完成，以确保NACK发送给最后一个字节。</p>
+</li>
+<li><p>最后一个字节接收完毕后，RBNE位被置1，软件可以读取最后一个字节。由于ACKEN已经在前一步骤中被清0，I2C不再为最后一个字节发送ACK，并在最后一个字节发送完毕后产生一个STOP信号。以上步骤要求字节数目N&gt;1，如果N&#x3D;1，步骤7应该在步骤4之后就执行，且需要在字节接收完成之前完成。</p>
+</li>
+</ol>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260226225914700.png" alt="image-20260226225914700"></p>
+<p>方案 B</p>
+<ol>
+<li><p>首先，软件应该使能I2C外设时钟，配置I2C_CTL1中时钟相关寄存器来确保正确的I2C时序。初始化完成之后，I2C运行在默认的从机模式状态，等待START信号和地址。</p>
+</li>
+<li><p>软件将START位置1，从而在I2C总线上产生一个START信号。</p>
+</li>
+<li><p>发送一个START信号后，I2C硬件将I2C_STAT0寄存器的SBSEND位置1然后进入主机模式。现在软件应该读I2C_STAT0寄存器然后写一个7位地址位或10位地址的地址头到I2C_DATA寄存器来清除SBSEND位。当SBSEND位被清0时，I2C就开始发送地址或者地址头到I2C总线。如果发送的地址是10位地址的地址头，硬件在发送地址头之后会将ADD10SEND位置1，软件应该通过读I2C_STAT0寄存器然后写10位低地址到I2C_DATA来清除ADD10SEND位。</p>
+</li>
+<li><p>7位或10位的地址位发送出去之后，I2C硬件将ADDSEND位置1，软件应该通过读I2C_STAT0寄存器然后读I2C_STAT1寄存器清除ADDSEND位。如果地址是10位格式，软件应该接着将START位再次置1来产生一个开始信号，START被发送出去以后SBSEND位被再次置1。软件应该通过先读I2C_STAT0然后写地址头到I2C_DATA来清除SBSEND位，然后地址头被发到I2C总线，ADDSEND再次被置1。软件应该再次通过先读I2C_STAT0然后读I2C_STAT1来清除ADDSEND位。</p>
+</li>
+<li><p>当第一个字节被接收时，RBNE位会被硬件置1。此时软件可从I2C_DATA寄存器读取出第一个字节，同时RBNE位被清0。</p>
+</li>
+<li><p>此后任何时刻，只要RBNE位被置1，软件就可以从I2C_DATA寄存器读取一个字节的数据，直到主机接收了N-3个字节。如图20-13. 主机接收使用方案B 模式（10 位地址模式）所示，第N-2 个字节还没被软件读出，之后第N-1 个字节被接收，此时BTC 和RBNE 都被置位，总线就会被主机锁死以阻止最后一个字节的接收。然后软件应该清除ACKEN 位。</p>
+</li>
+<li><p>软件从I2C_DATA读出倒数第三个（N-2）字节数据，同时也将BTC位清0。此后第N-1个字节从移位寄存器被移到I2C_DATA，总线得到释放然后开始接收最后一个字节，由于ACKEN已经被清除，因此主机不会给最后一个字节数据发送ACK响应。</p>
+</li>
+<li><p>最后一个字节接收完毕后，硬件再次把BTC位和RBNE置1，并拉低SCL，软件将STOP位置1，主机发出一个STOP信号。</p>
+</li>
+<li><p>软件读取第N-1个字节，清除BTC。此后最后一个字节从移位寄存器被移动到I2C_DATA。</p>
+</li>
+<li><p>软件读取最后一个字节，清除RBNE。<br>以上步骤需要字节数字N&gt;2，N&#x3D;1和N&#x3D;2的情况近似：N&#x3D;1在第4 步，软件应该在清除ADDSEND 位之前将ACKEN 位清0，在清除ADDSEND 位之后将STOP 位置1。当N&#x3D;1 时步骤5 是最后一步。N&#x3D;2在第2步，软件应该在START置1之前将POAP置1。在第4步，软件应该在清除ADDSEND位之前将ACKEN位清0。在第5步，软件应该一直等到BTC位被置1然后将STOP位置1且读取I2C_DATA两次。</p>
+</li>
+</ol>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260226230042455.png" alt="image-20260226230042455"></p>
+<h2 id="例程：使用库函数配置IIC"><a href="#例程：使用库函数配置IIC" class="headerlink" title="例程：使用库函数配置IIC"></a>例程：使用库函数配置IIC</h2><p>为了更好地理解IIC的使用，我们提供一个简单的例程，使用GD32F4xx标准外设库（SPL）来配置IIC0作为主机，向一个从机设备发送数据。假设从机地址为0x50，我们发送一个字节的数据0xAA。</p>
+<h3 id="步骤详解"><a href="#步骤详解" class="headerlink" title="步骤详解"></a>步骤详解</h3><ol>
+<li><p><strong>包含头文件</strong>：<br>首先，在代码文件中包含必要的头文件，包括GD32F4xx的IIC和GPIO库。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;gd32f4xx.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;gd32f4xx_i2c.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;gd32f4xx_gpio.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;gd32f4xx_rcu.h&quot;</span></span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>定义常量和变量</strong>：<br>定义IIC外设、引脚和时钟。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> I2C0_SLAVE_ADDRESS7 0x50  <span class="hljs-comment">// 从机地址</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> I2C_DATA 0xAA              <span class="hljs-comment">// 要发送的数据</span></span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>使能外设时钟</strong>：<br>使能IIC0和相关GPIO的时钟。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">rcu_periph_clock_enable(RCU_I2C0);      <span class="hljs-comment">// 使能IIC0时钟</span><br>rcu_periph_clock_enable(RCU_GPIOB);     <span class="hljs-comment">// 假设IIC0使用PB6(SCL)和PB7(SDA)</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>配置GPIO引脚</strong>：<br>将PB6和PB7配置为IIC模式，使用复用功能。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c">gpio_af_set(GPIOB, GPIO_AF_4, GPIO_PIN_6);  <span class="hljs-comment">// PB6复用为I2C0_SCL</span><br>gpio_af_set(GPIOB, GPIO_AF_4, GPIO_PIN_7);  <span class="hljs-comment">// PB7复用为I2C0_SDA</span><br><br>gpio_mode_set(GPIOB, GPIO_MODE_AF, GPIO_PUPD_PULLUP, GPIO_PIN_6);<br>gpio_output_options_set(GPIOB, GPIO_OTYPE_OD, GPIO_OSPEED_50MHZ, GPIO_PIN_6);<br><br>gpio_mode_set(GPIOB, GPIO_MODE_AF, GPIO_PUPD_PULLUP, GPIO_PIN_7);<br>gpio_output_options_set(GPIOB, GPIO_OTYPE_OD, GPIO_OSPEED_50MHZ, GPIO_PIN_7);<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>初始化IIC结构体</strong>：<br>配置IIC的参数，如时钟速度、地址模式等。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c">i2c_deinit(I2C0);  <span class="hljs-comment">// 复位IIC0</span><br><br>i2c_init(I2C0, I2C_SPEED_100K, I2C_DUTY_2_1, I2C_ADDRESS_MODE_7BIT, I2C0_SLAVE_ADDRESS7);<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>I2C_SPEED_100K：100kHz标准模式。</li>
+<li>I2C_DUTY_2_1：时钟占空比。</li>
+<li>I2C_ADDRESS_MODE_7BIT：7位地址模式。</li>
+<li>I2C0_SLAVE_ADDRESS7：从机地址。</li>
+</ul>
+</li>
+<li><p><strong>使能IIC</strong>：<br>使能IIC0外设。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">i2c_enable(I2C0);<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>发送数据</strong>：<br>编写一个函数来发送数据。首先产生START信号，发送地址，然后发送数据，最后发送STOP。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">i2c_send_data</span><span class="hljs-params">(<span class="hljs-type">uint8_t</span> data)</span> &#123;<br>    <span class="hljs-comment">// 产生START信号</span><br>    i2c_start_on_bus(I2C0);<br>    <span class="hljs-keyword">while</span>(!i2c_flag_get(I2C0, I2C_FLAG_SBSEND));  <span class="hljs-comment">// 等待START发送完成</span><br><br>    <span class="hljs-comment">// 发送从机地址（写操作）</span><br>    i2c_master_addressing(I2C0, I2C0_SLAVE_ADDRESS7, I2C_TRANSMITTER);<br>    <span class="hljs-keyword">while</span>(!i2c_flag_get(I2C0, I2C_FLAG_ADDSEND));  <span class="hljs-comment">// 等待地址发送完成</span><br>    i2c_flag_clear(I2C0, I2C_FLAG_ADDSEND);        <span class="hljs-comment">// 清除地址发送标志</span><br><br>    <span class="hljs-comment">// 发送数据</span><br>    i2c_data_transmit(I2C0, data);<br>    <span class="hljs-keyword">while</span>(!i2c_flag_get(I2C0, I2C_FLAG_TBE));      <span class="hljs-comment">// 等待发送缓冲区空</span><br>    <span class="hljs-keyword">while</span>(!i2c_flag_get(I2C0, I2C_FLAG_BTC));      <span class="hljs-comment">// 等待字节传输完成</span><br><br>    <span class="hljs-comment">// 发送STOP信号</span><br>    i2c_stop_on_bus(I2C0);<br>    <span class="hljs-keyword">while</span>(I2C_CTL0(I2C0) &amp; I2C_CTL0_STOP);         <span class="hljs-comment">// 等待STOP发送完成</span><br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>在主函数中调用</strong>：<br>在main函数中调用初始化和发送函数。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br>    <span class="hljs-comment">// 初始化系统时钟等（省略）</span><br>    <br>    <span class="hljs-comment">// 初始化IIC</span><br>    <span class="hljs-comment">// 步骤3-6的代码</span><br>    <br>    <span class="hljs-comment">// 发送数据</span><br>    i2c_send_data(I2C_DATA);<br>    <br>    <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>) &#123;<br>        <span class="hljs-comment">// 主循环</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<blockquote>
+<p>你也可参考如下文章<a target="_blank" rel="noopener" href="https://wiki.lckfb.com/zh-hans/lspi/beginner/i2c.html#_24-4-%E7%A1%AC%E4%BB%B6-i2c-%E9%85%8D%E7%BD%AE">二十四、 IIC 实验 | 立创开发板技术文档中心</a></p>
+</blockquote>
+<h2 id="IIC库函数详解"><a href="#IIC库函数详解" class="headerlink" title="IIC库函数详解"></a>IIC库函数详解</h2><h3 id="1-IIC-初始化与配置"><a href="#1-IIC-初始化与配置" class="headerlink" title="1. IIC 初始化与配置"></a>1. IIC 初始化与配置</h3><h4 id="i2c-deinit"><a href="#i2c-deinit" class="headerlink" title="i2c_deinit"></a>i2c_deinit</h4><p><strong>功能</strong>：复位I2C外设，将I2C寄存器重置为默认值。<br><strong>原型</strong>：<code>void i2c_deinit(uint32_t i2c_periph)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。<ul>
+<li><code>I2C0</code>: I2C0外设</li>
+<li><code>I2C1</code>: I2C1外设</li>
+<li><code>I2C2</code>: I2C2外设<br><strong>返回值</strong>：无</li>
+</ul>
+</li>
+</ul>
+<h4 id="i2c-clock-config"><a href="#i2c-clock-config" class="headerlink" title="i2c_clock_config"></a>i2c_clock_config</h4><p><strong>功能</strong>：配置I2C时钟速度和占空比。<br><strong>原型</strong>：<code>void i2c_clock_config(uint32_t i2c_periph, uint32_t clkspeed, uint32_t dutycyc)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设 (I2C0, I2C1, I2C2)。</li>
+<li><code>clkspeed</code>: I2C速度，单位为Hz。标准模式最高100000Hz (100kHz)，快速模式最高400000Hz (400kHz)。</li>
+<li><code>dutycyc</code>: 快速模式下的占空比。<ul>
+<li><code>I2C_DTCY_2</code>: T_low&#x2F;T_high &#x3D; 2</li>
+<li><code>I2C_DTCY_16_9</code>: T_low&#x2F;T_high &#x3D; 16&#x2F;9<br><strong>返回值</strong>：无</li>
+</ul>
+</li>
+</ul>
+<h4 id="i2c-mode-addr-config"><a href="#i2c-mode-addr-config" class="headerlink" title="i2c_mode_addr_config"></a>i2c_mode_addr_config</h4><p><strong>功能</strong>：配置I2C模式、地址格式和从机地址。<br><strong>原型</strong>：<code>void i2c_mode_addr_config(uint32_t i2c_periph, uint32_t mode, uint32_t addformat, uint32_t addr)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。</li>
+<li><code>mode</code>: I2C模式。<ul>
+<li><code>I2C_I2CMODE_ENABLE</code>: I2C模式</li>
+<li><code>I2C_SMBUSMODE_ENABLE</code>: SMBus模式</li>
+</ul>
+</li>
+<li><code>addformat</code>: 地址格式。<ul>
+<li><code>I2C_ADDFORMAT_7BITS</code>: 7位地址</li>
+<li><code>I2C_ADDFORMAT_10BITS</code>: 10位地址</li>
+</ul>
+</li>
+<li><code>addr</code>: I2C从机地址。<br><strong>返回值</strong>：无</li>
+</ul>
+<h4 id="i2c-enable"><a href="#i2c-enable" class="headerlink" title="i2c_enable"></a>i2c_enable</h4><p><strong>功能</strong>：使能I2C外设。<br><strong>原型</strong>：<code>void i2c_enable(uint32_t i2c_periph)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。<br><strong>返回值</strong>：无</li>
+</ul>
+<h4 id="i2c-disable"><a href="#i2c-disable" class="headerlink" title="i2c_disable"></a>i2c_disable</h4><p><strong>功能</strong>：禁用I2C外设。<br><strong>原型</strong>：<code>void i2c_disable(uint32_t i2c_periph)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。<br><strong>返回值</strong>：无</li>
+</ul>
+<h4 id="i2c-ack-config"><a href="#i2c-ack-config" class="headerlink" title="i2c_ack_config"></a>i2c_ack_config</h4><p><strong>功能</strong>：使能或禁用ACK（应答）发送。<br><strong>原型</strong>：<code>void i2c_ack_config(uint32_t i2c_periph, uint32_t ack)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。</li>
+<li><code>ack</code>: ACK状态。<ul>
+<li><code>I2C_ACK_ENABLE</code>: 使能ACK发送</li>
+<li><code>I2C_ACK_DISABLE</code>: 禁用ACK发送<br><strong>返回值</strong>：无</li>
+</ul>
+</li>
+</ul>
+<h4 id="i2c-ackpos-config"><a href="#i2c-ackpos-config" class="headerlink" title="i2c_ackpos_config"></a>i2c_ackpos_config</h4><p><strong>功能</strong>：配置ACK位置（当前字节或下一个字节）。通常用于接收只剩两个字节时的特殊操作。<br><strong>原型</strong>：<code>void i2c_ackpos_config(uint32_t i2c_periph, uint32_t pos)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。</li>
+<li><code>pos</code>: ACK位置。<ul>
+<li><code>I2C_ACKPOS_CURRENT</code>: ACK作用于当前正在接收的字节</li>
+<li><code>I2C_ACKPOS_NEXT</code>: ACK作用于下一个字节<br><strong>返回值</strong>：无</li>
+</ul>
+</li>
+</ul>
+<h4 id="i2c-master-addressing"><a href="#i2c-master-addressing" class="headerlink" title="i2c_master_addressing"></a>i2c_master_addressing</h4><p><strong>功能</strong>：在主机模式下配置从机地址和传输方向。<br><strong>原型</strong>：<code>void i2c_master_addressing(uint32_t i2c_periph, uint32_t addr, uint32_t trandirection)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。</li>
+<li><code>addr</code>: 从机地址。</li>
+<li><code>trandirection</code>: 传输方向。<ul>
+<li><code>I2C_TRANSMITTER</code>: 发送方向</li>
+<li><code>I2C_RECEIVER</code>: 接收方向<br><strong>返回值</strong>：无</li>
+</ul>
+</li>
+</ul>
+<h4 id="i2c-dualaddr-enable"><a href="#i2c-dualaddr-enable" class="headerlink" title="i2c_dualaddr_enable"></a>i2c_dualaddr_enable</h4><p><strong>功能</strong>：使能双地址模式并配置第二个从机地址。<br><strong>原型</strong>：<code>void i2c_dualaddr_enable(uint32_t i2c_periph, uint32_t addr)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。</li>
+<li><code>addr</code>: 第二个从机地址。<br><strong>返回值</strong>：无</li>
+</ul>
+<h4 id="i2c-software-reset-config"><a href="#i2c-software-reset-config" class="headerlink" title="i2c_software_reset_config"></a>i2c_software_reset_config</h4><p><strong>功能</strong>：使能或禁用I2C软件复位。<br><strong>原型</strong>：<code>void i2c_software_reset_config(uint32_t i2c_periph, uint32_t sreset)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。</li>
+<li><code>sreset</code>: 软件复位状态。<ul>
+<li><code>I2C_SRESET_SET</code>: I2C处于复位状态</li>
+<li><code>I2C_SRESET_RESET</code>: I2C不处于复位状态<br><strong>返回值</strong>：无</li>
+</ul>
+</li>
+</ul>
+<h4 id="i2c-stretch-scl-low-config"><a href="#i2c-stretch-scl-low-config" class="headerlink" title="i2c_stretch_scl_low_config"></a>i2c_stretch_scl_low_config</h4><p><strong>功能</strong>：使能或禁用SCL时钟延展（Clock Stretching）。<br><strong>原型</strong>：<code>void i2c_stretch_scl_low_config(uint32_t i2c_periph, uint32_t stretch)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。</li>
+<li><code>stretch</code>: 时钟延展状态。<ul>
+<li><code>I2C_SCLSTRETCH_ENABLE</code>: 使能时钟延展</li>
+<li><code>I2C_SCLSTRETCH_DISABLE</code>: 禁用时钟延展<br><strong>返回值</strong>：无</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-数据传输"><a href="#2-数据传输" class="headerlink" title="2. 数据传输"></a>2. 数据传输</h3><h4 id="i2c-data-transmit"><a href="#i2c-data-transmit" class="headerlink" title="i2c_data_transmit"></a>i2c_data_transmit</h4><p><strong>功能</strong>：通过I2C外设发送一个字节的数据。<br><strong>原型</strong>：<code>void i2c_data_transmit(uint32_t i2c_periph, uint8_t data)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。</li>
+<li><code>data</code>: 要发送的数据字节。<br><strong>返回值</strong>：无</li>
+</ul>
+<h4 id="i2c-data-receive"><a href="#i2c-data-receive" class="headerlink" title="i2c_data_receive"></a>i2c_data_receive</h4><p><strong>功能</strong>：通过I2C外设接收一个字节的数据。<br><strong>原型</strong>：<code>uint8_t i2c_data_receive(uint32_t i2c_periph)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。<br><strong>返回值</strong>：接收到的数据字节。</li>
+</ul>
+<h4 id="i2c-start-on-bus"><a href="#i2c-start-on-bus" class="headerlink" title="i2c_start_on_bus"></a>i2c_start_on_bus</h4><p><strong>功能</strong>：在I2C总线上产生START条件。<br><strong>原型</strong>：<code>void i2c_start_on_bus(uint32_t i2c_periph)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。<br><strong>返回值</strong>：无</li>
+</ul>
+<h4 id="i2c-stop-on-bus"><a href="#i2c-stop-on-bus" class="headerlink" title="i2c_stop_on_bus"></a>i2c_stop_on_bus</h4><p><strong>功能</strong>：在I2C总线上产生STOP条件。<br><strong>原型</strong>：<code>void i2c_stop_on_bus(uint32_t i2c_periph)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。<br><strong>返回值</strong>：无</li>
+</ul>
+<h3 id="3-状态标志管理"><a href="#3-状态标志管理" class="headerlink" title="3. 状态标志管理"></a>3. 状态标志管理</h3><h4 id="i2c-flag-get"><a href="#i2c-flag-get" class="headerlink" title="i2c_flag_get"></a>i2c_flag_get</h4><p><strong>功能</strong>：检查指定的I2C标志位状态。<br><strong>原型</strong>：<code>FlagStatus i2c_flag_get(uint32_t i2c_periph, uint32_t flag)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。</li>
+<li><code>flag</code>: 待检查的标志位。常用标志包括：<ul>
+<li><code>I2C_FLAG_SBSEND</code>: START条件已发送 (Master)</li>
+<li><code>I2C_FLAG_ADDSEND</code>: 地址已发送&#x2F;匹配 (Master&#x2F;Slave)</li>
+<li><code>I2C_FLAG_BTC</code>: 字节传输完成 (Byte transfer finished)</li>
+<li><code>I2C_FLAG_ADD10SEND</code>: 10位地址头部已发送 (Master)</li>
+<li><code>I2C_FLAG_STPDET</code>: 检测到STOP条件 (Slave)</li>
+<li><code>I2C_FLAG_RBNE</code>: 接收缓冲区非空 (Data register not empty)</li>
+<li><code>I2C_FLAG_TBE</code>: 发送缓冲区空 (Data register empty)</li>
+<li><code>I2C_FLAG_BERR</code>: 总线错误</li>
+<li><code>I2C_FLAG_LOSTARB</code>: 仲裁丢失</li>
+<li><code>I2C_FLAG_AERR</code>: 应答错误</li>
+<li><code>I2C_FLAG_OVR</code>: 过载&#x2F;溢出错误</li>
+<li><code>I2C_FLAG_PECERR</code>: PEC错误</li>
+<li><code>I2C_FLAG_SMBTO</code>: SMBus超时</li>
+<li><code>I2C_FLAG_SMBALT</code>: SMBus告警</li>
+<li><code>I2C_FLAG_I2CBSY</code>: I2C总线忙</li>
+<li><code>I2C_FLAG_DUMODF</code>: 双地址模式匹配<br><strong>返回值</strong>：<code>SET</code> (标志位置位) 或 <code>RESET</code> (标志位未置位)。</li>
+</ul>
+</li>
+</ul>
+<h4 id="i2c-flag-clear"><a href="#i2c-flag-clear" class="headerlink" title="i2c_flag_clear"></a>i2c_flag_clear</h4><p><strong>功能</strong>：清除指定的I2C标志位。<br><strong>原型</strong>：<code>void i2c_flag_clear(uint32_t i2c_periph, uint32_t flag)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。</li>
+<li><code>flag</code>: 待清除的标志位。<ul>
+<li><code>I2C_FLAG_SMBTO</code>: SMBus超时</li>
+<li><code>I2C_FLAG_SMBALT</code>: SMBus告警</li>
+<li><code>I2C_FLAG_PECERR</code>: PEC错误</li>
+<li><code>I2C_FLAG_OVR</code>: 过载&#x2F;溢出错误</li>
+<li><code>I2C_FLAG_AERR</code>: 应答错误</li>
+<li><code>I2C_FLAG_LOSTARB</code>: 仲裁丢失</li>
+<li><code>I2C_FLAG_BERR</code>: 总线错误</li>
+<li><code>I2C_FLAG_ADDSEND</code>: 地址已发送&#x2F;匹配</li>
+<li><code>I2C_FLAG_STPDET</code>: 检测到STOP条件 (Slave) (注意：有些标志位需要特定读写序列清除，不仅是调用此函数)<br><strong>返回值</strong>：无</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-中断配置"><a href="#4-中断配置" class="headerlink" title="4. 中断配置"></a>4. 中断配置</h3><h4 id="i2c-interrupt-enable"><a href="#i2c-interrupt-enable" class="headerlink" title="i2c_interrupt_enable"></a>i2c_interrupt_enable</h4><p><strong>功能</strong>：使能指定的I2C中断。<br><strong>原型</strong>：<code>void i2c_interrupt_enable(uint32_t i2c_periph, uint32_t interrupt)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。</li>
+<li><code>interrupt</code>: 待使能的中断源。<ul>
+<li><code>I2C_INT_ERR</code>: 错误中断使能</li>
+<li><code>I2C_INT_EV</code>: 事件中断使能</li>
+<li><code>I2C_INT_BUF</code>: 缓冲区中断使能<br><strong>返回值</strong>：无</li>
+</ul>
+</li>
+</ul>
+<h4 id="i2c-interrupt-disable"><a href="#i2c-interrupt-disable" class="headerlink" title="i2c_interrupt_disable"></a>i2c_interrupt_disable</h4><p><strong>功能</strong>：禁用指定的I2C中断。<br><strong>原型</strong>：<code>void i2c_interrupt_disable(uint32_t i2c_periph, uint32_t interrupt)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。</li>
+<li><code>interrupt</code>: 待禁用的中断源。<br><strong>返回值</strong>：无</li>
+</ul>
+<h4 id="i2c-interrupt-flag-get"><a href="#i2c-interrupt-flag-get" class="headerlink" title="i2c_interrupt_flag_get"></a>i2c_interrupt_flag_get</h4><p><strong>功能</strong>：检查指定的I2C中断标志位状态。<br><strong>原型</strong>：<code>FlagStatus i2c_interrupt_flag_get(uint32_t i2c_periph, uint32_t interrupt)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。</li>
+<li><code>interrupt</code>: 待检查的中断标志位。<ul>
+<li><code>I2C_INT_FLAG_SMBTO</code>: SMBus超时中断标志</li>
+<li><code>I2C_INT_FLAG_SMBALT</code>: SMBus告警中断标志</li>
+<li><code>I2C_INT_FLAG_PECERR</code>: PEC错误中断标志</li>
+<li><code>I2C_INT_FLAG_OVR</code>: 过载错误中断标志</li>
+<li><code>I2C_INT_FLAG_AERR</code>: 应答错误中断标志</li>
+<li><code>I2C_INT_FLAG_LOSTARB</code>: 仲裁丢失中断标志</li>
+<li><code>I2C_INT_FLAG_BERR</code>: 总线错误中断标志</li>
+<li><code>I2C_INT_FLAG_TBE</code>: 发送缓冲区空中断标志</li>
+<li><code>I2C_INT_FLAG_RBNE</code>: 接收缓冲区非空中断标志</li>
+<li><code>I2C_INT_FLAG_STPDET</code>: 检测到STOP中断标志</li>
+<li><code>I2C_INT_FLAG_ADD10SEND</code>: 10位头发送中断标志</li>
+<li><code>I2C_INT_FLAG_BTC</code>: 字节传输完成中断标志</li>
+<li><code>I2C_INT_FLAG_ADDSEND</code>: 地址发送中断标志</li>
+<li><code>I2C_INT_FLAG_SBSEND</code>: START发送中断标志<br><strong>返回值</strong>：<code>SET</code> 或 <code>RESET</code>。</li>
+</ul>
+</li>
+</ul>
+<h4 id="i2c-interrupt-flag-clear"><a href="#i2c-interrupt-flag-clear" class="headerlink" title="i2c_interrupt_flag_clear"></a>i2c_interrupt_flag_clear</h4><p><strong>功能</strong>：清除指定的I2C中断标志位。<br><strong>原型</strong>：<code>void i2c_interrupt_flag_clear(uint32_t i2c_periph, uint32_t interrupt)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。</li>
+<li><code>interrupt</code>: 待清除的中断标志位。<br><strong>返回值</strong>：无</li>
+</ul>
+<h3 id="5-DMA-配置"><a href="#5-DMA-配置" class="headerlink" title="5. DMA 配置"></a>5. DMA 配置</h3><h4 id="i2c-dma-enable"><a href="#i2c-dma-enable" class="headerlink" title="i2c_dma_enable"></a>i2c_dma_enable</h4><p><strong>功能</strong>：使能I2C DMA请求。<br><strong>原型</strong>：<code>void i2c_dma_enable(uint32_t i2c_periph, uint32_t dma)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。</li>
+<li><code>dma</code>: DMA请求使能。<ul>
+<li><code>I2C_DMA_ON</code>: 使能DMA模式</li>
+<li><code>I2C_DMA_OFF</code>: 禁用DMA模式<br><strong>返回值</strong>：无</li>
+</ul>
+</li>
+</ul>
+<h4 id="i2c-dma-last-transfer-config"><a href="#i2c-dma-last-transfer-config" class="headerlink" title="i2c_dma_last_transfer_config"></a>i2c_dma_last_transfer_config</h4><p><strong>功能</strong>：配置DMA最后一次传输（只在接收模式下使用）。<br><strong>原型</strong>：<code>void i2c_dma_last_transfer_config(uint32_t i2c_periph, uint32_t dma_last)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。</li>
+<li><code>dma_last</code>: DMA最后传输配置。<ul>
+<li><code>I2C_DMALST_ON</code>: 下一次DMA EOT（传输结束）时发送NACK</li>
+<li><code>I2C_DMALST_OFF</code>: 下一次DMA EOT时不发送NACK<br><strong>返回值</strong>：无</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-PEC-Packet-Error-Checking-配置"><a href="#6-PEC-Packet-Error-Checking-配置" class="headerlink" title="6. PEC (Packet Error Checking) 配置"></a>6. PEC (Packet Error Checking) 配置</h3><h4 id="i2c-pec-enable"><a href="#i2c-pec-enable" class="headerlink" title="i2c_pec_enable"></a>i2c_pec_enable</h4><p><strong>功能</strong>：使能I2C PEC计算。<br><strong>原型</strong>：<code>void i2c_pec_enable(uint32_t i2c_periph, uint32_t pecstate)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。</li>
+<li><code>pecstate</code>: PEC状态。<ul>
+<li><code>I2C_PEC_ENABLE</code>: 使能PEC</li>
+<li><code>I2C_PEC_DISABLE</code>: 禁用PEC<br><strong>返回值</strong>：无</li>
+</ul>
+</li>
+</ul>
+<h4 id="i2c-pec-value-get"><a href="#i2c-pec-value-get" class="headerlink" title="i2c_pec_value_get"></a>i2c_pec_value_get</h4><p><strong>功能</strong>：获取当前的PEC值。<br><strong>原型</strong>：<code>uint8_t i2c_pec_value_get(uint32_t i2c_periph)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。<br><strong>返回值</strong>：当前的PEC计算值。</li>
+</ul>
+<h4 id="i2c-pec-transfer-enable"><a href="#i2c-pec-transfer-enable" class="headerlink" title="i2c_pec_transfer_enable"></a>i2c_pec_transfer_enable</h4><p><strong>功能</strong>：请求传输PEC值（作为最后一个字节发送或接收）。<br><strong>原型</strong>：<code>void i2c_pec_transfer_enable(uint32_t i2c_periph, uint32_t pec_transfer)</code><br><strong>参数</strong>：</p>
+<ul>
+<li><code>i2c_periph</code>: I2C外设。</li>
+<li><code>pec_transfer</code>: PEC传输使能。<ul>
+<li><code>I2C_PECTRANS_ENABLE</code>: 传输PEC</li>
+<li><code>I2C_PECTRANS_DISABLE</code>: 不传输PEC<br><strong>返回值</strong>：无</li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left  disabled "
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2026/02/21/GD32F470-6-TIMERx/"
+      title="GD32F470入门教程（六）定时器"
+     >
+
+    <p class="title-text">
+      
+        GD32F470入门教程（六）定时器
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+
+  <div id="comment-card" class="comment-card">
+    <div class="main-title-bar">
+      <div class="main-title-dot"></div>
+      <div class="main-title">留言 </div>
+    </div>
+    <div id="giscus-container"></div>
+  </div>
+  <script src="https://giscus.app/client.js"
+    data-repo="chaoxiaohan/myblog"
+    data-repo-id="R_kgDOPe4zOQ"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOPe4zOc4CuRDG"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="noborder_light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async>
+  </script>
+  
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2026 超小韓<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+  <script src="/js/toc.js"></script>
+  
+  <script src="/js/search.js"></script>
+  <script src="/js/code-copy.js"></script>
+  <script src="/js/mobile-warning.js"></script>
+  <script src="/js/image-viewer.js"></script>
+  <script src="/js/context-menu.js"></script>
+</body>
+</html>
