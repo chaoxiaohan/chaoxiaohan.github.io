@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+
+
+<html theme="light" showBanner="true" hasBanner="true" > 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+<!-- Gaug.es Analytics -->
+<script>
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', 'true');
+    t.setAttribute('data-track-path', 'https://track.gaug.es/track.gif');
+    t.src = 'https://d36ee2fcip1434.cloudfront.net/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+<!-- End Gaug.es Analytics -->
+
+
+  
+  <title>GD32F470入门教程（十）DMA | 超小韓の个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="本文介绍GD32F470的DMA直接存储器访问控制器，阐述其传输模式与外设请求机制，并通过串口DMA发送&#x2F;接收的示例代码演示其配置方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GD32F470入门教程（十）DMA">
+<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2026/02/27/GD32F470-10-DMA/index.html">
+<meta property="og:site_name" content="超小韓の个人博客">
+<meta property="og:description" content="本文介绍GD32F470的DMA直接存储器访问控制器，阐述其传输模式与外设请求机制，并通过串口DMA发送&#x2F;接收的示例代码演示其配置方法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260227220954230.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260227221216172.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260227221256587.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260227221304788.png">
+<meta property="article:published_time" content="2026-02-27T14:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-27T14:36:56.902Z">
+<meta property="article:author" content="超小韓">
+<meta property="article:tag" content="DMA">
+<meta property="article:tag" content="GD32F470">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260227220954230.png">
+  
+    <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+<link rel="stylesheet" href="/css/search.css">
+
+  
+<link rel="stylesheet" href="/css/toc-fix.css">
+
+  
+<link rel="stylesheet" href="/css/code-copy.css">
+
+  
+<link rel="stylesheet" href="/css/mobile-warning.css">
+
+  
+<link rel="stylesheet" href="/css/image-viewer.css">
+
+  
+<link rel="stylesheet" href="/css/context-menu.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/xiaoxin7284678236.png" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>超小韓の个人博客 </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">主页</a>
+    
+      <a class="main-nav-link" href="/archives">文章</a>
+    
+      <a class="main-nav-link" href="/resources">资料</a>
+    
+      <a class="main-nav-link" href="/about">关于我的</a>
+    
+  </nav>
+  <nav id="search-nav">
+    <div id="search-container">
+      <select id="search-mode-selector" name="search-mode">
+        <option value="exact">精确</option>
+        <option value="fuzzy">模糊</option>
+      </select>
+      <input type="text" id="search-input" placeholder="搜索文章..." autocomplete="off">
+      <div id="search-results" class="hidden">
+        <div id="search-results-content"></div>
+      </div>
+    </div>
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">主页</a>
+    
+      <a class="nav-dropdown-link" href="/archives">文章</a>
+    
+      <a class="nav-dropdown-link" href="/resources">资料</a>
+    
+      <a class="nav-dropdown-link" href="/about">关于我的</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/head.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">超小韓 </div>
+      <div class="dot"></div>
+      <div class="subtitle">生活明朗，万物可爱！ </div>
+      <div class="link-list">
+        
+          <a class="link-btn" href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2537037482&website=www.oicqzone.com" title="QQ"><i class="fa-brands fa-qq"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/353687950" title="哔哩哔哩"><i class="fa-brands fa-bilibili"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/chaoxiaohan/" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        
+          <a class="link-btn" href="mailto:chaoxiaohan@chaoxiaohan.cyou" title="Email"><i class="fa-solid fa-envelope"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+    
+
+
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">分类</h3>
+      <div class="category-box">
+            <a class="category-link" href="/categories/GD32F470xx/">
+                GD32F470xx
+                <div class="category-count">11</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Android/">
+                Android
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/HAL/">
+                HAL
+                <div class="category-count">12</div>
+            </a>
+        
+            <a class="category-link" href="/categories/YOLO/">
+                YOLO
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/C/">
+                C
+                <div class="category-count">8</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Standard/">
+                Standard
+                <div class="category-count">4</div>
+            </a>
+        
+            <a class="category-link" href="/categories/computer/">
+                computer
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Python/">
+                Python
+                <div class="category-count">2</div>
+            </a>
+        
+            <a class="category-link" href="/categories/siemens-cup/">
+                siemens-cup
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/OpenCv/">
+                OpenCv
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/test/">
+                test
+                <div class="category-count">1</div>
+            </a>
+        </div>
+    </div>
+  </div>
+
+
+  
+    
+  
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">GD32F470xx 系列文章</h3>
+      <ul class="same-category-posts">
+        
+          <li class="same-category-item current-post">
+            <a href="/2026/02/27/GD32F470-10-DMA/" title="GD32F470入门教程（十）DMA">
+              GD32F470入门教程（十）DMA
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/27/GD32F470-9-ADC/" title="GD32F470入门教程（九）ADC">
+              GD32F470入门教程（九）ADC
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/27/GD32F470-8-SPI/" title="GD32F470入门教程（八）SPI/I2S">
+              GD32F470入门教程（八）SPI/I2S
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/26/GD32F470-7-IIC/" title="GD32F470入门教程（七）IIC">
+              GD32F470入门教程（七）IIC
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/21/GD32F470-6-TIMERx/" title="GD32F470入门教程（六）定时器">
+              GD32F470入门教程（六）定时器
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/12/GD32F470-5-USART/" title="GD32F470入门教程（五）串口">
+              GD32F470入门教程（五）串口
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/12/GD32F470-3-GPIO-/" title="GD32F470入门教程（四）中断（EXTI）">
+              GD32F470入门教程（四）中断（EXTI）
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/12/GD32F470-4-EXTI/" title="GD32F470入门教程（四）中断（EXTI）">
+              GD32F470入门教程（四）中断（EXTI）
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/11/GD32F470-2-clock/" title="GD32F470入门教程（二）时钟系统">
+              GD32F470入门教程（二）时钟系统
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/10/GD32F470-1-system/" title="GD32F470入门教程（一）系统架构">
+              GD32F470入门教程（一）系统架构
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2023/02/11/GD32F470-%20-/" title="GD32F470入门教程（）">
+              GD32F470入门教程（）
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+  
+  <div class="sticky">
+    
+      
+        
+          <div class="toc-widget">
+  <h3 class="toc-title">目录</h3>
+  <div class="toc-content">
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#DMA"><span class="toc-list-text">DMA</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-list-text">简介</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%BB%E8%A6%81%E7%89%B9%E5%BE%81"><span class="toc-list-text">主要特征</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#DMA%E4%BC%A0%E8%BE%93%E6%96%B9%E5%BC%8F"><span class="toc-list-text">DMA传输方式</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#DMA%E5%A4%96%E8%AE%BE%E8%AF%B7%E6%B1%82"><span class="toc-list-text">DMA外设请求</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%B2%E5%8F%A3DMA%E5%8F%91%E9%80%81-%E6%8E%A5%E6%94%B6%E7%A4%BA%E4%BE%8B"><span class="toc-list-text">串口DMA发送&#x2F;接收示例</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89"><span class="toc-list-text">1. 变量定义</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-DMA-%E5%88%9D%E5%A7%8B%E5%8C%96%E9%85%8D%E7%BD%AE"><span class="toc-list-text">2. DMA 初始化配置</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-USART-%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-list-text">3. USART 初始化</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-%E4%B8%AD%E6%96%AD%E9%85%8D%E7%BD%AE%E4%B8%8E%E6%9C%8D%E5%8A%A1%E5%87%BD%E6%95%B0"><span class="toc-list-text">4. 中断配置与服务函数</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-%E5%B0%81%E8%A3%85%E5%8F%91%E9%80%81%E5%87%BD%E6%95%B0"><span class="toc-list-text">5. 封装发送函数</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-%E4%B8%BB%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8"><span class="toc-list-text">6. 主函数调用</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#DMA%E5%BA%93%E5%87%BD%E6%95%B0"><span class="toc-list-text">DMA库函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%B8%80%E3%80%81%E7%BB%93%E6%9E%84%E4%BD%93%E5%AE%9A%E4%B9%89"><span class="toc-list-text">一、结构体定义</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#1-dma-multi-data-parameter-struct"><span class="toc-list-text">1. dma_multi_data_parameter_struct</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#2-dma-single-data-parameter-struct"><span class="toc-list-text">2. dma_single_data_parameter_struct</span></a></li></ol></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#%E4%BA%8C%E3%80%81DMA%E5%BA%93%E5%87%BD%E6%95%B0%E8%AF%A6%E7%BB%86%E4%BF%A1%E6%81%AF"><span class="toc-list-text">二、DMA库函数详细信息</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#1-dma-deinit"><span class="toc-list-text">1. dma_deinit</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#2-dma-single-data-mode-init"><span class="toc-list-text">2. dma_single_data_mode_init</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#3-dma-multi-data-mode-init"><span class="toc-list-text">3. dma_multi_data_mode_init</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#4-dma-periph-address-config"><span class="toc-list-text">4. dma_periph_address_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#5-dma-memory-address-config"><span class="toc-list-text">5. dma_memory_address_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#6-dma-transfer-number-config"><span class="toc-list-text">6. dma_transfer_number_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#7-dma-transfer-number-get"><span class="toc-list-text">7. dma_transfer_number_get</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#8-dma-priority-config"><span class="toc-list-text">8. dma_priority_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#9-dma-memory-burst-beats-config"><span class="toc-list-text">9. dma_memory_burst_beats_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#10-dma-periph-burst-beats-config"><span class="toc-list-text">10. dma_periph_burst_beats_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#11-dma-memory-width-config"><span class="toc-list-text">11. dma_memory_width_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#12-dma-periph-width-config"><span class="toc-list-text">12. dma_periph_width_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#13-dma-memory-address-generation-config"><span class="toc-list-text">13. dma_memory_address_generation_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#14-dma-peripheral-address-generation-config"><span class="toc-list-text">14. dma_peripheral_address_generation_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#15-dma-circulation-enable"><span class="toc-list-text">15. dma_circulation_enable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#16-dma-circulation-disable"><span class="toc-list-text">16. dma_circulation_disable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#17-dma-channel-enable"><span class="toc-list-text">17. dma_channel_enable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#18-dma-channel-disable"><span class="toc-list-text">18. dma_channel_disable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#19-dma-transfer-direction-config"><span class="toc-list-text">19. dma_transfer_direction_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#20-dma-switch-buffer-mode-config"><span class="toc-list-text">20. dma_switch_buffer_mode_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#21-dma-using-memory-get"><span class="toc-list-text">21. dma_using_memory_get</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#22-dma-channel-subperipheral-select"><span class="toc-list-text">22. dma_channel_subperipheral_select</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#23-dma-flow-controller-config"><span class="toc-list-text">23. dma_flow_controller_config</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#24-dma-switch-buffer-mode-enable"><span class="toc-list-text">24. dma_switch_buffer_mode_enable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#25-dma-fifo-status-get"><span class="toc-list-text">25. dma_fifo_status_get</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#26-dma-flag-get"><span class="toc-list-text">26. dma_flag_get</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#27-dma-flag-clear"><span class="toc-list-text">27. dma_flag_clear</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#28-dma-interrupt-flag-get"><span class="toc-list-text">28. dma_interrupt_flag_get</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#29-dma-interrupt-flag-clear"><span class="toc-list-text">29. dma_interrupt_flag_clear</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#30-dma-interrupt-enable"><span class="toc-list-text">30. dma_interrupt_enable</span></a></li><li class="toc-list-item toc-list-level-4"><a class="toc-list-link" href="#31-dma-interrupt-disable"><span class="toc-list-text">31. dma_interrupt_disable</span></a></li></ol></li></ol></li></ol></li></ol>
+  </div>
+</div>
+
+        
+      
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-GD32F470-10-DMA" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        GD32F470入门教程（十）DMA
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2026-02-27T14:00:00.000Z" itemprop="datePublished">2026-02-27</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+  <a class="meta-cate-link" href="/categories/GD32F470xx/">GD32F470xx</a>
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            18k 词 
+          </div>
+        </div>
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DMA/" rel="tag">DMA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GD32F470/" rel="tag">GD32F470</a></li></ul>
+
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <h1 id="DMA"><a href="#DMA" class="headerlink" title="DMA"></a>DMA</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>DMA控制器提供了一种硬件的方式在外设和存储器之间或者存储器和存储器之间传输数据，而无需MCU的介入，避免了MCU多次进入中断进行大规模的数据拷贝，最终提高整体的系统性能。<br>每个DMA控制器包含了两个AHB总线接口和8个4字深度的FIFO，使DMA可以高效的传输数据。DMA控制器（DMA0，DMA1）共有16个通道，每个通道可以被分配给一个或多个特定的外设进行数据传输。两个内置的总线仲裁器用来处理DMA请求的优先级问题。<br>Cortex®-M4内核与DMA控制器都是通过系统总线来处理数据，引入仲裁机制来处理它们之间的竞争关系。当MCU和DMA指定相同的外设的时候，MCU将会在特定的总线周期挂起。总线矩阵使用了轮询的算法保证MCU至少占用了一半的带宽。</p>
+<h2 id="主要特征"><a href="#主要特征" class="headerlink" title="主要特征"></a>主要特征</h2><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260227220954230.png" alt="image-20260227220954230"></p>
+<h2 id="DMA传输方式"><a href="#DMA传输方式" class="headerlink" title="DMA传输方式"></a>DMA传输方式</h2><p>DMA 支持三种传输模式，如下：</p>
+<ul>
+<li>外设到存储器：通过 AHB 外设主机接口从外设读取数据，通过 AHB 存储器主机接口向存储器写入数据。比如串口的 DMA 接收，就是从外设到存储器。</li>
+<li>存储器到外设：通过 AHB 存储器主机接口从存储器读取数据，通过 AHB 外设主机接口向外设写入数据。比如串口的 DMA 发送，就是存储器到外设。</li>
+<li>存储器到存储器：通过 AHB 外设主机接口从存储器读取数据，通过 AHB 存储器主机接口向存储器写入数据。</li>
+</ul>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260227221216172.png" alt="image-20260227221216172"></p>
+<h2 id="DMA外设请求"><a href="#DMA外设请求" class="headerlink" title="DMA外设请求"></a>DMA外设请求</h2><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260227221256587.png" alt="image-20260227221256587"></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260227221304788.png" alt="image-20260227221304788"></p>
+<h2 id="串口DMA发送-接收示例"><a href="#串口DMA发送-接收示例" class="headerlink" title="串口DMA发送&#x2F;接收示例"></a>串口DMA发送&#x2F;接收示例</h2><p>DMA 最常见的应用场景之一就是串口通信。在大数据量高速传输时，使用中断逐字节接收会占用大量 CPU 资源，而 DMA 可以让外设直接将数据搬运到内存，只在传输完成时通知 CPU。</p>
+<p>本示例演示如何使用 <strong>USART0</strong> 配合 <strong>DMA</strong> 进行数据的发送和接收。</p>
+<p><strong>注意：</strong> GD32F4 系列的 DMA 请求映射比较灵活，需要查阅用户手册的 <strong>DMA 请求映射表</strong> 来确定特定外设对应的 DMA 控制器、数据流 (Stream) 和通道 (Channel)。</p>
+<p>假设映射关系如下（具体请查阅数据手册）：</p>
+<ul>
+<li><strong>USART0_TX</strong>: DMA1, Stream7, Channel4</li>
+<li><strong>USART0_RX</strong>: DMA1, Stream2, Channel4</li>
+</ul>
+<h3 id="1-变量定义"><a href="#1-变量定义" class="headerlink" title="1. 变量定义"></a>1. 变量定义</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;gd32f4xx.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> ARRAYNUM(arr_nan)       (sizeof(arr_nan) / sizeof(*(arr_nan)))</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> TRANSMIT_SIZE           100</span><br><br><span class="hljs-type">uint8_t</span> tx_buffer[TRANSMIT_SIZE]; <span class="hljs-comment">// 发送缓冲区</span><br><span class="hljs-type">uint8_t</span> rx_buffer[TRANSMIT_SIZE]; <span class="hljs-comment">// 接收缓冲区</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-DMA-初始化配置"><a href="#2-DMA-初始化配置" class="headerlink" title="2. DMA 初始化配置"></a>2. DMA 初始化配置</h3><p>配置 DMA 需要注意源地址、目标地址、数据宽度、传输方向等。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">dma_config</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    dma_single_data_parameter_struct dma_init_struct;<br><br>    <span class="hljs-comment">/* 1. 开启 DMA1 时钟 */</span><br>    rcu_periph_clock_enable(RCU_DMA1);<br><br>    <span class="hljs-comment">/* 2. 复位 DMA Stream */</span><br>    dma_deinit(DMA1, DMA_CH7); <span class="hljs-comment">// USART0_TX</span><br>    dma_deinit(DMA1, DMA_CH2); <span class="hljs-comment">// USART0_RX</span><br><br>    <span class="hljs-comment">/* ================= 配置 USART0_TX (DMA1, CH7) ================= */</span><br>    dma_init_struct.periph_addr         = (<span class="hljs-type">uint32_t</span>)&amp;USART_DATA(USART0); <span class="hljs-comment">// 外设地址：串口数据寄存器</span><br>    dma_init_struct.periph_inc          = DMA_PERIPH_INCREASE_DISABLE;   <span class="hljs-comment">// 外设地址不自增</span><br>    dma_init_struct.memory0_addr        = (<span class="hljs-type">uint32_t</span>)tx_buffer;           <span class="hljs-comment">// 内存地址：发送缓冲区</span><br>    dma_init_struct.memory_inc          = DMA_MEMORY_INCREASE_ENABLE;    <span class="hljs-comment">// 内存地址自增</span><br>    dma_init_struct.periph_memory_width = DMA_PERIPH_WIDTH_8BIT;         <span class="hljs-comment">// 数据宽度 8位</span><br>    dma_init_struct.circular_mode       = DMA_CIRCULAR_MODE_DISABLE;     <span class="hljs-comment">// 关闭循环模式（单次发送）</span><br>    dma_init_struct.direction           = DMA_MEMORY_TO_PERIPH;          <span class="hljs-comment">// 方向：内存 -&gt; 外设</span><br>    dma_init_struct.number              = TRANSMIT_SIZE;                 <span class="hljs-comment">// 传输数据量</span><br>    dma_init_struct.priority            = DMA_PRIORITY_URGENT;           <span class="hljs-comment">// 优先级</span><br>    <br>    <span class="hljs-comment">// 初始化 DMA1_CH7 (Stream 7)</span><br>    dma_single_data_mode_init(DMA1, DMA_CH7, &amp;dma_init_struct);<br>    <span class="hljs-comment">// 选择通道4 (Channel 4) 作为请求源</span><br>    dma_channel_subperipheral_select(DMA1, DMA_CH7, DMA_SUBPERI4);<br><br>    <span class="hljs-comment">/* ================= 配置 USART0_RX (DMA1, CH2) ================= */</span><br>    dma_init_struct.periph_addr         = (<span class="hljs-type">uint32_t</span>)&amp;USART_DATA(USART0);<br>    dma_init_struct.periph_inc          = DMA_PERIPH_INCREASE_DISABLE;<br>    dma_init_struct.memory0_addr        = (<span class="hljs-type">uint32_t</span>)rx_buffer;<br>    dma_init_struct.memory_inc          = DMA_MEMORY_INCREASE_ENABLE;<br>    dma_init_struct.periph_memory_width = DMA_PERIPH_WIDTH_8BIT;<br>    dma_init_struct.circular_mode       = DMA_CIRCULAR_MODE_DISABLE;     <span class="hljs-comment">// 根据需求，可设为循环模式</span><br>    dma_init_struct.direction           = DMA_PERIPH_TO_MEMORY;          <span class="hljs-comment">// 方向：外设 -&gt; 内存</span><br>    dma_init_struct.number              = TRANSMIT_SIZE;<br>    dma_init_struct.priority            = DMA_PRIORITY_HIGH;<br>    <br>    <span class="hljs-comment">// 初始化 DMA1_CH2 (Stream 2)</span><br>    dma_single_data_mode_init(DMA1, DMA_CH2, &amp;dma_init_struct);<br>    <span class="hljs-comment">// 选择通道4 (Channel 4) 作为请求源</span><br>    dma_channel_subperipheral_select(DMA1, DMA_CH2, DMA_SUBPERI4);<br><br>    <span class="hljs-comment">/* 配置 DMA 发送完成中断 (可选) */</span><br>    dma_interrupt_enable(DMA1, DMA_CH7, DMA_CHXCTL_FTFIE); <br>    <br>    <span class="hljs-comment">/* 使能 DMA 接收通道 (准备好接收数据) */</span><br>    dma_channel_enable(DMA1, DMA_CH2);<br>    <br>    <span class="hljs-comment">/* 注意：DMA 发送通道 (CH7) 先不使能，等有数据要发时再使能 */</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-USART-初始化"><a href="#3-USART-初始化" class="headerlink" title="3. USART 初始化"></a>3. USART 初始化</h3><p>除了常规配置外，关键是要使能 USART 的 DMA 发送和接收功能。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">usart0_config</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-comment">/* 1. 开启时钟和配置GPIO (PA9/TX, PA10/RX) */</span><br>    rcu_periph_clock_enable(RCU_GPIOA);<br>    rcu_periph_clock_enable(RCU_USART0);<br><br>    gpio_af_set(GPIOA, GPIO_AF_7, GPIO_PIN_9 | GPIO_PIN_10);<br>    gpio_mode_set(GPIOA, GPIO_MODE_AF, GPIO_PUPD_PULLUP, GPIO_PIN_9 | GPIO_PIN_10);<br>    gpio_output_options_set(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_9 | GPIO_PIN_10);<br><br>    <span class="hljs-comment">/* 2. 配置 USART 参数 */</span><br>    usart_deinit(USART0);<br>    usart_baudrate_set(USART0, <span class="hljs-number">115200U</span>);<br>    usart_receive_config(USART0, USART_RECEIVE_ENABLE);<br>    usart_transmit_config(USART0, USART_TRANSMIT_ENABLE);<br>    <br>    <span class="hljs-comment">/* 3. 关键：使能串口的 DMA 发送和接收 */</span><br>    usart_dma_transmit_config(USART0, USART_DENT_ENABLE); <span class="hljs-comment">// 允许串口发送请求DMA</span><br>    usart_dma_receive_config(USART0, USART_DENR_ENABLE);  <span class="hljs-comment">// 允许串口接收请求DMA</span><br><br>    usart_enable(USART0);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-中断配置与服务函数"><a href="#4-中断配置与服务函数" class="headerlink" title="4. 中断配置与服务函数"></a>4. 中断配置与服务函数</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">nvic_config</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-comment">/* 配置 DMA1_Channel7 (发送完成) 中断优先级 */</span><br>    nvic_irq_enable(DMA1_Channel7_IRQn, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<br>&#125;<br><br><span class="hljs-comment">/* DMA1_Channel7 中断服务函数 (发送完成) */</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">DMA1_Channel7_IRQHandler</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-comment">/* 检查是否是传输完成标志 */</span><br>    <span class="hljs-keyword">if</span>(dma_interrupt_flag_get(DMA1, DMA_CH7, DMA_INT_FLAG_FTF))&#123;<br>        <span class="hljs-comment">/* 清除标志位 */</span><br>        dma_interrupt_flag_clear(DMA1, DMA_CH7, DMA_INT_FLAG_FTF);<br>        <br>        <span class="hljs-comment">/* 可以在这里设置标志位，通知主循环发送完毕 */</span><br>        <span class="hljs-comment">// g_transfer_complete = 1;</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-封装发送函数"><a href="#5-封装发送函数" class="headerlink" title="5. 封装发送函数"></a>5. 封装发送函数</h3><p>为了方便使用，我們可以封装着一个启动 DMA 发送的函数。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">usart_dma_send</span><span class="hljs-params">(<span class="hljs-type">uint8_t</span> *data, <span class="hljs-type">uint16_t</span> len)</span><br>&#123;<br>    <span class="hljs-comment">/* 1. 关闭 DMA 通道，准备重新配置 */</span><br>    dma_channel_disable(DMA1, DMA_CH7);<br><br>    <span class="hljs-comment">/* 2. 清除中断标志（保险起见） */</span><br>    dma_interrupt_flag_clear(DMA1, DMA_CH7, DMA_INT_FLAG_FTF);<br><br>    <span class="hljs-comment">/* 3. 重新设置内存地址和传输数量 */</span><br>    <span class="hljs-comment">/* 注意：如果不重新设置地址，DMA会继续从上次结束的地方读或者复位到初始地址 */</span><br>    dma_memory_address_config(DMA1, DMA_CH7, DMA_MEMORY_0, (<span class="hljs-type">uint32_t</span>)data);<br>    dma_transfer_number_config(DMA1, DMA_CH7, len);<br><br>    <span class="hljs-comment">/* 4. 开启 DMA 通道，开始发送 */</span><br>    dma_channel_enable(DMA1, DMA_CH7);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-主函数调用"><a href="#6-主函数调用" class="headerlink" title="6. 主函数调用"></a>6. 主函数调用</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-comment">// 系统初始化...</span><br>    nvic_config();<br>    dma_config();<br>    usart0_config();<br><br>    <span class="hljs-comment">// 填充发送数据...</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; i&lt;TRANSMIT_SIZE; i++) tx_buffer[i] = i;<br><br>    <span class="hljs-comment">// 启动第一次发送</span><br>    usart_dma_send(tx_buffer, TRANSMIT_SIZE);<br><br>    <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>)<br>    &#123;<br>        <span class="hljs-comment">// 主循环可以做其他事情，不需要管串口发送</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="DMA库函数"><a href="#DMA库函数" class="headerlink" title="DMA库函数"></a>DMA库函数</h2><table>
+<thead>
+<tr>
+<th>库函数名称</th>
+<th>库函数描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dma_deinit</td>
+<td>复位 DMA 一个通道的所有寄存器</td>
+</tr>
+<tr>
+<td>dma_single_data_mode_init</td>
+<td>DMA 单数据传输模式初始化</td>
+</tr>
+<tr>
+<td>dma_multi_data_mode_init</td>
+<td>DMA 多数据传输模式初始化</td>
+</tr>
+<tr>
+<td>dma_periph_address_config</td>
+<td>DMA 外设基地址配置</td>
+</tr>
+<tr>
+<td>dma_memory_address_config</td>
+<td>DMA 存储器基地址配置</td>
+</tr>
+<tr>
+<td>dma_transfer_number_config</td>
+<td>DMA 需要传输数据数配置</td>
+</tr>
+<tr>
+<td>dma_transfer_number_get</td>
+<td>DMA 需要传输数据数获取</td>
+</tr>
+<tr>
+<td>dma_priority_config</td>
+<td>DMA 通道传输优先级配置</td>
+</tr>
+<tr>
+<td>dma_memory_burst_beats_config</td>
+<td>存储器增量突发传输节拍数配置</td>
+</tr>
+<tr>
+<td>dma_periph_burst_beats_config</td>
+<td>外设增量突发传输节拍数配置</td>
+</tr>
+<tr>
+<td>dma_memory_width_config</td>
+<td>存储器传输数据宽度配置</td>
+</tr>
+<tr>
+<td>dma_periph_width_config</td>
+<td>外设传输数据宽度配置</td>
+</tr>
+<tr>
+<td>dma_memory_address_generation_config</td>
+<td>存储器下地址算法配置</td>
+</tr>
+<tr>
+<td>dma_peripheral_address_generation_config</td>
+<td>外设地址算法配置</td>
+</tr>
+<tr>
+<td>dma_circulation_enable</td>
+<td>DMA 循环传输模式使能</td>
+</tr>
+<tr>
+<td>dma_circulation_disable</td>
+<td>DMA 循环传输模式失能</td>
+</tr>
+<tr>
+<td>dma_channel_enable</td>
+<td>DMA 通道使能</td>
+</tr>
+<tr>
+<td>dma_channel_disable</td>
+<td>DMA 通道失能</td>
+</tr>
+<tr>
+<td>dma_transfer_direction_config</td>
+<td>DMA 通道数据传输方向配置</td>
+</tr>
+<tr>
+<td>dma_switch_buffer_mode_config</td>
+<td>DMA 存储器传输缓冲区配置</td>
+</tr>
+<tr>
+<td>dma_using_memory_get</td>
+<td>DMA 存储器传输缓冲区获取</td>
+</tr>
+<tr>
+<td>dma_channel_subperipheral_select</td>
+<td>DMA 通道外设使能选择</td>
+</tr>
+<tr>
+<td>dma_flow_controller_config</td>
+<td>DMA 传输控制器配置</td>
+</tr>
+<tr>
+<td>dma_switch_buffer_mode_enable</td>
+<td>DMA 存储切换模式使能</td>
+</tr>
+<tr>
+<td>dma_fifo_status_get</td>
+<td>DMA FIFO 状态获取</td>
+</tr>
+<tr>
+<td>dma_flag_get</td>
+<td>DMA 通道传输标志位获取</td>
+</tr>
+<tr>
+<td>dma_flag_clear</td>
+<td>DMA 通道传输标志位清除</td>
+</tr>
+<tr>
+<td>dma_interrupt_flag_get</td>
+<td>DMA 通道传输中断标志位获取</td>
+</tr>
+<tr>
+<td>dma_interrupt_flag_clear</td>
+<td>DMA 通道传输中断标志位清除</td>
+</tr>
+<tr>
+<td>dma_interrupt_enable</td>
+<td>DMA 中断使能</td>
+</tr>
+<tr>
+<td>dma_interrupt_disable</td>
+<td>DMA 中断失能</td>
+</tr>
+</tbody></table>
+<h3 id="一、结构体定义"><a href="#一、结构体定义" class="headerlink" title="一、结构体定义"></a>一、结构体定义</h3><h4 id="1-dma-multi-data-parameter-struct"><a href="#1-dma-multi-data-parameter-struct" class="headerlink" title="1. dma_multi_data_parameter_struct"></a>1. <code>dma_multi_data_parameter_struct</code></h4><table>
+<thead>
+<tr>
+<th>成员名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>periph_addr</code></td>
+<td>外设基地址</td>
+</tr>
+<tr>
+<td><code>periph_width</code></td>
+<td>外设数据传输宽度</td>
+</tr>
+<tr>
+<td><code>periph_inc</code></td>
+<td>外设地址生成算法模式</td>
+</tr>
+<tr>
+<td><code>memory0_addr</code></td>
+<td>存储器0基地址</td>
+</tr>
+<tr>
+<td><code>memory0_width</code></td>
+<td>存储器0传输宽度</td>
+</tr>
+<tr>
+<td><code>memory0_inc</code></td>
+<td>存储器0地址生成算法模式</td>
+</tr>
+<tr>
+<td><code>memory0_burst</code></td>
+<td>存储器0增量突发传输</td>
+</tr>
+<tr>
+<td><code>memory1_addr</code></td>
+<td>存储器1基地址</td>
+</tr>
+<tr>
+<td><code>memory1_width</code></td>
+<td>存储器1传输宽度</td>
+</tr>
+<tr>
+<td><code>memory1_inc</code></td>
+<td>存储器1地址生成算法模式</td>
+</tr>
+<tr>
+<td><code>memory1_burst</code></td>
+<td>存储器1增量突发传输</td>
+</tr>
+<tr>
+<td><code>periph_burst</code></td>
+<td>外设增量突发传输</td>
+</tr>
+<tr>
+<td><code>periph_inc</code></td>
+<td>外设增量突发模式</td>
+</tr>
+<tr>
+<td><code>circular_value</code></td>
+<td>DMA FIFO寄存器</td>
+</tr>
+<tr>
+<td><code>circular_mode</code></td>
+<td>DMA循环模式</td>
+</tr>
+<tr>
+<td><code>direction</code></td>
+<td>DMA通道数据传输方向</td>
+</tr>
+<tr>
+<td><code>number</code></td>
+<td>DMA需要传输数据数</td>
+</tr>
+<tr>
+<td><code>priority</code></td>
+<td>DMA通道优先级</td>
+</tr>
+</tbody></table>
+<h4 id="2-dma-single-data-parameter-struct"><a href="#2-dma-single-data-parameter-struct" class="headerlink" title="2. dma_single_data_parameter_struct"></a>2. <code>dma_single_data_parameter_struct</code></h4><table>
+<thead>
+<tr>
+<th>成员名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>periph_addr</code></td>
+<td>外设基地址</td>
+</tr>
+<tr>
+<td><code>periph_inc</code></td>
+<td>外设地址生成算法模式</td>
+</tr>
+<tr>
+<td><code>periph_width</code></td>
+<td>外设数据传输宽度</td>
+</tr>
+<tr>
+<td><code>DMA_CHx(x=0..7)</code></td>
+<td>DMA外设选择</td>
+</tr>
+<tr>
+<td><code>memory_addr</code></td>
+<td>存储器基地址</td>
+</tr>
+<tr>
+<td><code>memory_inc</code></td>
+<td>存储器地址生成算法模式</td>
+</tr>
+<tr>
+<td><code>memory_width</code></td>
+<td>外设数据传输宽度</td>
+</tr>
+<tr>
+<td><code>periph_burst</code></td>
+<td>外设增量突发传输</td>
+</tr>
+<tr>
+<td><code>circular_mode</code></td>
+<td>DMA循环模式</td>
+</tr>
+<tr>
+<td><code>direction</code></td>
+<td>DMA通道数据传输方向</td>
+</tr>
+<tr>
+<td><code>DMA_MTOM</code></td>
+<td>DMA外设选择</td>
+</tr>
+<tr>
+<td><code>priority</code></td>
+<td>DMA通道优先级</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="二、DMA库函数详细信息"><a href="#二、DMA库函数详细信息" class="headerlink" title="二、DMA库函数详细信息"></a>二、DMA库函数详细信息</h3><h4 id="1-dma-deinit"><a href="#1-dma-deinit" class="headerlink" title="1. dma_deinit"></a>1. <code>dma_deinit</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_deinit(uint32_t dma_periph, dma_channel_enum channelx)</code></li>
+<li><strong>功能描述</strong>：复位DMA一个通道的所有寄存器</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_deinit(DMA0, DMA_CH0);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="2-dma-single-data-mode-init"><a href="#2-dma-single-data-mode-init" class="headerlink" title="2. dma_single_data_mode_init"></a>2. <code>dma_single_data_mode_init</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_single_data_mode_init(uint32_t dma_periph, dma_channel_enum channelx, dma_single_data_parameter_struct *init_struct)</code></li>
+<li><strong>功能描述</strong>：DMA单数据传输模式初始化</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>init_struct</code>：指向<code>dma_single_data_parameter_struct</code>的指针</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_single_data_parameter_struct dma_single_data_struct;<br>dma_single_data_mode_init(DMA0, DMA_CH0, &amp;dma_single_data_struct);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="3-dma-multi-data-mode-init"><a href="#3-dma-multi-data-mode-init" class="headerlink" title="3. dma_multi_data_mode_init"></a>3. <code>dma_multi_data_mode_init</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_multi_data_mode_init(uint32_t dma_periph, dma_channel_enum channelx, dma_multi_data_parameter_struct *init_struct)</code></li>
+<li><strong>功能描述</strong>：DMA多数据传输模式初始化</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>init_struct</code>：指向<code>dma_multi_data_parameter_struct</code>的指针</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_multi_data_parameter_struct dma_multi_data_struct;<br>dma_multi_data_mode_init(DMA0, DMA_CH0, &amp;dma_multi_data_struct);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="4-dma-periph-address-config"><a href="#4-dma-periph-address-config" class="headerlink" title="4. dma_periph_address_config"></a>4. <code>dma_periph_address_config</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_periph_address_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t address)</code></li>
+<li><strong>功能描述</strong>：DMA外设基地址配置</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>address</code>：外设基地址</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> BASE_ADDR ((uint32_t)0x40004000)</span><br>dma_periph_address_config(DMA0, DMA_CH0, BASE_ADDR);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="5-dma-memory-address-config"><a href="#5-dma-memory-address-config" class="headerlink" title="5. dma_memory_address_config"></a>5. <code>dma_memory_address_config</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_memory_address_config(uint32_t dma_periph, dma_channel_enum channelx, dma_memory_flag memory_flag, uint32_t address)</code></li>
+<li><strong>功能描述</strong>：DMA存储器基地址配置</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>memory_flag</code>：存储器选择（<code>DMA_MEMORY0</code>&#x2F;<code>DMA_MEMORY1</code>）</li>
+<li><code>address</code>：存储器基地址</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> BUF_ADDR ((uint32_t)0x20001000)</span><br>dma_memory_address_config(DMA0, DMA_CH0, DMA_MEMORY0, BUF_ADDR);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="6-dma-transfer-number-config"><a href="#6-dma-transfer-number-config" class="headerlink" title="6. dma_transfer_number_config"></a>6. <code>dma_transfer_number_config</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_transfer_number_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t number)</code></li>
+<li><strong>功能描述</strong>：DMA需要传输数据数配置</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>number</code>：需要传输数据数（0~0xffff）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> TRANSFER_NUM 0x400</span><br>dma_transfer_number_config(DMA0, DMA_CH0, TRANSFER_NUM);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="7-dma-transfer-number-get"><a href="#7-dma-transfer-number-get" class="headerlink" title="7. dma_transfer_number_get"></a>7. <code>dma_transfer_number_get</code></h4><ul>
+<li><strong>函数原型</strong>：<code>uint32_t dma_transfer_number_get(uint32_t dma_periph, dma_channel_enum channelx)</code></li>
+<li><strong>功能描述</strong>：DMA需要传输数据数获取</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：需要传输数据数（0~0xffff）</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">uint32_t</span> number = <span class="hljs-number">0</span>;<br>number = dma_transfer_number_get(DMA0, DMA_CH0);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="8-dma-priority-config"><a href="#8-dma-priority-config" class="headerlink" title="8. dma_priority_config"></a>8. <code>dma_priority_config</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_priority_config(uint32_t dma_periph, dma_channel_enum channelx, dma_priority_enum priority)</code></li>
+<li><strong>功能描述</strong>：DMA通道传输优先级配置</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>priority</code>：优先级（<code>DMA_PRIORITY_LOW</code>&#x2F;<code>DMA_PRIORITY_MEDIUM</code>&#x2F;<code>DMA_PRIORITY_HIGH</code>&#x2F;<code>DMA_PRIORITY_ULTRA_HIGH</code>）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_priority_config(DMA0, DMA_CH0, DMA_PRIORITY_HIGH);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="9-dma-memory-burst-beats-config"><a href="#9-dma-memory-burst-beats-config" class="headerlink" title="9. dma_memory_burst_beats_config"></a>9. <code>dma_memory_burst_beats_config</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_memory_burst_beats_config(uint32_t dma_periph, dma_channel_enum channelx, dma_memory_burst_enum mbeat)</code></li>
+<li><strong>功能描述</strong>：存储器增量突发传输节拍数配置</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>mbeat</code>：存储器增量突发传输节拍数（<code>DMA_MEMORY_BURST_SINGLE</code>&#x2F;<code>DMA_MEMORY_BURST_4_BEAT</code>&#x2F;<code>DMA_MEMORY_BURST_8_BEAT</code>&#x2F;<code>DMA_MEMORY_BURST_16_BEAT</code>）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_memory_burst_beats_config(DMA0, DMA_CH0, DMA_MEMORY_BURST_8_BEAT);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="10-dma-periph-burst-beats-config"><a href="#10-dma-periph-burst-beats-config" class="headerlink" title="10. dma_periph_burst_beats_config"></a>10. <code>dma_periph_burst_beats_config</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_periph_burst_beats_config(uint32_t dma_periph, dma_channel_enum channelx, dma_periph_burst_enum pbeat)</code></li>
+<li><strong>功能描述</strong>：外设增量突发传输节拍数配置</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>pbeat</code>：外设增量突发传输节拍数（<code>DMA_PERIPH_BURST_SINGLE</code>&#x2F;<code>DMA_PERIPH_BURST_4_BEAT</code>&#x2F;<code>DMA_PERIPH_BURST_8_BEAT</code>&#x2F;<code>DMA_PERIPH_BURST_16_BEAT</code>）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_periph_burst_beats_config(DMA0, DMA_CH0, DMA_PERIPH_BURST_8_BEAT);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="11-dma-memory-width-config"><a href="#11-dma-memory-width-config" class="headerlink" title="11. dma_memory_width_config"></a>11. <code>dma_memory_width_config</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_memory_width_config(uint32_t dma_periph, dma_channel_enum channelx, dma_memory_width_enum mwidth)</code></li>
+<li><strong>功能描述</strong>：存储器传输数据宽度配置</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>mwidth</code>：存储器传输数据宽度（<code>DMA_MEMORY_WIDTH_8BIT</code>&#x2F;<code>DMA_MEMORY_WIDTH_16BIT</code>&#x2F;<code>DMA_MEMORY_WIDTH_32BIT</code>）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_memory_width_config(DMA0, DMA_CH0, DMA_MEMORY_WIDTH_32BIT);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="12-dma-periph-width-config"><a href="#12-dma-periph-width-config" class="headerlink" title="12. dma_periph_width_config"></a>12. <code>dma_periph_width_config</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_periph_width_config(uint32_t dma_periph, dma_channel_enum channelx, dma_periph_width_enum pwidth)</code></li>
+<li><strong>功能描述</strong>：外设传输数据宽度配置</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>pwidth</code>：外设传输数据宽度（<code>DMA_PERIPH_WIDTH_8BIT</code>&#x2F;<code>DMA_PERIPH_WIDTH_16BIT</code>&#x2F;<code>DMA_PERIPH_WIDTH_32BIT</code>）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_periph_width_config(DMA0, DMA_CH0, DMA_PERIPH_WIDTH_32BIT);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="13-dma-memory-address-generation-config"><a href="#13-dma-memory-address-generation-config" class="headerlink" title="13. dma_memory_address_generation_config"></a>13. <code>dma_memory_address_generation_config</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_memory_address_generation_config(uint32_t dma_periph, dma_channel_enum channelx, uint8_t generation_algorithm)</code></li>
+<li><strong>功能描述</strong>：存储器下地址算法配置</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>generation_algorithm</code>：存储器地址生成算法（<code>DMA_MEMORY_INCREASE_ENABLE</code>&#x2F;<code>DMA_MEMORY_INCREASE_DECREASE</code>&#x2F;<code>DMA_MEMORY_SAME</code>）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_memory_address_generation_config(DMA0, DMA_CH0, DMA_MEMORY_INCREASE_ENABLE);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="14-dma-peripheral-address-generation-config"><a href="#14-dma-peripheral-address-generation-config" class="headerlink" title="14. dma_peripheral_address_generation_config"></a>14. <code>dma_peripheral_address_generation_config</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_peripheral_address_generation_config(uint32_t dma_periph, dma_channel_enum channelx, uint8_t generation_algorithm)</code></li>
+<li><strong>功能描述</strong>：外设地址算法配置</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>generation_algorithm</code>：外设地址生成算法（<code>DMA_PERIPH_INCREASE_ENABLE</code>&#x2F;<code>DMA_PERIPH_INCREASE_DECREASE</code>&#x2F;<code>DMA_PERIPH_FIX</code>&#x2F;<code>DMA_PERIPH_FIX_INCREASE</code>）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_peripheral_address_generation_config(DMA0, DMA_CH0, DMA_PERIPH_INCREASE_ENABLE);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="15-dma-circulation-enable"><a href="#15-dma-circulation-enable" class="headerlink" title="15. dma_circulation_enable"></a>15. <code>dma_circulation_enable</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_circulation_enable(uint32_t dma_periph, dma_channel_enum channelx)</code></li>
+<li><strong>功能描述</strong>：DMA循环传输模式使能</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_circulation_enable(DMA0, DMA_CH0);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="16-dma-circulation-disable"><a href="#16-dma-circulation-disable" class="headerlink" title="16. dma_circulation_disable"></a>16. <code>dma_circulation_disable</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_circulation_disable(uint32_t dma_periph, dma_channel_enum channelx)</code></li>
+<li><strong>功能描述</strong>：DMA循环传输模式失能</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_circulation_disable(DMA0, DMA_CH0);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="17-dma-channel-enable"><a href="#17-dma-channel-enable" class="headerlink" title="17. dma_channel_enable"></a>17. <code>dma_channel_enable</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_channel_enable(uint32_t dma_periph, dma_channel_enum channelx)</code></li>
+<li><strong>功能描述</strong>：DMA通道使能</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_channel_enable(DMA0, DMA_CH0);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="18-dma-channel-disable"><a href="#18-dma-channel-disable" class="headerlink" title="18. dma_channel_disable"></a>18. <code>dma_channel_disable</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_channel_disable(uint32_t dma_periph, dma_channel_enum channelx)</code></li>
+<li><strong>功能描述</strong>：DMA通道失能</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_channel_disable(DMA0, DMA_CH0);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="19-dma-transfer-direction-config"><a href="#19-dma-transfer-direction-config" class="headerlink" title="19. dma_transfer_direction_config"></a>19. <code>dma_transfer_direction_config</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_transfer_direction_config(uint32_t dma_periph, dma_channel_enum channelx, uint8_t direction)</code></li>
+<li><strong>功能描述</strong>：DMA通道数据传输方向配置</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>direction</code>：数据传输方向（<code>DMA_PERIPH_TO_MEMORY</code>&#x2F;<code>DMA_MEMORY_TO_PERIPH</code>&#x2F;<code>DMA_MEMORY_TO_MEMORY</code>）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_transfer_direction_config(DMA0, DMA_CH0, DMA_PERIPH_TO_MEMORY);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="20-dma-switch-buffer-mode-config"><a href="#20-dma-switch-buffer-mode-config" class="headerlink" title="20. dma_switch_buffer_mode_config"></a>20. <code>dma_switch_buffer_mode_config</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_switch_buffer_mode_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t memory0_addr, uint32_t memory1_addr)</code></li>
+<li><strong>功能描述</strong>：DMA存储器传输缓冲区配置</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>memory0_addr</code>：存储器0基地址</li>
+<li><code>memory1_addr</code>：存储器1基地址</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> BUF0_ADDR ((uint32_t)0x20001000)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BUF1_ADDR ((uint32_t)0x20002000)</span><br>dma_switch_buffer_mode_config(DMA0, DMA_CH0, BUF0_ADDR, BUF1_ADDR);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="21-dma-using-memory-get"><a href="#21-dma-using-memory-get" class="headerlink" title="21. dma_using_memory_get"></a>21. <code>dma_using_memory_get</code></h4><ul>
+<li><strong>函数原型</strong>：<code>uint32_t dma_using_memory_get(uint32_t dma_periph, dma_channel_enum channelx)</code></li>
+<li><strong>功能描述</strong>：DMA存储器传输缓冲区获取</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：使用的存储器（<code>DMA_MEMORY0</code>&#x2F;<code>DMA_MEMORY1</code>）</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">uint32_t</span> using_memory = dma_using_memory_get(DMA0, DMA_CH0);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="22-dma-channel-subperipheral-select"><a href="#22-dma-channel-subperipheral-select" class="headerlink" title="22. dma_channel_subperipheral_select"></a>22. <code>dma_channel_subperipheral_select</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_channel_subperipheral_select(uint32_t dma_periph, dma_channel_enum channelx, dma_subperipheral_enum sub_periph)</code></li>
+<li><strong>功能描述</strong>：DMA通道外设使能选择</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>sub_periph</code>：指定DMA通道的外设（如<code>DMA_SUBPERIO</code>等）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_channel_subperipheral_select(DMA0, DMA_CH0, DMA_SUBPERIO);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="23-dma-flow-controller-config"><a href="#23-dma-flow-controller-config" class="headerlink" title="23. dma_flow_controller_config"></a>23. <code>dma_flow_controller_config</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_flow_controller_config(uint32_t dma_periph, dma_channel_enum channelx, dma_flow_controller_enum controller)</code></li>
+<li><strong>功能描述</strong>：DMA传输控制器配置</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>controller</code>：DMA传输控制器（<code>DMA_FLOW_CONTROLLER_DMA</code>&#x2F;<code>DMA_FLOW_CONTROLLER_PERIPH</code>）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_flow_controller_config(DMA0, DMA_CH0, DMA_FLOW_CONTROLLER_DMA);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="24-dma-switch-buffer-mode-enable"><a href="#24-dma-switch-buffer-mode-enable" class="headerlink" title="24. dma_switch_buffer_mode_enable"></a>24. <code>dma_switch_buffer_mode_enable</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_switch_buffer_mode_enable(uint32_t dma_periph, dma_channel_enum channelx)</code></li>
+<li><strong>功能描述</strong>：DMA存储切换模式使能</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_switch_buffer_mode_enable(DMA0, DMA_CH0);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="25-dma-fifo-status-get"><a href="#25-dma-fifo-status-get" class="headerlink" title="25. dma_fifo_status_get"></a>25. <code>dma_fifo_status_get</code></h4><ul>
+<li><strong>函数原型</strong>：<code>uint32_t dma_fifo_status_get(uint32_t dma_periph, dma_channel_enum channelx)</code></li>
+<li><strong>功能描述</strong>：DMA FIFO状态获取</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：FIFO状态值</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">uint32_t</span> fifo_status = dma_fifo_status_get(DMA0, DMA_CH0);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="26-dma-flag-get"><a href="#26-dma-flag-get" class="headerlink" title="26. dma_flag_get"></a>26. <code>dma_flag_get</code></h4><ul>
+<li><strong>函数原型</strong>：<code>FlagStatus dma_flag_get(uint32_t dma_periph, dma_channel_enum channelx, uint32_t flag)</code></li>
+<li><strong>功能描述</strong>：DMA通道传输标志位获取</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>flag</code>：指定获取的标志位（<code>DMA_FLAG_FEE</code>&#x2F;<code>DMA_FLAG_SDE</code>&#x2F;<code>DMA_FLAG_TAE</code>&#x2F;<code>DMA_FLAG_HTF</code>&#x2F;<code>DMA_FLAG_FTF</code>）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：<code>SET</code>或<code>RESET</code></li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">FlagStatus flag_status = dma_flag_get(DMA0, DMA_CH0, DMA_FLAG_FTF);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="27-dma-flag-clear"><a href="#27-dma-flag-clear" class="headerlink" title="27. dma_flag_clear"></a>27. <code>dma_flag_clear</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_flag_clear(uint32_t dma_periph, dma_channel_enum channelx, uint32_t flag)</code></li>
+<li><strong>功能描述</strong>：DMA通道传输标志位清除</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>flag</code>：指定清除的标志位（<code>DMA_FLAG_FEE</code>&#x2F;<code>DMA_FLAG_SDE</code>&#x2F;<code>DMA_FLAG_TAE</code>&#x2F;<code>DMA_FLAG_HTF</code>&#x2F;<code>DMA_FLAG_FTF</code>）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_flag_clear(DMA0, DMA_CH0, DMA_FLAG_FTF);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="28-dma-interrupt-flag-get"><a href="#28-dma-interrupt-flag-get" class="headerlink" title="28. dma_interrupt_flag_get"></a>28. <code>dma_interrupt_flag_get</code></h4><ul>
+<li><strong>函数原型</strong>：<code>FlagStatus dma_interrupt_flag_get(uint32_t dma_periph, dma_channel_enum channelx, uint32_t interrupt)</code></li>
+<li><strong>功能描述</strong>：DMA通道传输中断标志位获取</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>interrupt</code>：指定获取的中断标志位（<code>DMA_INT_FLAG_FEE</code>&#x2F;<code>DMA_INT_FLAG_SDE</code>&#x2F;<code>DMA_INT_FLAG_TAE</code>&#x2F;<code>DMA_INT_FLAG_HTF</code>&#x2F;<code>DMA_INT_FLAG_FTF</code>）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：<code>SET</code>或<code>RESET</code></li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">if</span> (dma_interrupt_flag_get(DMA0, DMA_CH0, DMA_INT_FLAG_FTF)) &#123;<br>    <span class="hljs-comment">// 处理传输完成中断</span><br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="29-dma-interrupt-flag-clear"><a href="#29-dma-interrupt-flag-clear" class="headerlink" title="29. dma_interrupt_flag_clear"></a>29. <code>dma_interrupt_flag_clear</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_interrupt_flag_clear(uint32_t dma_periph, dma_channel_enum channelx, uint32_t interrupt)</code></li>
+<li><strong>功能描述</strong>：DMA通道传输中断标志位清除</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>interrupt</code>：指定清除的中断标志位（<code>DMA_INT_FLAG_FEE</code>&#x2F;<code>DMA_INT_FLAG_SDE</code>&#x2F;<code>DMA_INT_FLAG_TAE</code>&#x2F;<code>DMA_INT_FLAG_HTF</code>&#x2F;<code>DMA_INT_FLAG_FTF</code>）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_interrupt_flag_clear(DMA0, DMA_CH0, DMA_INT_FLAG_FTF);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="30-dma-interrupt-enable"><a href="#30-dma-interrupt-enable" class="headerlink" title="30. dma_interrupt_enable"></a>30. <code>dma_interrupt_enable</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_interrupt_enable(uint32_t dma_periph, dma_channel_enum channelx, uint32_t source)</code></li>
+<li><strong>功能描述</strong>：DMA中断使能</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>source</code>：DMA中断源（<code>DMA_CHXCTL_SDEIE</code>&#x2F;<code>DMA_CHXCTL_TAEIE</code>&#x2F;<code>DMA_CHXCTL_HTFIE</code>&#x2F;<code>DMA_CHXCTL_FTFIE</code>&#x2F;<code>DMA_CHXCTL_FEEIE</code>）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_interrupt_enable(DMA0, DMA_CH0, DMA_CHXCTL_FTFIE);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="31-dma-interrupt-disable"><a href="#31-dma-interrupt-disable" class="headerlink" title="31. dma_interrupt_disable"></a>31. <code>dma_interrupt_disable</code></h4><ul>
+<li><strong>函数原型</strong>：<code>void dma_interrupt_disable(uint32_t dma_periph, dma_channel_enum channelx, uint32_t source)</code></li>
+<li><strong>功能描述</strong>：DMA中断失能</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li><strong>输入参数</strong>：<ul>
+<li><code>dma_periph</code>：DMA外设（<code>DMA0</code>&#x2F;<code>DMA1</code>）</li>
+<li><code>channelx</code>：DMA通道（<code>DMA_CH0</code>~&#96;DMA_CH7&#96;）</li>
+<li><code>source</code>：DMA中断源（<code>DMA_CHXCTL_SDEIE</code>&#x2F;<code>DMA_CHXCTL_TAEIE</code>&#x2F;<code>DMA_CHXCTL_HTFIE</code>&#x2F;<code>DMA_CHXCTL_FTFIE</code>&#x2F;<code>DMA_CHXCTL_FEEIE</code>）</li>
+</ul>
+</li>
+<li><strong>输出参数</strong>：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">dma_interrupt_disable(DMA0, DMA_CH0, DMA_CHXCTL_FTFIE);<br></code></pre></td></tr></table></figure></li>
+</ul>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left  disabled "
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2026/02/27/GD32F470-9-ADC/"
+      title="GD32F470入门教程（九）ADC"
+     >
+
+    <p class="title-text">
+      
+        GD32F470入门教程（九）ADC
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+
+  <div id="comment-card" class="comment-card">
+    <div class="main-title-bar">
+      <div class="main-title-dot"></div>
+      <div class="main-title">留言 </div>
+    </div>
+    <div id="giscus-container"></div>
+  </div>
+  <script src="https://giscus.app/client.js"
+    data-repo="chaoxiaohan/myblog"
+    data-repo-id="R_kgDOPe4zOQ"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOPe4zOc4CuRDG"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="noborder_light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async>
+  </script>
+  
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2026 超小韓<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+  <script src="/js/toc.js"></script>
+  
+  <script src="/js/search.js"></script>
+  <script src="/js/code-copy.js"></script>
+  <script src="/js/mobile-warning.js"></script>
+  <script src="/js/image-viewer.js"></script>
+  <script src="/js/context-menu.js"></script>
+</body>
+</html>
