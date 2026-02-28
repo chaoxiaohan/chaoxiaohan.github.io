@@ -1,0 +1,2430 @@
+<!DOCTYPE html>
+
+
+<html theme="light" showBanner="true" hasBanner="true" > 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+<!-- Gaug.es Analytics -->
+<script>
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', 'true');
+    t.setAttribute('data-track-path', 'https://track.gaug.es/track.gif');
+    t.src = 'https://d36ee2fcip1434.cloudfront.net/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+<!-- End Gaug.es Analytics -->
+
+
+  
+  <title>GD32F470入门教程（十二）SDIO | 超小韓の个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="本文详细讲解了GD32F470的SDIO接口，涵盖SD卡协议基础、命令响应机制、卡初始化流程以及使用SDIO外设配合DMA读写SD卡数据的库函数开发实战。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GD32F470入门教程（十二）SDIO">
+<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2026/02/28/GD32F470-12-SDIO/index.html">
+<meta property="og:site_name" content="超小韓の个人博客">
+<meta property="og:description" content="本文详细讲解了GD32F470的SDIO接口，涵盖SD卡协议基础、命令响应机制、卡初始化流程以及使用SDIO外设配合DMA读写SD卡数据的库函数开发实战。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260228131033625.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260228131456782.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260228131515381.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260228131524160.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260228131539445.png">
+<meta property="article:published_time" content="2026-02-28T06:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-28T05:37:18.786Z">
+<meta property="article:author" content="超小韓">
+<meta property="article:tag" content="GD32F470">
+<meta property="article:tag" content="SDIO">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260228131033625.png">
+  
+    <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+<link rel="stylesheet" href="/css/search.css">
+
+  
+<link rel="stylesheet" href="/css/toc-fix.css">
+
+  
+<link rel="stylesheet" href="/css/code-copy.css">
+
+  
+<link rel="stylesheet" href="/css/mobile-warning.css">
+
+  
+<link rel="stylesheet" href="/css/image-viewer.css">
+
+  
+<link rel="stylesheet" href="/css/context-menu.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/xiaoxin7284678236.png" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>超小韓の个人博客 </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">主页</a>
+    
+      <a class="main-nav-link" href="/archives">文章</a>
+    
+      <a class="main-nav-link" href="/resources">资料</a>
+    
+      <a class="main-nav-link" href="/about">关于我的</a>
+    
+  </nav>
+  <nav id="search-nav">
+    <div id="search-container">
+      <select id="search-mode-selector" name="search-mode">
+        <option value="exact">精确</option>
+        <option value="fuzzy">模糊</option>
+      </select>
+      <input type="text" id="search-input" placeholder="搜索文章..." autocomplete="off">
+      <div id="search-results" class="hidden">
+        <div id="search-results-content"></div>
+      </div>
+    </div>
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">主页</a>
+    
+      <a class="nav-dropdown-link" href="/archives">文章</a>
+    
+      <a class="nav-dropdown-link" href="/resources">资料</a>
+    
+      <a class="nav-dropdown-link" href="/about">关于我的</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/head.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">超小韓 </div>
+      <div class="dot"></div>
+      <div class="subtitle">生活明朗，万物可爱！ </div>
+      <div class="link-list">
+        
+          <a class="link-btn" href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2537037482&website=www.oicqzone.com" title="QQ"><i class="fa-brands fa-qq"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/353687950" title="哔哩哔哩"><i class="fa-brands fa-bilibili"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/chaoxiaohan/" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        
+          <a class="link-btn" href="mailto:chaoxiaohan@chaoxiaohan.cyou" title="Email"><i class="fa-solid fa-envelope"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+    
+
+
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">分类</h3>
+      <div class="category-box">
+            <a class="category-link" href="/categories/GD32F470xx/">
+                GD32F470xx
+                <div class="category-count">13</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Android/">
+                Android
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/HAL/">
+                HAL
+                <div class="category-count">12</div>
+            </a>
+        
+            <a class="category-link" href="/categories/YOLO/">
+                YOLO
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/C/">
+                C
+                <div class="category-count">8</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Standard/">
+                Standard
+                <div class="category-count">4</div>
+            </a>
+        
+            <a class="category-link" href="/categories/computer/">
+                computer
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Python/">
+                Python
+                <div class="category-count">2</div>
+            </a>
+        
+            <a class="category-link" href="/categories/siemens-cup/">
+                siemens-cup
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/OpenCv/">
+                OpenCv
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/test/">
+                test
+                <div class="category-count">1</div>
+            </a>
+        </div>
+    </div>
+  </div>
+
+
+  
+    
+  
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">GD32F470xx 系列文章</h3>
+      <ul class="same-category-posts">
+        
+          <li class="same-category-item current-post">
+            <a href="/2026/02/28/GD32F470-12-SDIO/" title="GD32F470入门教程（十二）SDIO">
+              GD32F470入门教程（十二）SDIO
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/28/GD32F470-11-RTC/" title="GD32F470入门教程（十一）RTC">
+              GD32F470入门教程（十一）RTC
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/27/GD32F470-10-DMA/" title="GD32F470入门教程（十）DMA">
+              GD32F470入门教程（十）DMA
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/27/GD32F470-9-ADC/" title="GD32F470入门教程（九）ADC">
+              GD32F470入门教程（九）ADC
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/27/GD32F470-8-SPI/" title="GD32F470入门教程（八）SPI/I2S">
+              GD32F470入门教程（八）SPI/I2S
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/26/GD32F470-7-IIC/" title="GD32F470入门教程（七）IIC">
+              GD32F470入门教程（七）IIC
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/21/GD32F470-6-TIMERx/" title="GD32F470入门教程（六）定时器">
+              GD32F470入门教程（六）定时器
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/12/GD32F470-5-USART/" title="GD32F470入门教程（五）串口">
+              GD32F470入门教程（五）串口
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/12/GD32F470-3-GPIO-/" title="GD32F470入门教程（四）中断（EXTI）">
+              GD32F470入门教程（四）中断（EXTI）
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/12/GD32F470-4-EXTI/" title="GD32F470入门教程（四）中断（EXTI）">
+              GD32F470入门教程（四）中断（EXTI）
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/11/GD32F470-2-clock/" title="GD32F470入门教程（二）时钟系统">
+              GD32F470入门教程（二）时钟系统
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2026/02/10/GD32F470-1-system/" title="GD32F470入门教程（一）系统架构">
+              GD32F470入门教程（一）系统架构
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2023/02/11/GD32F470-%20-/" title="GD32F470入门教程（）">
+              GD32F470入门教程（）
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+  
+  <div class="sticky">
+    
+      
+        
+          <div class="toc-widget">
+  <h3 class="toc-title">目录</h3>
+  <div class="toc-content">
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-1"><a class="toc-list-link" href="#SDIO"><span class="toc-list-text">SDIO</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-list-text">简介</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E4%B8%BB%E8%A6%81%E7%89%B9%E6%80%A7"><span class="toc-list-text">主要特性</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#SDIO%E6%80%BB%E7%BA%BF%E6%8B%93%E8%A1%A5"><span class="toc-list-text">SDIO总线拓补</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%8D%A1%E5%91%BD%E4%BB%A4%E7%B1%BB"><span class="toc-list-text">卡命令类</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#SD%E5%8D%A1%E4%B8%BB%E8%A6%81%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-list-text">SD卡主要寄存器</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#SDIO-%E5%93%8D%E5%BA%94%E6%A0%BC%E5%BC%8F"><span class="toc-list-text">SDIO 响应格式</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#SD-%E5%8D%A1%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B%E8%AF%A6%E8%A7%A3"><span class="toc-list-text">SD 卡初始化流程详解</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98"><span class="toc-list-text">开发实战</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-%E7%A1%AC%E4%BB%B6%E5%BC%95%E8%84%9A%E9%85%8D%E7%BD%AE"><span class="toc-list-text">1. 硬件引脚配置</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-SDIO-%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-list-text">2. SDIO 初始化</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-%E5%91%BD%E4%BB%A4%E5%8F%91%E9%80%81%E4%B8%8E%E5%93%8D%E5%BA%94"><span class="toc-list-text">3. 命令发送与响应</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E9%85%8D%E7%BD%AE"><span class="toc-list-text">4. 数据传输配置</span></a></li></ol></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#%E5%AE%9E%E6%88%98%E6%B5%81%E7%A8%8B%EF%BC%9A%E8%AF%BB%E5%8F%96-SD-%E5%8D%A1%E6%89%87%E5%8C%BA%E7%A4%BA%E4%BE%8B"><span class="toc-list-text">实战流程：读取 SD 卡扇区示例</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#SDIO%E5%BA%93%E5%87%BD%E6%95%B0"><span class="toc-list-text">SDIO库函数</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-%E5%87%BD%E6%95%B0-sdio-deinit"><span class="toc-list-text">1. 函数 sdio_deinit</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-%E5%87%BD%E6%95%B0-sdio-clock-config"><span class="toc-list-text">2. 函数 sdio_clock_config</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#3-%E5%87%BD%E6%95%B0-sdio-hardware-clock-enable"><span class="toc-list-text">3. 函数 sdio_hardware_clock_enable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#4-%E5%87%BD%E6%95%B0-sdio-hardware-clock-disable"><span class="toc-list-text">4. 函数 sdio_hardware_clock_disable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#5-%E5%87%BD%E6%95%B0-sdio-bus-mode-set"><span class="toc-list-text">5. 函数 sdio_bus_mode_set</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#6-%E5%87%BD%E6%95%B0-sdio-power-state-set"><span class="toc-list-text">6. 函数 sdio_power_state_set</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#7-%E5%87%BD%E6%95%B0-sdio-power-state-get"><span class="toc-list-text">7. 函数 sdio_power_state_get</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#8-%E5%87%BD%E6%95%B0-sdio-clock-enable"><span class="toc-list-text">8. 函数 sdio_clock_enable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#9-%E5%87%BD%E6%95%B0-sdio-clock-disable"><span class="toc-list-text">9. 函数 sdio_clock_disable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#10-%E5%87%BD%E6%95%B0-sdio-command-response-config"><span class="toc-list-text">10. 函数 sdio_command_response_config</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#11-%E5%87%BD%E6%95%B0-sdio-wait-type-set"><span class="toc-list-text">11. 函数 sdio_wait_type_set</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#12-%E5%87%BD%E6%95%B0-sdio-csm-enable"><span class="toc-list-text">12. 函数 sdio_csm_enable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#13-%E5%87%BD%E6%95%B0-sdio-csm-disable"><span class="toc-list-text">13. 函数 sdio_csm_disable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#14-%E5%87%BD%E6%95%B0-sdio-command-index-get"><span class="toc-list-text">14. 函数 sdio_command_index_get</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#15-%E5%87%BD%E6%95%B0-sdio-suspend-disable"><span class="toc-list-text">15. 函数 sdio_suspend_disable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#16-%E5%87%BD%E6%95%B0-sdio-ceata-command-enable"><span class="toc-list-text">16. 函数 sdio_ceata_command_enable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#17-%E5%87%BD%E6%95%B0-sdio-ceata-command-disable"><span class="toc-list-text">17. 函数 sdio_ceata_command_disable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#18-%E5%87%BD%E6%95%B0-sdio-ceata-interrupt-enable"><span class="toc-list-text">18. 函数 sdio_ceata_interrupt_enable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#19-%E5%87%BD%E6%95%B0-sdio-ceata-interrupt-disable"><span class="toc-list-text">19. 函数 sdio_ceata_interrupt_disable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#20-%E5%87%BD%E6%95%B0-sdio-ceata-command-completion-enable"><span class="toc-list-text">20. 函数 sdio_ceata_command_completion_enable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#21-%E5%87%BD%E6%95%B0-sdio-ceata-command-completion-disable"><span class="toc-list-text">21. 函数 sdio_ceata_command_completion_disable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#22-%E5%87%BD%E6%95%B0-sdio-interrupt-enable"><span class="toc-list-text">22. 函数 sdio_interrupt_enable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#23-%E5%87%BD%E6%95%B0-sdio-interrupt-disable"><span class="toc-list-text">23. 函数 sdio_interrupt_disable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#24-%E5%87%BD%E6%95%B0-sdio-interrupt-flag-get"><span class="toc-list-text">24. 函数 sdio_interrupt_flag_get</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#25-%E5%87%BD%E6%95%B0-sdio-interrupt-flag-clear"><span class="toc-list-text">25. 函数 sdio_interrupt_flag_clear</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#26-%E5%87%BD%E6%95%B0-sdio-read-wait-enable"><span class="toc-list-text">26. 函数 sdio_read_wait_enable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#27-%E5%87%BD%E6%95%B0-sdio-read-wait-disable"><span class="toc-list-text">27. 函数 sdio_read_wait_disable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#28-%E5%87%BD%E6%95%B0-sdio-stop-read-wait"><span class="toc-list-text">28. 函数 sdio_stop_read_wait</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#29-%E5%87%BD%E6%95%B0-sdio-read-wait-type-set"><span class="toc-list-text">29. 函数 sdio_read_wait_type_set</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#30-%E5%87%BD%E6%95%B0-sdio-response-get"><span class="toc-list-text">30. 函数 sdio_response_get</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#31-%E5%87%BD%E6%95%B0-sdio-data-config"><span class="toc-list-text">31. 函数 sdio_data_config</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#32-%E5%87%BD%E6%95%B0-sdio-data-transfer-config"><span class="toc-list-text">32. 函数 sdio_data_transfer_config</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#33-%E5%87%BD%E6%95%B0-sdio-dsm-enable"><span class="toc-list-text">33. 函数 sdio_dsm_enable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#34-%E5%87%BD%E6%95%B0-sdio-dsm-disable"><span class="toc-list-text">34. 函数 sdio_dsm_disable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#35-%E5%87%BD%E6%95%B0-sdio-data-write"><span class="toc-list-text">35. 函数 sdio_data_write</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#36-%E5%87%BD%E6%95%B0-sdio-data-read"><span class="toc-list-text">36. 函数 sdio_data_read</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#37-%E5%87%BD%E6%95%B0-sdio-data-counter-get"><span class="toc-list-text">37. 函数 sdio_data_counter_get</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#38-%E5%87%BD%E6%95%B0-sdio-fifo-counter-get"><span class="toc-list-text">38. 函数 sdio_fifo_counter_get</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#39-%E5%87%BD%E6%95%B0-sdio-dma-enable"><span class="toc-list-text">39. 函数 sdio_dma_enable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#40-%E5%87%BD%E6%95%B0-sdio-dma-disable"><span class="toc-list-text">40. 函数 sdio_dma_disable</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#41-%E5%87%BD%E6%95%B0-sdio-flag-get"><span class="toc-list-text">41. 函数 sdio_flag_get</span></a></li></ol></li></ol></li></ol>
+  </div>
+</div>
+
+        
+      
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-GD32F470-12-SDIO" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        GD32F470入门教程（十二）SDIO
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2026-02-28T06:00:00.000Z" itemprop="datePublished">2026-02-28</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+  <a class="meta-cate-link" href="/categories/GD32F470xx/">GD32F470xx</a>
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            24k 词 
+          </div>
+        </div>
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GD32F470/" rel="tag">GD32F470</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SDIO/" rel="tag">SDIO</a></li></ul>
+
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <h1 id="SDIO"><a href="#SDIO" class="headerlink" title="SDIO"></a>SDIO</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>安全的数字输入&#x2F;输出接口（SDIO）定义了SD 卡、SD I&#x2F;O 卡、多媒体卡（MMC）和CE-ATA卡主机接口，提供APB2 系统总线与SD 存储卡、SD I&#x2F;O 卡、MMC 和CE-ATA 设备之间的数据传输。<br>所支持的SD 存储卡和SD I&#x2F;O 卡系统规格书可以通过SD 卡协会网站（<a target="_blank" rel="noopener" href="http://www.sdcard.org)获取./">www.sdcard.org）获取。</a><br>所支持的多媒体卡（MMC）系统规格书可以通过多媒体卡协会网站（<a target="_blank" rel="noopener" href="http://www.jedec.org)获取,由jedec/">www.jedec.org）获取，由JEDEC</a> 固态技术协会出版。<br>所支持的CE-ATA 系统规格书可以通过CE-ATA 工作组网站（<a target="_blank" rel="noopener" href="http://www.ce-ata.org)获取./">www.ce-ata.org）获取。</a></p>
+<h2 id="主要特性"><a href="#主要特性" class="headerlink" title="主要特性"></a>主要特性</h2><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260228131033625.png" alt="image-20260228131033625"></p>
+<h2 id="SDIO总线拓补"><a href="#SDIO总线拓补" class="headerlink" title="SDIO总线拓补"></a>SDIO总线拓补</h2><p>SD卡使用9-pin接口通信，其中3根电源线、1根时钟线、1根命令线和4根数据线，具体说明如下：</p>
+<ul>
+<li><strong>CLK：</strong>时钟线，由SDIO主机产生，即由STM32控制器输出；</li>
+<li><strong>CMD：</strong>命令控制线，SDIO主机通过该线发送命令控制SD卡，如果命令要求SD卡提供应答(响应)，SD卡也是通过该线传输应答信息；</li>
+<li><strong>D0-3：</strong>数据线，传输读写数据；SD卡可将D0拉低表示忙状态；</li>
+<li><strong>VDD、VSS1、VSS2：</strong>电源和地信号。</li>
+</ul>
+<p>在之前的I2C以及SPI章节都有详细讲解了对应的通信时序，实际上，SDIO的通信时序简单许多，SDIO不管是从主机控制器 向SD卡传输，还是SD卡向主机控制器传输都只以CLK时钟线的<strong>上升沿</strong>为有效。SD卡操作过程会使用两种不同频率 的时钟同步数据，一个是识别卡阶段时钟频率FOD，最高为400kHz，另外一个是数据传输模式下时钟频率FPP，默认最高 为25MHz，如果通过相关寄存器配置使SDIO工作在高速模式，此时数据传输模式最高频率为50MHz。</p>
+<p>总线上的基本操作是命令&#x2F;响应操作（参考图24-1. SDIO “无响应” 和 “无数据” 操作）。这种类型的总线事务直接在命令或响应结构中传递它们的信息。此外，有些操作还有数据令牌。卡与设备之间的数据传输通过块完成。</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260228131456782.png" alt="image-20260228131456782"></p>
+<p>多块操作模式比单块操作速度更快。当CMD 信号线上出现停止命令时，多块传输终止。主机数据传输可以使用单个或多个数据线。多个块的读操作如图24-2. SDIO 多块读操作所示，多个块的写操作如图24-3. SDIO 多块写操作所示。块的写操作在数据（DAT0）信号线上使用忙信号。CE-ATA 设备在准备接收数据之前有一个可选的忙信号。</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260228131515381.png" alt="image-20260228131515381"></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260228131524160.png" alt="image-20260228131524160"></p>
+<p>SD 存储卡、SD I&#x2F;O 卡（包括仅IO 卡和组合卡）和CE-ATA 设备直接的数据传输是以数据块的方式完成的。MMC 卡以数据块或数据流方式进行数据传输。图24-4. SDIO 数据流读操作和图24-5. SDIO 数据流写操作分别是数据流的读和写操作。</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260228131539445.png" alt="image-20260228131539445"></p>
+<h2 id="卡命令类"><a href="#卡命令类" class="headerlink" title="卡命令类"></a>卡命令类</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>类描述</th>
+<th>basic</th>
+<th>Stream read</th>
+<th>Block read</th>
+<th>Stream write</th>
+<th>Block write</th>
+<th>erase</th>
+<th>write protection</th>
+<th>Lock card</th>
+<th>application specific</th>
+<th>I&#x2F;O mode</th>
+<th>switch</th>
+<th>reserved</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CMD0</td>
+<td>M</td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD1</td>
+<td>M</td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD2</td>
+<td>M</td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD3</td>
+<td>M</td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD4</td>
+<td>M</td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD5</td>
+<td>O</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD6</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+</tr>
+<tr>
+<td>CMD7</td>
+<td>M</td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD8</td>
+<td>M</td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD9</td>
+<td>M</td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD10</td>
+<td>M</td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD11</td>
+<td>M</td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD13</td>
+<td>M</td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD14</td>
+<td>M</td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD15</td>
+<td>M</td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD16</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD17</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD18</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD19</td>
+<td>M</td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD20</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD23</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD24</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD25</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD26</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD27</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD28</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD29</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD30</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD32</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD33</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD34</td>
+<td>O</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+</tr>
+<tr>
+<td>CMD36</td>
+<td>O</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+</tr>
+<tr>
+<td>CMD37</td>
+<td>O</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+</tr>
+<tr>
+<td>CMD38</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD39</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD40</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD42</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD50</td>
+<td>O</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+</tr>
+<tr>
+<td>CMD52</td>
+<td>O</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD53</td>
+<td>O</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD55</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD57</td>
+<td>O</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+</tr>
+<tr>
+<td>CMD60</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CMD61</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>ACMD6</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>ACMD13</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>ACMD22</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>ACMD23</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>ACMD41</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>ACMD42</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>ACMD51</td>
+<td>M</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>注意</strong>：</p>
+<ol>
+<li>CMD1、CMD11、CMD14、CMD19、CMD20、CMD23、CMD26、CMD39 和 CMD40 仅用于 MMC 卡。</li>
+<li>CMD5、CMD32-34、CMD50、CMD52、CMD53、CMD57 和 ACMDx 仅用于 SD 存储卡。</li>
+<li>CMD60、CMD61 仅用于 CE-ATA 设备。</li>
+</ol>
+<h2 id="SD卡主要寄存器"><a href="#SD卡主要寄存器" class="headerlink" title="SD卡主要寄存器"></a>SD卡主要寄存器</h2><p>SD卡内部包含多个寄存器，主机可以通过这些寄存器读取卡的状态、特性或控制卡的行为。常用的寄存器如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th align="left">寄存器</th>
+<th align="left">宽度 (bits)</th>
+<th align="left">描述</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>CID</strong> (Card Identification)</td>
+<td align="left">128</td>
+<td align="left">卡识别寄存器</td>
+<td align="left">包含卡的唯一标识号，如制造商ID、产品名称、序列号、生产日期等。在卡识别阶段读取(CMD2&#x2F;CMD10)。</td>
+</tr>
+<tr>
+<td align="left"><strong>RCA</strong> (Relative Card Address)</td>
+<td align="left">16</td>
+<td align="left">相对卡地址寄存器</td>
+<td align="left">包含卡在初始化过程中由卡发布的本地系统地址。主机使用该地址寻址卡(CMD3)。</td>
+</tr>
+<tr>
+<td align="left"><strong>CSD</strong> (Card Specific Data)</td>
+<td align="left">128</td>
+<td align="left">卡特定数据寄存器</td>
+<td align="left">包含卡的具体操作条件信息，如容量、最大读写电流、最大时钟频率、块长度等(CMD9)。</td>
+</tr>
+<tr>
+<td align="left"><strong>SCR</strong> (SD Configuration)</td>
+<td align="left">64</td>
+<td align="left">SD配置寄存器</td>
+<td align="left">包含SD卡的特殊功能信息，如支持的数据宽度（1位&#x2F;4位）、SD版本规范等(ACMD51)。</td>
+</tr>
+<tr>
+<td align="left"><strong>OCR</strong> (Operation Condition)</td>
+<td align="left">32</td>
+<td align="left">操作条件寄存器</td>
+<td align="left">保存卡的电压支持范围和供电状态位。上电时主机需读取此寄存器确认电压匹配(CMD1)。</td>
+</tr>
+<tr>
+<td align="left"><strong>SSR</strong> (SD Status)</td>
+<td align="left">512</td>
+<td align="left">SD状态寄存器</td>
+<td align="left">包含卡的专有特性信息，如速度等级、分配单元大小等(ACMD13)。</td>
+</tr>
+<tr>
+<td align="left"><strong>CSR</strong> (Card Status)</td>
+<td align="left">32</td>
+<td align="left">卡状态寄存器</td>
+<td align="left">包含卡当前的状态信息（传输中、编程中、错误等），作为命令的响应返回(CMD13)。</td>
+</tr>
+</tbody></table>
+<h2 id="SDIO-响应格式"><a href="#SDIO-响应格式" class="headerlink" title="SDIO 响应格式"></a>SDIO 响应格式</h2><p>SDIO 定义了多种响应格式（Response），不同的命令会触发不同类型的响应。常见的响应类型如下：</p>
+<ul>
+<li><strong>R1</strong>: 32位。包含卡状态（Card Status）。大多数读写命令和状态查询命令都使用此响应。</li>
+<li><strong>R1b</strong>: 与 R1 格式相同，但 SD 卡会在 <code>DATA0</code> 线上传输忙信号（Busy），直到操作完成。</li>
+<li><strong>R2</strong>: 136位。用于返回 CID 或 CSD 寄存器的全部内容。CMD2, CMD9, CMD10 使用此响应。</li>
+<li><strong>R3</strong>: 32位。用于返回 OCR 寄存器的内容。CMD58 或 ACMD41 使用此响应。</li>
+<li><strong>R6</strong>: 32位。SD 卡发布其相对地址 (RCA)。CMD3 使用此响应。</li>
+<li><strong>R7</strong>: 32位。包含电压范围和校验模式。仅 CMD8 使用。</li>
+</ul>
+<h2 id="SD-卡初始化流程详解"><a href="#SD-卡初始化流程详解" class="headerlink" title="SD 卡初始化流程详解"></a>SD 卡初始化流程详解</h2><p>SD 卡的上电初始化是一个标准且严格的过程，必须按照特定顺序发送命令。</p>
+<ol>
+<li><strong>上电与时钟配置</strong>：<ul>
+<li>主机将时钟设置为 <strong>&lt; 400kHz</strong>。</li>
+<li>发送至少 74 个时钟周期，确保 SD 卡完成内部复位。</li>
+</ul>
+</li>
+<li>**复位 (CMD0)**：<ul>
+<li>发送 CMD0，使卡进入空闲状态 (Idle State)。</li>
+</ul>
+</li>
+<li>**接口条件检测 (CMD8)**：<ul>
+<li>仅 SD 2.0 及以上版本支持。发送 CMD8 检查电压范围和物理连接。如果卡有响应，说明是 V2.0 卡；无响应可能是 V1.x 或 MMC 卡。</li>
+</ul>
+</li>
+<li>**初始化与电压确认 (ACMD41)**：<ul>
+<li>循环发送 ACMD41（注意：发送 ACMD 之前必须先发送 CMD55）。</li>
+<li>在参数中设置主机支持的电压窗口（HCS 位设置是否支持高容量卡 SDHC&#x2F;SDXC）。</li>
+<li>检查响应中的忙信号位，直到卡准备就绪 (Busy位为1)。</li>
+</ul>
+</li>
+<li>**读取唯一标识 (CMD2)**：<ul>
+<li>发送 CMD2，获取 CID 寄存器内容（136位）。</li>
+</ul>
+</li>
+<li>**获取相对地址 (CMD3)**：<ul>
+<li>发送 CMD3，让卡发布一个新的相对地址 (RCA)。主机后续使用此 RCA 寻址该卡。</li>
+</ul>
+</li>
+<li>**读取卡参数 (CMD9)**：<ul>
+<li>使用 RCA 发送 CMD9，获取 CSD 寄存器，从而计算卡容量、最大速率等信息。</li>
+</ul>
+</li>
+<li>**选中卡 (CMD7)**：<ul>
+<li>使用 RCA 发送 CMD7，选中该卡，使其进入传输状态 (Transfer State)。</li>
+</ul>
+</li>
+<li>**配置总线宽度 (ACMD6)**：<ul>
+<li>发送 ACMD6，将总线宽度从默认的 1-bit 切换为 4-bit（前提是硬件支持且已初始化 GPIO）。</li>
+</ul>
+</li>
+<li><strong>提速</strong>：<ul>
+<li>将 SDIO 时钟频率提高到 <strong>25MHz</strong> (或 50MHz)，进入高速传输模式。</li>
+</ul>
+</li>
+</ol>
+<h2 id="开发实战"><a href="#开发实战" class="headerlink" title="开发实战"></a>开发实战</h2><p>GD32F470 标准库提供了完善的 SDIO 驱动函数，位于 <code>gd32f4xx_sdio.c</code> 和 <code>gd32f4xx_sdio.h</code> 中。开发 SDIO 通常涉及 GPIO 配置、SDIO 参数初始化、命令发送、数据传输以及 DMA 配置。</p>
+<h3 id="1-硬件引脚配置"><a href="#1-硬件引脚配置" class="headerlink" title="1. 硬件引脚配置"></a>1. 硬件引脚配置</h3><p>SDIO 信号线通常复用在 PC8-PC12 和 PD2 上。需要配置为复用推挽输出（由 SDIO 控制器驱动）。</p>
+<table>
+<thead>
+<tr>
+<th align="left">SDIO信号</th>
+<th align="left">GPIO引脚</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">SDIO_D0</td>
+<td align="left">PC8</td>
+<td align="left">数据线 0</td>
+</tr>
+<tr>
+<td align="left">SDIO_D1</td>
+<td align="left">PC9</td>
+<td align="left">数据线 1</td>
+</tr>
+<tr>
+<td align="left">SDIO_D2</td>
+<td align="left">PC10</td>
+<td align="left">数据线 2</td>
+</tr>
+<tr>
+<td align="left">SDIO_D3</td>
+<td align="left">PC11</td>
+<td align="left">数据线 3</td>
+</tr>
+<tr>
+<td align="left">SDIO_CK</td>
+<td align="left">PC12</td>
+<td align="left">时钟线</td>
+</tr>
+<tr>
+<td align="left">SDIO_CMD</td>
+<td align="left">PD2</td>
+<td align="left">命令线</td>
+</tr>
+</tbody></table>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* 使能时钟 */</span><br>rcu_periph_clock_enable(RCU_GPIOC);<br>rcu_periph_clock_enable(RCU_GPIOD);<br>rcu_periph_clock_enable(RCU_SDIO);<br><br><span class="hljs-comment">/* 配置 PC8-PC12, PD2 为复用功能 */</span><br>gpio_af_set(GPIOC, GPIO_AF_12, GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12);<br>gpio_af_set(GPIOD, GPIO_AF_12, GPIO_PIN_2);<br><br><span class="hljs-comment">/* 配置 GPIO 模式 */</span><br>gpio_mode_set(GPIOC, GPIO_MODE_AF, GPIO_PUPD_PULLUP, GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12);<br>gpio_output_options_set(GPIOC, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12);<br><br>gpio_mode_set(GPIOD, GPIO_MODE_AF, GPIO_PUPD_PULLUP, GPIO_PIN_2);<br>gpio_output_options_set(GPIOD, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_2);<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-SDIO-初始化"><a href="#2-SDIO-初始化" class="headerlink" title="2. SDIO 初始化"></a>2. SDIO 初始化</h3><p>初始化主要配置时钟分频、总线宽度、时钟边缘等。</p>
+<p><strong>关键结构体 <code>sdio_parameter_struct</code>：</strong></p>
+<ul>
+<li><code>sdio_clock_edge</code>: 时钟沿选择（<code>SDIO_CLOCK_EDGE_RISING</code> &#x2F; <code>FALLING</code>）。</li>
+<li><code>sdio_clock_bypass</code>: 是否旁路时钟分频器（通常不旁路）。</li>
+<li><code>sdio_clock_power_save</code>: 省电模式，总线空闲时关闭时钟。</li>
+<li><code>sdio_bus_mode</code>: 总线位宽（1位&#x2F;4位&#x2F;8位）。<strong>初始化时通常先用1位宽，卡识别完成后再切换为4位宽</strong>。</li>
+<li><code>sdio_hardware_flow_control</code>: 硬件流控，防止 FIFO 溢出。</li>
+<li><code>sdio_clock_divider</code>: 时钟分频系数。$SDIO_CK &#x3D; SDIO_CLK &#x2F; (分频系数 + 2)$。<ul>
+<li>初始化频率不能超过 400kHz。</li>
+<li>数据传输频率可达 25MHz 或 50MHz。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c">sdio_parameter_struct sdio_init_struct;<br><br><span class="hljs-comment">/* 复位 SDIO */</span><br>sdio_deinit();<br><br><span class="hljs-comment">/* 配置 SDIO 参数 - 初始化阶段使用低速时钟 (&lt;= 400kHz) */</span><br><span class="hljs-comment">/* 假设系统时钟足够高，分频系数设大一点，例如 118 */</span><br><span class="hljs-comment">/* 48MHz / (118 + 2) = 400kHz */</span><br>sdio_init_struct.sdio_clock_edge = SDIO_CLOCK_EDGE_RISING;<br>sdio_init_struct.sdio_clock_bypass = SDIO_CLOCK_BYPASS_DISABLE;<br>sdio_init_struct.sdio_clock_power_save = SDIO_CLOCK_POWER_SAVE_DISABLE;<br>sdio_init_struct.sdio_bus_mode = SDIO_BUSMODE_1BIT; <span class="hljs-comment">// 初始必须为1位</span><br>sdio_init_struct.sdio_hardware_flow_control = SDIO_HARDWARE_FLOW_CONTROL_DISABLE;<br>sdio_init_struct.sdio_clock_divider = <span class="hljs-number">118</span>; <br><br>sdio_init(&amp;sdio_init_struct);<br><br><span class="hljs-comment">/* 使能 SDIO 电源 */</span><br>sdio_power_enable(SDIO_POWERMODE_ON);<br><br><span class="hljs-comment">/* 使能 SDIO 时钟 */</span><br>sdio_clock_enable();<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-命令发送与响应"><a href="#3-命令发送与响应" class="headerlink" title="3. 命令发送与响应"></a>3. 命令发送与响应</h3><p>SDIO 通信的核心是命令-响应机制。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c">sdio_command_struct sdio_command_init_struct;<br><br><span class="hljs-comment">/* 发送 CMD0: 复位所有卡到空闲状态 */</span><br>sdio_command_init_struct.sdio_argument = <span class="hljs-number">0x00</span>;<br>sdio_command_init_struct.sdio_cmd_index = SDIO_CMD_0;<br>sdio_command_init_struct.sdio_response = SDIO_RESPONSE_NO; <span class="hljs-comment">// 无响应</span><br>sdio_command_init_struct.sdio_wait = SDIO_WAIT_NO;<br>sdio_command_init_struct.sdio_cpsm = SDIO_CPSM_ENABLE; <span class="hljs-comment">// 命令通道状态机使能</span><br><br>sdio_command_init(&amp;sdio_command_init_struct);<br><br><span class="hljs-comment">/* 获取响应 (如有) */</span><br><span class="hljs-comment">/* uint32_t resp = sdio_response_get(SDIO_RESP1); */</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-数据传输配置"><a href="#4-数据传输配置" class="headerlink" title="4. 数据传输配置"></a>4. 数据传输配置</h3><p>在读写数据块时，需要告诉 SDIO 控制器数据的长度、块大小和传输方向。这通常配合 DMA 使用，但也支持轮询或中断。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c">sdio_data_struct sdio_data_init_struct;<br><br>sdio_data_init_struct.sdio_data_timeout_parameter = <span class="hljs-number">0xFFFFFFFF</span>;<br>sdio_data_init_struct.sdio_data_length = <span class="hljs-number">512</span>; <span class="hljs-comment">// 传输 512 字节</span><br>sdio_data_init_struct.sdio_data_block_size = SDIO_DATABLOCK_SIZE_512B;<br>sdio_data_init_struct.sdio_transfer_direction = SDIO_DATA_TRANSFER_TO_CONTROLLER; <span class="hljs-comment">// 读操作：卡 -&gt; 控制器</span><br>sdio_data_init_struct.sdio_transfer_mode = SDIO_DATA_TRANSFER_MODE_BLOCK;<br>sdio_data_init_struct.sdio_dma_enable = SDIO_DMA_ENABLE; <span class="hljs-comment">// 使能 DMA</span><br><br>sdio_data_config(&amp;sdio_data_init_struct);<br></code></pre></td></tr></table></figure>
+
+<h2 id="实战流程：读取-SD-卡扇区示例"><a href="#实战流程：读取-SD-卡扇区示例" class="headerlink" title="实战流程：读取 SD 卡扇区示例"></a>实战流程：读取 SD 卡扇区示例</h2><p>SD 卡的初始化流程非常复杂（CMD0 -&gt; CMD8 -&gt; ACMD41 -&gt; CMD2 -&gt; CMD3 -&gt; …）。通常我们会移植现成的 SD 卡驱动（如 GD32 官方示例中的 <code>sd_card.c</code>）。这里展示一个基于库函数的、简化后的单块读取函数的核心逻辑。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;gd32f4xx.h&quot;</span></span><br><br><span class="hljs-comment">/* 假设已经完成了 SD 卡的初始化、选卡(CMD7) 和 4位宽配置(ACMD6) */</span><br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment">  * @brief  使用 DMA 读取一个扇区 (512字节)</span><br><span class="hljs-comment">  * @param  buffer: 数据接收缓冲区 (需4字节对齐)</span><br><span class="hljs-comment">  * @param  sector_addr: 扇区地址</span><br><span class="hljs-comment">  * @retval 状态</span><br><span class="hljs-comment">  */</span><br>ErrStatus <span class="hljs-title function_">sd_read_single_block</span><span class="hljs-params">(<span class="hljs-type">uint8_t</span> *buffer, <span class="hljs-type">uint32_t</span> sector_addr)</span><br>&#123;<br>    sdio_command_struct sdio_command;<br>    sdio_data_struct sdio_data;<br>    <br>    <span class="hljs-comment">/* 1. 配置 DMA (DMA2_Channel4_Stream3 or Stream6 for SDIO) */</span><br>    dma_single_data_parameter_struct dma_init_struct;<br>    <br>    rcu_periph_clock_enable(RCU_DMA1);<br>    dma_deinit(DMA1, DMA_CH4); <span class="hljs-comment">// 注意：GD32F4 SDIO 通常在 DMA1, 具体查DataSheet</span><br>    <span class="hljs-comment">/* 修正：GD32F4 SDIO 通常连接 DMA1 Channel 4 */</span><br>    <br>    dma_init_struct.periph_addr = (<span class="hljs-type">uint32_t</span>)&amp;SDIO_FIFO;<br>    dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;<br>    dma_init_struct.memory0_addr = (<span class="hljs-type">uint32_t</span>)buffer;<br>    dma_init_struct.memory_inc = DMA_MEMORY_INCREASE_ENABLE;<br>    dma_init_struct.periph_memory_width = DMA_PERIPH_WIDTH_32BIT; <span class="hljs-comment">// FIFO 是32位的</span><br>    dma_init_struct.circular_mode = DMA_CIRCULAR_MODE_DISABLE;<br>    dma_init_struct.direction = DMA_PERIPH_TO_MEMORY;<br>    dma_init_struct.number = <span class="hljs-number">512</span> / <span class="hljs-number">4</span>; <span class="hljs-comment">// 传输字数 (128 words)</span><br>    dma_init_struct.priority = DMA_PRIORITY_HIGH;<br>    <br>    dma_single_data_mode_init(DMA1, DMA_CH4, &amp;dma_init_struct);<br>    dma_channel_subperipheral_select(DMA1, DMA_CH4, DMA_SUBPERI4);<br>    <br>    dma_channel_enable(DMA1, DMA_CH4);<br><br>    <span class="hljs-comment">/* 2. 配置 SDIO 数据路径 */</span><br>    sdio_data.sdio_data_timeout_parameter = <span class="hljs-number">0xFFFFFFFF</span>;<br>    sdio_data.sdio_data_length = <span class="hljs-number">512</span>;<br>    sdio_data.sdio_data_block_size = SDIO_DATABLOCK_SIZE_512B;<br>    sdio_data.sdio_transfer_direction = SDIO_DATA_TRANSFER_TO_CONTROLLER;<br>    sdio_data.sdio_transfer_mode = SDIO_DATA_TRANSFER_MODE_BLOCK;<br>    sdio_data.sdio_dma_enable = SDIO_DMA_ENABLE;<br>    sdio_data_config(&amp;sdio_data);<br><br>    <span class="hljs-comment">/* 3. 发送 CMD17 (READ_SINGLE_BLOCK) */</span><br>    <span class="hljs-comment">/* SDHC 卡地址是块地址，SDSC 卡是字节地址。这里假设是 SDHC/SDXC */</span><br>    sdio_command.sdio_argument = sector_addr; <br>    sdio_command.sdio_cmd_index = SDIO_CMD_17;<br>    sdio_command.sdio_response = SDIO_RESPONSE_SHORT;<br>    sdio_command.sdio_wait = SDIO_WAIT_NO;<br>    sdio_command.sdio_cpsm = SDIO_CPSM_ENABLE;<br>    sdio_command_init(&amp;sdio_command);<br><br>    <span class="hljs-comment">/* 4. 等待命令响应和传输完成 */</span><br>    <span class="hljs-comment">/* Check command response errors... */</span><br>    <br>    <span class="hljs-comment">/* 等待 DMA 传输完成 */</span><br>    <span class="hljs-keyword">while</span>(RESET == dma_flag_get(DMA1, DMA_CH4, DMA_FLAG_FTF));<br><br>    <span class="hljs-keyword">return</span> SUCCESS;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="SDIO库函数"><a href="#SDIO库函数" class="headerlink" title="SDIO库函数"></a>SDIO库函数</h2><table>
+<thead>
+<tr>
+<th>库函数名称</th>
+<th>库函数描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>sdio_deinit</td>
+<td>复位 SDIO</td>
+</tr>
+<tr>
+<td>sdio_clock_config</td>
+<td>配置 SDIO 时钟</td>
+</tr>
+<tr>
+<td>sdio_hardware_clock_enable</td>
+<td>使能硬件时钟控制</td>
+</tr>
+<tr>
+<td>sdio_hardware_clock_disable</td>
+<td>禁能硬件时钟控制</td>
+</tr>
+<tr>
+<td>sdio_bus_mode_set</td>
+<td>设置多种 SDIO 卡总线模式</td>
+</tr>
+<tr>
+<td>sdio_power_state_set</td>
+<td>设置 SDIO 电源状态</td>
+</tr>
+<tr>
+<td>sdio_power_state_get</td>
+<td>获取 SDIO 电源状态</td>
+</tr>
+<tr>
+<td>sdio_clock_enable</td>
+<td>使能 SDIO_CLK 时钟</td>
+</tr>
+<tr>
+<td>sdio_clock_disable</td>
+<td>禁能 SDIO_CLK 时钟</td>
+</tr>
+<tr>
+<td>sdio_command_response_config</td>
+<td>配置命令和响应</td>
+</tr>
+<tr>
+<td>sdio_wait_type_set</td>
+<td>设置命令状态机等待类型</td>
+</tr>
+<tr>
+<td>sdio_csm_enable</td>
+<td>使能命令状态机</td>
+</tr>
+<tr>
+<td>sdio_csm_disable</td>
+<td>禁能命令状态机</td>
+</tr>
+<tr>
+<td>sdio_command_index_get</td>
+<td>获取上一次响应的命令索引</td>
+</tr>
+<tr>
+<td>sdio_response_get</td>
+<td>获取上一次响应的接收命令</td>
+</tr>
+<tr>
+<td>sdio_data_config</td>
+<td>配置数据超时、数据长度和数据块大小</td>
+</tr>
+<tr>
+<td>sdio_data_transfer_config</td>
+<td>配置数据传输模式和方向</td>
+</tr>
+<tr>
+<td>sdio_dsm_enable</td>
+<td>使能数据传输的数据状态机</td>
+</tr>
+<tr>
+<td>sdio_dsm_disable</td>
+<td>禁能数据传输的数据状态机</td>
+</tr>
+<tr>
+<td>sdio_data_write</td>
+<td>在发送 FIFO 里写入数据（一个字）</td>
+</tr>
+<tr>
+<td>sdio_data_read</td>
+<td>在接收 FIFO 里读取数据（一个字）</td>
+</tr>
+<tr>
+<td>sdio_data_counter_get</td>
+<td>获取要传输到卡的剩余数据字节的数目</td>
+</tr>
+<tr>
+<td>sdio_fifo_counter_get</td>
+<td>从 FIFO 中获取要写入或读取的字数</td>
+</tr>
+<tr>
+<td>sdio_dma_enable</td>
+<td>使能 SDIO 的 DMA 请求</td>
+</tr>
+<tr>
+<td>sdio_dma_disable</td>
+<td>禁能 SDIO 的 DMA 请求</td>
+</tr>
+<tr>
+<td>sdio_flag_get</td>
+<td>获取 SDIO 的标志位状态</td>
+</tr>
+<tr>
+<td>sdio_flag_clear</td>
+<td>清除 SDIO 的标志位状态</td>
+</tr>
+<tr>
+<td>sdio_interrupt_enable</td>
+<td>使能 SDIO 中断</td>
+</tr>
+<tr>
+<td>sdio_interrupt_disable</td>
+<td>禁能 SDIO 中断</td>
+</tr>
+<tr>
+<td>sdio_interrupt_flag_get</td>
+<td>获取 SDIO 的中断标志位状态</td>
+</tr>
+<tr>
+<td>sdio_interrupt_flag_clear</td>
+<td>清除 SDIO 的中断标志位状态</td>
+</tr>
+<tr>
+<td>sdio_readwait_enable</td>
+<td>使能读等待模式（仅限 SD I&#x2F;O 模式）</td>
+</tr>
+<tr>
+<td>sdio_readwait_disable</td>
+<td>禁能读等待模式（仅限 SD I&#x2F;O 模式）</td>
+</tr>
+<tr>
+<td>sdio_stop_readwait_enable</td>
+<td>使能停止读等待过程的功能（仅限 SD I&#x2F;O 模式）</td>
+</tr>
+<tr>
+<td>sdio_stop_readwait_disable</td>
+<td>禁能停止读等待过程的功能（仅限 SD I&#x2F;O 模式）</td>
+</tr>
+<tr>
+<td>sdio_readwait_type_set</td>
+<td>设置读等待类型（仅限 SD I&#x2F;O 模式）</td>
+</tr>
+<tr>
+<td>sdio_operation_enable</td>
+<td>使能 SD I&#x2F;O 模式特定操作（仅限 SD I&#x2F;O 模式）</td>
+</tr>
+<tr>
+<td>sdio_operation_disable</td>
+<td>禁能 SD I&#x2F;O 模式特定操作（仅限 SD I&#x2F;O 模式）</td>
+</tr>
+<tr>
+<td>sdio_suspend_enable</td>
+<td>使能 SD I&#x2F;O 暂停模式（仅限 SD I&#x2F;O 模式）</td>
+</tr>
+<tr>
+<td>sdio_suspend_disable</td>
+<td>禁能 SD I&#x2F;O 暂停模式（仅限 SD I&#x2F;O 模式）</td>
+</tr>
+<tr>
+<td>sdio_ceata_command_enable</td>
+<td>使能 CE-ATA 命令 (仅限 CE-ATA 模式)</td>
+</tr>
+<tr>
+<td>sdio_ceata_command_disable</td>
+<td>禁能 CE-ATA 命令 (仅限 CE-ATA 模式)</td>
+</tr>
+<tr>
+<td>sdio_ceata_interrupt_enable</td>
+<td>使能 CE-ATA 中断 (仅限 CE-ATA 模式)</td>
+</tr>
+<tr>
+<td>sdio_ceata_interrupt_disable</td>
+<td>禁能 CE-ATA 中断 (仅限 CE-ATA 模式)</td>
+</tr>
+<tr>
+<td>sdio_ceata_command_completion_enable</td>
+<td>使能 CE-ATA 命令完成信号 (仅限 CE-ATA 模式)</td>
+</tr>
+<tr>
+<td>sdio_ceata_command_completion_disable</td>
+<td>禁能 CE-ATA 命令完成信号 (仅限 CE-ATA 模式)</td>
+</tr>
+</tbody></table>
+<h3 id="1-函数-sdio-deinit"><a href="#1-函数-sdio-deinit" class="headerlink" title="1. 函数 sdio_deinit"></a>1. 函数 <code>sdio_deinit</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_deinit</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_deinit(void);</code></li>
+<li><strong>功能描述</strong>：复位SDIO外设。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* deinitialize the SDIO */</span><br>sdio_deinit();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="2-函数-sdio-clock-config"><a href="#2-函数-sdio-clock-config" class="headerlink" title="2. 函数 sdio_clock_config"></a>2. 函数 <code>sdio_clock_config</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_clock_config</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_clock_config(uint32_t clock_edge, uint32_t clock_bypass, uint32_t clock_powersave, uint32_t clock_division);</code></li>
+<li><strong>功能描述</strong>：配置SDIO时钟。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：<ul>
+<li><code>clock_edge</code>：SDIO_CLK时钟边沿选择<ul>
+<li><code>SDIO_SDIOCLKEDGE_RISING</code>：选择SDIO_CLK的上升沿产生SDIO_CK</li>
+<li><code>SDIO_SDIOCLKEDGE_FALLING</code>：选择SDIO_CLK的下降沿产生SDIO_CK</li>
+</ul>
+</li>
+<li><code>clock_bypass</code>：旁路边时钟使能<ul>
+<li><code>SDIO_CLOCKBYPASS_ENABLE</code>：使能旁路时钟</li>
+<li><code>SDIO_CLOCKBYPASS_DISABLE</code>：失能旁路时钟</li>
+</ul>
+</li>
+<li><code>clock_powersave</code>：SDIO_CLK时钟动态开启&#x2F;关闭以节省功耗<ul>
+<li><code>SDIO_CLOCKPWR_SAVE_ENABLE</code>：SDIO_CLK时钟在总线空闲时关闭</li>
+<li><code>SDIO_CLOCKPWR_SAVE_DISABLE</code>：SDIO_CLK时钟总是开启</li>
+</ul>
+</li>
+<li><code>clock_division</code>：时钟分频，小于512</li>
+</ul>
+</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* configure the SDIO clock */</span><br>sdio_clock_config(SDIO_SDIOCLKEDGE_RISING, SDIO_CLOCKBYPASS_DISABLE, SDIO_CLOCKPWR_SAVE_DISABLE, SD_CLK_DIV_TRANS);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="3-函数-sdio-hardware-clock-enable"><a href="#3-函数-sdio-hardware-clock-enable" class="headerlink" title="3. 函数 sdio_hardware_clock_enable"></a>3. 函数 <code>sdio_hardware_clock_enable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_hardware_clock_enable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_hardware_clock_enable(void);</code></li>
+<li><strong>功能描述</strong>：使能硬件时钟控制。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* enable hardware clock control */</span><br>sdio_hardware_clock_enable();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="4-函数-sdio-hardware-clock-disable"><a href="#4-函数-sdio-hardware-clock-disable" class="headerlink" title="4. 函数 sdio_hardware_clock_disable"></a>4. 函数 <code>sdio_hardware_clock_disable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_hardware_clock_disable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_hardware_clock_disable(void);</code></li>
+<li><strong>功能描述</strong>：禁能硬件时钟控制。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* disable hardware clock control */</span><br>sdio_hardware_clock_disable();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="5-函数-sdio-bus-mode-set"><a href="#5-函数-sdio-bus-mode-set" class="headerlink" title="5. 函数 sdio_bus_mode_set"></a>5. 函数 <code>sdio_bus_mode_set</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_bus_mode_set</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_bus_mode_set(uint32_t bus_mode);</code></li>
+<li><strong>功能描述</strong>：设置SDIO总线模式。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：<ul>
+<li><code>bus_mode</code>：SDIO总线模式<ul>
+<li><code>SDIO_BUSMODE_1BIT</code>：1位SDIO总线模式</li>
+<li><code>SDIO_BUSMODE_4BIT</code>：4位SDIO总线模式</li>
+<li><code>SDIO_BUSMODE_8BIT</code>：8位SDIO总线模式</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* set SDIO bus mode */</span><br>sdio_bus_mode_set(SDIO_BUSMODE_1BIT);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="6-函数-sdio-power-state-set"><a href="#6-函数-sdio-power-state-set" class="headerlink" title="6. 函数 sdio_power_state_set"></a>6. 函数 <code>sdio_power_state_set</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_power_state_set</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_power_state_set(uint32_t power_state);</code></li>
+<li><strong>功能描述</strong>：设置SDIO电源状态。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：<ul>
+<li><code>power_state</code>：SDIO电源状态<ul>
+<li><code>SDIO_POWER_ON</code>：SDIO上电</li>
+<li><code>SDIO_POWER_OFF</code>：SDIO下电</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* set SDIO power state */</span><br>sdio_power_state_set(SDIO_POWER_ON);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="7-函数-sdio-power-state-get"><a href="#7-函数-sdio-power-state-get" class="headerlink" title="7. 函数 sdio_power_state_get"></a>7. 函数 <code>sdio_power_state_get</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_power_state_get</code></li>
+<li><strong>函数原型</strong>：<code>uint32_t sdio_power_state_get(void);</code></li>
+<li><strong>功能描述</strong>：获取SDIO电源状态。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：<ul>
+<li><code>SDIO_POWER_ON</code> &#x2F; <code>SDIO_POWER_OFF</code></li>
+</ul>
+</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* get the SDIO power state */</span><br><span class="hljs-type">uint32_t</span> power_value = sdio_power_state_get();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="8-函数-sdio-clock-enable"><a href="#8-函数-sdio-clock-enable" class="headerlink" title="8. 函数 sdio_clock_enable"></a>8. 函数 <code>sdio_clock_enable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_clock_enable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_clock_enable(void);</code></li>
+<li><strong>功能描述</strong>：使能SDIO_CLK时钟。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* enable SDIO_CLK clock output */</span><br>sdio_clock_enable();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="9-函数-sdio-clock-disable"><a href="#9-函数-sdio-clock-disable" class="headerlink" title="9. 函数 sdio_clock_disable"></a>9. 函数 <code>sdio_clock_disable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_clock_disable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_clock_disable(void);</code></li>
+<li><strong>功能描述</strong>：禁能SDIO_CLK时钟。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* disable SDIO_CLK clock output */</span><br>sdio_clock_disable();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="10-函数-sdio-command-response-config"><a href="#10-函数-sdio-command-response-config" class="headerlink" title="10. 函数 sdio_command_response_config"></a>10. 函数 <code>sdio_command_response_config</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_command_response_config</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_command_response_config(uint32_t cmd_index, uint32_t cmd_argument, uint32_t response_type);</code></li>
+<li><strong>功能描述</strong>：配置命令和响应。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：<ul>
+<li><code>cmd_index</code>：命令索引</li>
+<li><code>cmd_argument</code>：命令参数</li>
+<li><code>response_type</code>：响应类型<ul>
+<li><code>SDIO_RESPONSE_NO</code>：无响应</li>
+<li><code>SDIO_RESPONSE_SHORT</code>：短响应</li>
+<li><code>SDIO_RESPONSE_LONG</code>：长响应</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">sdio_command_response_config(CMD_ALL_SEND_CID, (<span class="hljs-type">uint32_t</span>)<span class="hljs-number">0x00</span>, SDIO_RESPONSE_LONG);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="11-函数-sdio-wait-type-set"><a href="#11-函数-sdio-wait-type-set" class="headerlink" title="11. 函数 sdio_wait_type_set"></a>11. 函数 <code>sdio_wait_type_set</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_wait_type_set</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_wait_type_set(uint32_t wait_type);</code></li>
+<li><strong>功能描述</strong>：设置等待类型。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：<ul>
+<li><code>wait_type</code>：等待类型<ul>
+<li><code>SDIO_WAITTYPE_NO</code>：不等待中断</li>
+<li><code>SDIO_WAITTYPE_INTERRUPT</code>：等待中断</li>
+<li><code>SDIO_WAITTYPE_TRANSFER</code>：等待数据传输结束</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* set the command wait type */</span><br>sdio_wait_type_set(SDIO_WAITTYPE_NO);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="12-函数-sdio-csm-enable"><a href="#12-函数-sdio-csm-enable" class="headerlink" title="12. 函数 sdio_csm_enable"></a>12. 函数 <code>sdio_csm_enable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_csm_enable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_csm_enable(void);</code></li>
+<li><strong>功能描述</strong>：使能命令状态机。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* enable the CSM (command state machine) */</span><br>sdio_csm_enable();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="13-函数-sdio-csm-disable"><a href="#13-函数-sdio-csm-disable" class="headerlink" title="13. 函数 sdio_csm_disable"></a>13. 函数 <code>sdio_csm_disable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_csm_disable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_csm_disable(void);</code></li>
+<li><strong>功能描述</strong>：禁能命令状态机。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* disable the CSM (command state machine) */</span><br>sdio_csm_disable();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="14-函数-sdio-command-index-get"><a href="#14-函数-sdio-command-index-get" class="headerlink" title="14. 函数 sdio_command_index_get"></a>14. 函数 <code>sdio_command_index_get</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_command_index_get</code></li>
+<li><strong>函数原型</strong>：<code>uint8_t sdio_command_index_get(void);</code></li>
+<li><strong>功能描述</strong>：获取命令索引。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：命令索引</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">uint8_t</span> cmd_index = sdio_command_index_get();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="15-函数-sdio-suspend-disable"><a href="#15-函数-sdio-suspend-disable" class="headerlink" title="15. 函数 sdio_suspend_disable"></a>15. 函数 <code>sdio_suspend_disable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_suspend_disable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_suspend_disable(void);</code></li>
+<li><strong>功能描述</strong>：禁能SD I&#x2F;O休眠模式（仅限SD I&#x2F;O模式）。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* disable the SD I/O suspend operation(SD I/O only) */</span><br>sdio_suspend_disable();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="16-函数-sdio-ceata-command-enable"><a href="#16-函数-sdio-ceata-command-enable" class="headerlink" title="16. 函数 sdio_ceata_command_enable"></a>16. 函数 <code>sdio_ceata_command_enable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_ceata_command_enable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_ceata_command_enable(void);</code></li>
+<li><strong>功能描述</strong>：使能CE-ATA命令（仅限CE-ATA模式）。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* enable the CE-ATA command(CE-ATA only) */</span><br>sdio_ceata_command_enable();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="17-函数-sdio-ceata-command-disable"><a href="#17-函数-sdio-ceata-command-disable" class="headerlink" title="17. 函数 sdio_ceata_command_disable"></a>17. 函数 <code>sdio_ceata_command_disable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_ceata_command_disable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_ceata_command_disable(void);</code></li>
+<li><strong>功能描述</strong>：禁能CE-ATA命令（仅限CE-ATA模式）。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* disable the CE-ATA command(CE-ATA only) */</span><br>sdio_ceata_command_disable();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="18-函数-sdio-ceata-interrupt-enable"><a href="#18-函数-sdio-ceata-interrupt-enable" class="headerlink" title="18. 函数 sdio_ceata_interrupt_enable"></a>18. 函数 <code>sdio_ceata_interrupt_enable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_ceata_interrupt_enable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_ceata_interrupt_enable(void);</code></li>
+<li><strong>功能描述</strong>：使能CE-ATA中断（仅限CE-ATA模式）。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* enable the CE-ATA interrupt(CE-ATA only) */</span><br>sdio_ceata_interrupt_enable();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="19-函数-sdio-ceata-interrupt-disable"><a href="#19-函数-sdio-ceata-interrupt-disable" class="headerlink" title="19. 函数 sdio_ceata_interrupt_disable"></a>19. 函数 <code>sdio_ceata_interrupt_disable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_ceata_interrupt_disable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_ceata_interrupt_disable(void);</code></li>
+<li><strong>功能描述</strong>：禁能CE-ATA中断（仅限CE-ATA模式）。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* disable the CE-ATA interrupt(CE-ATA only) */</span><br>sdio_ceata_interrupt_disable();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="20-函数-sdio-ceata-command-completion-enable"><a href="#20-函数-sdio-ceata-command-completion-enable" class="headerlink" title="20. 函数 sdio_ceata_command_completion_enable"></a>20. 函数 <code>sdio_ceata_command_completion_enable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_ceata_command_completion_enable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_ceata_command_completion_enable(void);</code></li>
+<li><strong>功能描述</strong>：使能CE-ATA命令完成信号（仅限CE-ATA模式）。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* enable the CE-ATA command completion signal(CE-ATA only) */</span><br>sdio_ceata_command_completion_enable();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="21-函数-sdio-ceata-command-completion-disable"><a href="#21-函数-sdio-ceata-command-completion-disable" class="headerlink" title="21. 函数 sdio_ceata_command_completion_disable"></a>21. 函数 <code>sdio_ceata_command_completion_disable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_ceata_command_completion_disable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_ceata_command_completion_disable(void);</code></li>
+<li><strong>功能描述</strong>：禁能CE-ATA命令完成信号（仅限CE-ATA模式）。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* disable the CE-ATA command completion signal(CE-ATA only) */</span><br>sdio_ceata_command_completion_disable();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="22-函数-sdio-interrupt-enable"><a href="#22-函数-sdio-interrupt-enable" class="headerlink" title="22. 函数 sdio_interrupt_enable"></a>22. 函数 <code>sdio_interrupt_enable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_interrupt_enable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_interrupt_enable(uint32_t int_flag);</code></li>
+<li><strong>功能描述</strong>：使能SDIO中断。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：<ul>
+<li><code>int_flag</code>：SDIO中断标志位状态，可组合使用：<ul>
+<li><code>SDIO_INT_CCRCERR</code>：命令响应CRC错误中断</li>
+<li><code>SDIO_INT_DCRCERR</code>：数据CRC错误中断</li>
+<li><code>SDIO_INT_CMDTIMEOUT</code>：命令响应超时中断</li>
+<li><code>SDIO_INT_DTTMO</code>：数据超时中断</li>
+<li><code>SDIO_INT_TXFIFOERR</code>：发送FIFO下溢错误中断</li>
+<li><code>SDIO_INT_RXFIFOERR</code>：接收FIFO上溢错误中断</li>
+<li><code>SDIO_INT_CMDRECV</code>：命令响应已接收中断</li>
+<li><code>SDIO_INT_CMDSEND</code>：命令已发送中断</li>
+<li><code>SDIO_INT_DTEND</code>：数据结束中断</li>
+<li><code>SDIO_INT_STBITE</code>：起始位错误中断</li>
+<li><code>SDIO_INT_DTBLKE</code>：数据块已发送&#x2F;已接收中断</li>
+<li><code>SDIO_INT_CMDRUN</code>：正在传输命令中断</li>
+<li><code>SDIO_INT_TXRUN</code>：正在传输数据中断</li>
+<li><code>SDIO_INT_RXRUN</code>：正在接收数据中断</li>
+<li><code>SDIO_INT_TFHF</code>：发送FIFO半满中断</li>
+<li><code>SDIO_INT_RFHF</code>：接收FIFO半满中断</li>
+<li><code>SDIO_INT_TFNE</code>：发送FIFO空中断</li>
+<li><code>SDIO_INT_RFNE</code>：接收FIFO空中断</li>
+<li><code>SDIO_INT_TXDAVL</code>：发送FIFO中的数据有效中断</li>
+<li><code>SDIO_INT_RXDAVL</code>：接收FIFO中的数据有效中断</li>
+<li><code>SDIO_INT_SDIOIN</code>：SD I&#x2F;O中断已接收中断</li>
+<li><code>SDIO_INT_ATAEN</code>：CE-ATA命令完成信号已接收中断</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* enable the SDIO corresponding interrupts */</span><br>sdio_interrupt_enable(SDIO_INT_DTEND | SDIO_INT_STBITE | SDIO_INT_TFHF | SDIO_INT_TXFIFOERR | SDIO_INT_DCRCERR);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="23-函数-sdio-interrupt-disable"><a href="#23-函数-sdio-interrupt-disable" class="headerlink" title="23. 函数 sdio_interrupt_disable"></a>23. 函数 <code>sdio_interrupt_disable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_interrupt_disable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_interrupt_disable(uint32_t int_flag);</code></li>
+<li><strong>功能描述</strong>：禁能SDIO中断。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：<ul>
+<li><code>int_flag</code>：SDIO中断标志位状态，可组合使用（同<code>sdio_interrupt_enable</code>）</li>
+</ul>
+</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* disable the SDIO interrupt */</span><br>sdio_interrupt_disable(SDIO_INT_DCRCERR);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="24-函数-sdio-interrupt-flag-get"><a href="#24-函数-sdio-interrupt-flag-get" class="headerlink" title="24. 函数 sdio_interrupt_flag_get"></a>24. 函数 <code>sdio_interrupt_flag_get</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_interrupt_flag_get</code></li>
+<li><strong>函数原型</strong>：<code>FlagStatus sdio_interrupt_flag_get(uint32_t int_flag);</code></li>
+<li><strong>功能描述</strong>：获取SDIO的中断标志位状态。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：<ul>
+<li><code>int_flag</code>：SDIO中断标志位状态（同<code>sdio_interrupt_enable</code>）</li>
+</ul>
+</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：<code>SET</code> 或 <code>RESET</code></li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* get the interrupt flag state of SDIO */</span><br>FlagStatus flag_status = sdio_interrupt_flag_get(SDIO_INT_DTEND);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="25-函数-sdio-interrupt-flag-clear"><a href="#25-函数-sdio-interrupt-flag-clear" class="headerlink" title="25. 函数 sdio_interrupt_flag_clear"></a>25. 函数 <code>sdio_interrupt_flag_clear</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_interrupt_flag_clear</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_interrupt_flag_clear(uint32_t int_flag);</code></li>
+<li><strong>功能描述</strong>：清除SDIO的中断标志位状态。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：<ul>
+<li><code>int_flag</code>：SDIO中断标志位状态（同<code>sdio_interrupt_enable</code>）</li>
+</ul>
+</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* clear the interrupt flag state of SDIO */</span><br>sdio_interrupt_flag_clear(SDIO_INT_DTEND);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="26-函数-sdio-read-wait-enable"><a href="#26-函数-sdio-read-wait-enable" class="headerlink" title="26. 函数 sdio_read_wait_enable"></a>26. 函数 <code>sdio_read_wait_enable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_read_wait_enable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_read_wait_enable(void);</code></li>
+<li><strong>功能描述</strong>：使能读等待模式（仅限SD I&#x2F;O模式）。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* enable read wait mode (SD I/O only) */</span><br>sdio_read_wait_enable();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="27-函数-sdio-read-wait-disable"><a href="#27-函数-sdio-read-wait-disable" class="headerlink" title="27. 函数 sdio_read_wait_disable"></a>27. 函数 <code>sdio_read_wait_disable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_read_wait_disable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_read_wait_disable(void);</code></li>
+<li><strong>功能描述</strong>：禁能读等待模式（仅限SD I&#x2F;O模式）。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* disable read wait mode (SD I/O only) */</span><br>sdio_read_wait_disable();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="28-函数-sdio-stop-read-wait"><a href="#28-函数-sdio-stop-read-wait" class="headerlink" title="28. 函数 sdio_stop_read_wait"></a>28. 函数 <code>sdio_stop_read_wait</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_stop_read_wait</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_stop_read_wait(void);</code></li>
+<li><strong>功能描述</strong>：禁止停止读等待的功能（仅限SD I&#x2F;O模式）。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* enable the function to halt the read wait process (SD I/O only) */</span><br>sdio_stop_read_wait();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="29-函数-sdio-read-wait-type-set"><a href="#29-函数-sdio-read-wait-type-set" class="headerlink" title="29. 函数 sdio_read_wait_type_set"></a>29. 函数 <code>sdio_read_wait_type_set</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_read_wait_type_set</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_read_wait_type_set(uint32_t read_wait_type);</code></li>
+<li><strong>功能描述</strong>：设置读等待类型。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：<ul>
+<li><code>read_wait_type</code>：读等待类型<ul>
+<li><code>SDIO_READWAITTYPE_FULL</code>：通过FIFO满中断等待</li>
+<li><code>SDIO_READWAITTYPE_EMPTY</code>：通过FIFO空中断等待</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* set the read wait type */</span><br>sdio_read_wait_type_set(SDIO_READWAITTYPE_FULL);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="30-函数-sdio-response-get"><a href="#30-函数-sdio-response-get" class="headerlink" title="30. 函数 sdio_response_get"></a>30. 函数 <code>sdio_response_get</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_response_get</code></li>
+<li><strong>函数原型</strong>：<code>uint32_t sdio_response_get(uint32_t resp_sex);</code></li>
+<li><strong>功能描述</strong>：获取上一次响应的接收命令。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：<ul>
+<li><code>resp_sex</code>：SDIO响应<ul>
+<li><code>SDIO_RESPONSE0</code>：卡响应[31:0]</li>
+<li><code>SDIO_RESPONSE1</code>：卡响应[63:32]</li>
+<li><code>SDIO_RESPONSE2</code>：卡响应[95:64]</li>
+<li><code>SDIO_RESPONSE3</code>：卡响应[127:96]</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：上一次响应的接收命令</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* get the SDIO response numbers */</span><br><span class="hljs-type">uint32_t</span> resp0 = sdio_response_get(SDIO_RESPONSE0);<br><span class="hljs-type">uint32_t</span> resp1 = sdio_response_get(SDIO_RESPONSE1);<br><span class="hljs-type">uint32_t</span> resp2 = sdio_response_get(SDIO_RESPONSE2);<br><span class="hljs-type">uint32_t</span> resp3 = sdio_response_get(SDIO_RESPONSE3);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="31-函数-sdio-data-config"><a href="#31-函数-sdio-data-config" class="headerlink" title="31. 函数 sdio_data_config"></a>31. 函数 <code>sdio_data_config</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_data_config</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_data_config(uint32_t data_timeout, uint32_t data_length, uint32_t data_blocksize);</code></li>
+<li><strong>功能描述</strong>：配置数据超时、数据长度和数据块大小。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：<ul>
+<li><code>data_timeout</code>：超时周期（数据超时周期）</li>
+<li><code>data_length</code>：要传输的数据字节数</li>
+<li><code>data_blocksize</code>：传输中数据块的大小<ul>
+<li><code>SDIO_DATABLOCKSIZE_1BYTE</code>：块大小 &#x3D; 1字节</li>
+<li><code>SDIO_DATABLOCKSIZE_2BYTES</code>：块大小 &#x3D; 2字节</li>
+<li><code>SDIO_DATABLOCKSIZE_4BYTES</code>：块大小 &#x3D; 4字节</li>
+<li><code>SDIO_DATABLOCKSIZE_8BYTES</code>：块大小 &#x3D; 8字节</li>
+<li><code>SDIO_DATABLOCKSIZE_16BYTES</code>：块大小 &#x3D; 16字节</li>
+<li><code>SDIO_DATABLOCKSIZE_32BYTES</code>：块大小 &#x3D; 32字节</li>
+<li><code>SDIO_DATABLOCKSIZE_64BYTES</code>：块大小 &#x3D; 64字节</li>
+<li><code>SDIO_DATABLOCKSIZE_128BYTES</code>：块大小 &#x3D; 128字节</li>
+<li><code>SDIO_DATABLOCKSIZE_256BYTES</code>：块大小 &#x3D; 256字节</li>
+<li><code>SDIO_DATABLOCKSIZE_512BYTES</code>：块大小 &#x3D; 512字节</li>
+<li><code>SDIO_DATABLOCKSIZE_1024BYTES</code>：块大小 &#x3D; 1024字节</li>
+<li><code>SDIO_DATABLOCKSIZE_2048BYTES</code>：块大小 &#x3D; 2048字节</li>
+<li><code>SDIO_DATABLOCKSIZE_4096BYTES</code>：块大小 &#x3D; 4096字节</li>
+<li><code>SDIO_DATABLOCKSIZE_8192BYTES</code>：块大小 &#x3D; 8192字节</li>
+<li><code>SDIO_DATABLOCKSIZE_16384BYTES</code>：块大小 &#x3D; 16384字节</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* configure the SDIO data */</span><br>sdio_data_config(<span class="hljs-number">0</span>, SDIO_DATABLOCKSIZE_1BYTE);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="32-函数-sdio-data-transfer-config"><a href="#32-函数-sdio-data-transfer-config" class="headerlink" title="32. 函数 sdio_data_transfer_config"></a>32. 函数 <code>sdio_data_transfer_config</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_data_transfer_config</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_data_transfer_config(uint32_t transfer_mode, uint32_t transfer_direction);</code></li>
+<li><strong>功能描述</strong>：配置数据传输模式和方向。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：<ul>
+<li><code>transfer_mode</code>：数据传输模式<ul>
+<li><code>SDIO_BLOCKSMOD</code>：块传输模式</li>
+<li><code>SDIO_STREAMMOD</code>：流传输（SD I&#x2F;O多字节传输模式）</li>
+</ul>
+</li>
+<li><code>transfer_direction</code>：数据传输方向<ul>
+<li><code>SDIO_TRANSDIRE_CARDTOIO</code>：写数据到卡上（从卡中读取数据）</li>
+<li><code>SDIO_TRANSDIRE_IOTOCARD</code>：从卡中读取数据（向卡发送数据）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* configure the SDIO data transfer mode and direction */</span><br>sdio_data_transfer_config(SDIO_BLOCKSMOD, SDIO_TRANSDIRE_CARDTOIO);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="33-函数-sdio-dsm-enable"><a href="#33-函数-sdio-dsm-enable" class="headerlink" title="33. 函数 sdio_dsm_enable"></a>33. 函数 <code>sdio_dsm_enable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_dsm_enable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_dsm_enable(void);</code></li>
+<li><strong>功能描述</strong>：使能数据传输的状态机。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* enable the DSM(data state machine) */</span><br>sdio_dsm_enable();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="34-函数-sdio-dsm-disable"><a href="#34-函数-sdio-dsm-disable" class="headerlink" title="34. 函数 sdio_dsm_disable"></a>34. 函数 <code>sdio_dsm_disable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_dsm_disable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_dsm_disable(void);</code></li>
+<li><strong>功能描述</strong>：禁能数据传输的状态机。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* disable the DSM(data state machine) */</span><br>sdio_dsm_disable();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="35-函数-sdio-data-write"><a href="#35-函数-sdio-data-write" class="headerlink" title="35. 函数 sdio_data_write"></a>35. 函数 <code>sdio_data_write</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_data_write</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_data_write(uint32_t data);</code></li>
+<li><strong>功能描述</strong>：在发送FIFO里写入数据（一个字）。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：<ul>
+<li><code>data</code>：往下里写入32位数据</li>
+</ul>
+</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* write data(one word) to the transmit FIFO */</span><br>sdio_data_write(<span class="hljs-number">0x00000001</span>);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="36-函数-sdio-data-read"><a href="#36-函数-sdio-data-read" class="headerlink" title="36. 函数 sdio_data_read"></a>36. 函数 <code>sdio_data_read</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_data_read</code></li>
+<li><strong>函数原型</strong>：<code>uint32_t sdio_data_read(void);</code></li>
+<li><strong>功能描述</strong>：在接收FIFO里提取数据（一个字）。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：接收的数据</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* read data(one word) from the receive FIFO */</span><br><span class="hljs-type">uint32_t</span> data = sdio_data_read();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="37-函数-sdio-data-counter-get"><a href="#37-函数-sdio-data-counter-get" class="headerlink" title="37. 函数 sdio_data_counter_get"></a>37. 函数 <code>sdio_data_counter_get</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_data_counter_get</code></li>
+<li><strong>函数原型</strong>：<code>uint32_t sdio_data_counter_get(void);</code></li>
+<li><strong>功能描述</strong>：获取要传输到卡&#x2F;从卡剩余数据字节的数目。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：要传输的剩余数据字节数</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* get the number of remaining data bytes to be transferred to card */</span><br><span class="hljs-type">uint32_t</span> data_value = sdio_data_counter_get();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="38-函数-sdio-fifo-counter-get"><a href="#38-函数-sdio-fifo-counter-get" class="headerlink" title="38. 函数 sdio_fifo_counter_get"></a>38. 函数 <code>sdio_fifo_counter_get</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_fifo_counter_get</code></li>
+<li><strong>函数原型</strong>：<code>uint32_t sdio_fifo_counter_get(void);</code></li>
+<li><strong>功能描述</strong>：从FIFO中获取写入或读取的空字数。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：剩余字数</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* get the number of words remaining to be written or read from FIFO */</span><br><span class="hljs-type">uint32_t</span> fifo_value = sdio_fifo_counter_get();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="39-函数-sdio-dma-enable"><a href="#39-函数-sdio-dma-enable" class="headerlink" title="39. 函数 sdio_dma_enable"></a>39. 函数 <code>sdio_dma_enable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_dma_enable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_dma_enable(void);</code></li>
+<li><strong>功能描述</strong>：使能SDIO的DMA请求。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* enable the SDIO DMA */</span><br>sdio_dma_enable();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="40-函数-sdio-dma-disable"><a href="#40-函数-sdio-dma-disable" class="headerlink" title="40. 函数 sdio_dma_disable"></a>40. 函数 <code>sdio_dma_disable</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_dma_disable</code></li>
+<li><strong>函数原型</strong>：<code>void sdio_dma_disable(void);</code></li>
+<li><strong>功能描述</strong>：禁能SDIO的DMA请求。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：无</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：无</li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* disable the SDIO DMA */</span><br>sdio_dma_disable();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="41-函数-sdio-flag-get"><a href="#41-函数-sdio-flag-get" class="headerlink" title="41. 函数 sdio_flag_get"></a>41. 函数 <code>sdio_flag_get</code></h3><ul>
+<li><strong>函数名称</strong>：<code>sdio_flag_get</code></li>
+<li><strong>函数原型</strong>：<code>FlagStatus sdio_flag_get(uint32_t flag);</code></li>
+<li><strong>功能描述</strong>：获取SDIO的标志位状态。</li>
+<li><strong>先决条件</strong>：无</li>
+<li><strong>被调用函数</strong>：无</li>
+<li>**输入参数(in)**：<ul>
+<li><code>flag</code>：SDIO标志位状态<ul>
+<li><code>SDIO_FLAG_CCRCERR</code>：命令响应（CRC检测）</li>
+<li><code>SDIO_FLAG_DCRCERR</code>：数据已发送&#x2F;接收（CRC检测）</li>
+<li><code>SDIO_FLAG_CMDTMO</code>：命令超时（CRC检测）</li>
+<li><code>SDIO_FLAG_DTTMO</code>：数据超时（CRC检测）</li>
+<li><code>SDIO_FLAG_TXFIFOERR</code>：发送FIFO下溢错误发生</li>
+<li><code>SDIO_FLAG_RXFIFOERR</code>：接收FIFO上溢错误发生</li>
+<li><code>SDIO_FLAG_CMDRECV</code>：命令响应（CRC检测）</li>
+<li><code>SDIO_FLAG_CMDSEND</code>：命令已发送（CRC检测）</li>
+<li><code>SDIO_FLAG_DTEND</code>：数据结束（CRC检测）</li>
+<li><code>SDIO_FLAG_STBITE</code>：起始位错误（CRC检测）</li>
+<li><code>SDIO_FLAG_DTBLKE</code>：数据块已发送&#x2F;接收（CRC检测）</li>
+<li><code>SDIO_FLAG_CMDRUN</code>：正在传输命令（CRC检测）</li>
+<li><code>SDIO_FLAG_TXRUN</code>：正在传输数据（CRC检测）</li>
+<li><code>SDIO_FLAG_RXRUN</code>：正在接收数据（CRC检测）</li>
+<li><code>SDIO_FLAG_TFHF</code>：发送FIFO半满（CRC检测）</li>
+<li><code>SDIO_FLAG_RFHF</code>：接收FIFO半满（CRC检测）</li>
+<li><code>SDIO_FLAG_TFNE</code>：发送FIFO空（CRC检测）</li>
+<li><code>SDIO_FLAG_RFNE</code>：接收FIFO空（CRC检测）</li>
+<li><code>SDIO_FLAG_TXDAVL</code>：发送FIFO中的数据有效（CRC检测）</li>
+<li><code>SDIO_FLAG_RXDAVL</code>：接收FIFO中的数据有效（CRC检测）</li>
+<li><code>SDIO_FLAG_SDIOIN</code>：SD I&#x2F;O中断已接收（CRC检测）</li>
+<li><code>SDIO_FLAG_ATAEN</code>：CE-ATA命令完成信号已接收（CRC检测）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>**输出参数(out)**：无</li>
+<li><strong>返回值</strong>：<code>SET</code> 或 <code>RESET</code></li>
+<li><strong>示例</strong>：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* get the flags of SDIO */</span><br>FlagStatus flag_status = sdio_flag_get(SDIO_FLAG_DTEND);<br></code></pre></td></tr></table></figure></li>
+</ul>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left  disabled "
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2026/02/28/GD32F470-11-RTC/"
+      title="GD32F470入门教程（十一）RTC"
+     >
+
+    <p class="title-text">
+      
+        GD32F470入门教程（十一）RTC
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+
+  <div id="comment-card" class="comment-card">
+    <div class="main-title-bar">
+      <div class="main-title-dot"></div>
+      <div class="main-title">留言 </div>
+    </div>
+    <div id="giscus-container"></div>
+  </div>
+  <script src="https://giscus.app/client.js"
+    data-repo="chaoxiaohan/myblog"
+    data-repo-id="R_kgDOPe4zOQ"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOPe4zOc4CuRDG"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="noborder_light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async>
+  </script>
+  
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2026 超小韓<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+  <script src="/js/toc.js"></script>
+  
+  <script src="/js/search.js"></script>
+  <script src="/js/code-copy.js"></script>
+  <script src="/js/mobile-warning.js"></script>
+  <script src="/js/image-viewer.js"></script>
+  <script src="/js/context-menu.js"></script>
+</body>
+</html>
