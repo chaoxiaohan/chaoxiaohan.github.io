@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+
+
+<html theme="light" showBanner="true" hasBanner="true" > 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+<!-- Gaug.es Analytics -->
+<script>
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', 'true');
+    t.setAttribute('data-track-path', 'https://track.gaug.es/track.gif');
+    t.src = 'https://d36ee2fcip1434.cloudfront.net/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+<!-- End Gaug.es Analytics -->
+
+
+  
+  <title>YOLOV11离线训练 | 超小韓の个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="详细介绍了YOLOV11如何训练自己的数据集并转换为onnx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="YOLOV11离线训练">
+<meta property="og:url" content="https://blog.chaoxiaohan.cyou/2026/07/01/yolov11_train/index.html">
+<meta property="og:site_name" content="超小韓の个人博客">
+<meta property="og:description" content="详细介绍了YOLOV11如何训练自己的数据集并转换为onnx">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E4%BB%8B%E7%BB%8Dyolo%E6%96%87%E4%BB%B6%E5%A4%B91.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/yolo%E6%96%87%E4%BB%B6%E5%A4%B92.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260701184247737.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/labeling.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260701233439876.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E8%AE%AD%E7%BB%83%E6%97%B6.png">
+<meta property="og:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E8%AE%AD%E7%BB%83%E5%AE%8C.png">
+<meta property="article:published_time" content="2026-06-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-01T16:00:10.270Z">
+<meta property="article:author" content="超小韓">
+<meta property="article:tag" content="OpenCV">
+<meta property="article:tag" content="Pytorch">
+<meta property="article:tag" content="YOLOV11">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E4%BB%8B%E7%BB%8Dyolo%E6%96%87%E4%BB%B6%E5%A4%B91.png">
+  
+    <link rel="alternate" href="/atom.xml" title="超小韓の个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+<link rel="stylesheet" href="/css/search.css">
+
+  
+<link rel="stylesheet" href="/css/toc-fix.css">
+
+  
+<link rel="stylesheet" href="/css/code-copy.css">
+
+  
+<link rel="stylesheet" href="/css/mobile-warning.css">
+
+  
+<link rel="stylesheet" href="/css/image-viewer.css">
+
+  
+<link rel="stylesheet" href="/css/context-menu.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/xiaoxin7284678236.png" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>超小韓の个人博客 </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">主页</a>
+    
+      <a class="main-nav-link" href="/archives">文章</a>
+    
+      <a class="main-nav-link" href="/resources">资料</a>
+    
+      <a class="main-nav-link" href="/about">关于我的</a>
+    
+  </nav>
+  <nav id="search-nav">
+    <div id="search-container">
+      <select id="search-mode-selector" name="search-mode">
+        <option value="exact">精确</option>
+        <option value="fuzzy">模糊</option>
+      </select>
+      <input type="text" id="search-input" placeholder="搜索文章..." autocomplete="off">
+      <div id="search-results" class="hidden">
+        <div id="search-results-content"></div>
+      </div>
+    </div>
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS 订阅">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">主页</a>
+    
+      <a class="nav-dropdown-link" href="/archives">文章</a>
+    
+      <a class="nav-dropdown-link" href="/resources">资料</a>
+    
+      <a class="nav-dropdown-link" href="/about">关于我的</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS 订阅">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/head.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">超小韓 </div>
+      <div class="dot"></div>
+      <div class="subtitle">生活明朗，万物可爱！ </div>
+      <div class="link-list">
+        
+          <a class="link-btn" href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=2537037482&website=www.oicqzone.com" title="QQ"><i class="fa-brands fa-qq"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/353687950" title="哔哩哔哩"><i class="fa-brands fa-bilibili"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/chaoxiaohan/" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        
+          <a class="link-btn" href="mailto:chaoxiaohan@chaoxiaohan.cyou" title="Email"><i class="fa-solid fa-envelope"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+    
+
+
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">分类</h3>
+      <div class="category-box">
+            <a class="category-link" href="/categories/GD32F470xx/">
+                GD32F470xx
+                <div class="category-count">14</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Android/">
+                Android
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/HAL/">
+                HAL
+                <div class="category-count">12</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Standard/">
+                Standard
+                <div class="category-count">4</div>
+            </a>
+        
+            <a class="category-link" href="/categories/C/">
+                C
+                <div class="category-count">8</div>
+            </a>
+        
+            <a class="category-link" href="/categories/YOLO/">
+                YOLO
+                <div class="category-count">2</div>
+            </a>
+        
+            <a class="category-link" href="/categories/computer/">
+                computer
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/Python/">
+                Python
+                <div class="category-count">2</div>
+            </a>
+        
+            <a class="category-link" href="/categories/siemens-cup/">
+                siemens-cup
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/OpenCv/">
+                OpenCv
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/test/">
+                test
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/MaixCam2/">
+                MaixCam2
+                <div class="category-count">1</div>
+            </a>
+        </div>
+    </div>
+  </div>
+
+
+  
+    
+  
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">YOLO 系列文章</h3>
+      <ul class="same-category-posts">
+        
+          <li class="same-category-item current-post">
+            <a href="/2026/07/01/yolov11_train/" title="YOLOV11离线训练">
+              YOLOV11离线训练
+            </a>
+          </li>
+        
+          <li class="same-category-item">
+            <a href="/2025/09/27/VOLOV5-lite_train/" title="使用YOLOV5-Lite训练模型">
+              使用YOLOV5-Lite训练模型
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+  
+  <div class="sticky">
+    
+      
+        
+          <div class="toc-widget">
+  <h3 class="toc-title">目录</h3>
+  <div class="toc-content">
+    <ol class="toc-list"><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#1-%E4%BB%8B%E7%BB%8DYOLO%E6%96%87%E4%BB%B6%E5%A4%B9%E7%BB%93%E6%9E%84"><span class="toc-list-text">1.介绍YOLO文件夹结构</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#2-%E5%88%B6%E4%BD%9C%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-list-text">2.制作数据集</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#3-%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E9%9B%86%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-list-text">3.创建数据集配置文件</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#4-%E5%88%9B%E5%BB%BA%E6%A8%A1%E5%9E%8B%E5%AF%B9%E8%B1%A1"><span class="toc-list-text">4.创建模型对象</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#5-%E5%88%9B%E5%BB%BAtrain-py%E6%96%87%E4%BB%B6"><span class="toc-list-text">5.创建train.py文件</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#pt%E8%BD%AConnx"><span class="toc-list-text">.pt转onnx</span></a></li><li class="toc-list-item toc-list-level-2"><a class="toc-list-link" href="#QA"><span class="toc-list-text">QA</span></a><ol class="toc-list-child"><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AFCUDA"><span class="toc-list-text">1.什么是CUDA</span></a></li><li class="toc-list-item toc-list-level-3"><a class="toc-list-link" href="#2-%E4%BB%80%E4%B9%88%E6%98%AFCUDNN"><span class="toc-list-text">2.什么是CUDNN</span></a></li></ol></li></ol>
+  </div>
+</div>
+
+        
+      
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-yolov11_train" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        YOLOV11离线训练
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2026-06-30T16:00:00.000Z" itemprop="datePublished">2026-07-01</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+  <a class="meta-cate-link" href="/categories/YOLO/">YOLO</a>
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            4.6k 词 
+          </div>
+        </div>
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenCV/" rel="tag">OpenCV</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pytorch/" rel="tag">Pytorch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/YOLOV11/" rel="tag">YOLOV11</a></li></ul>
+
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <p>环境配置可参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/2401_85556416/article/details/143378148">YOLOv11超详细环境搭建以及模型训练（GPU版本）-CSDN博客</a></p>
+<p>以下内容默认已经配置好YOLOV11所需的环境</p>
+<h2 id="1-介绍YOLO文件夹结构"><a href="#1-介绍YOLO文件夹结构" class="headerlink" title="1.介绍YOLO文件夹结构"></a>1.介绍YOLO文件夹结构</h2><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E4%BB%8B%E7%BB%8Dyolo%E6%96%87%E4%BB%B6%E5%A4%B91.png" alt="介绍yolo文件夹1"></p>
+<p>首先看根目录</p>
+<table>
+<thead>
+<tr>
+<th>文件夹</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>.git</code></td>
+<td>Git 版本管理数据，记录提交历史、分支等，一般不用手动改。</td>
+</tr>
+<tr>
+<td><code>.github</code></td>
+<td>GitHub 相关配置，比如自动测试、发布流程、Issue 模板等。里面有 <code>workflows</code>、<code>scripts</code>、<code>ISSUE_TEMPLATE</code>。</td>
+</tr>
+<tr>
+<td><code>.idea</code></td>
+<td>PyCharm &#x2F; IntelliJ 的项目配置文件，和代码本身关系不大。</td>
+</tr>
+<tr>
+<td><code>docker</code></td>
+<td>Docker 环境配置，用来构建可复现的运行环境，比如训练、推理、部署时用的容器。</td>
+</tr>
+<tr>
+<td><code>docs</code></td>
+<td>文档源码，官网文档通常从这里生成。里面有英文文档、页面模板、文档宏等。</td>
+</tr>
+<tr>
+<td><code>examples</code></td>
+<td>示例代码，展示 YOLO 如何接入不同平台或框架，比如 ONNXRuntime、OpenCV、Rust、C++、目标跟踪、分割等。</td>
+</tr>
+<tr>
+<td><code>tests</code></td>
+<td>测试代码，用来验证训练、预测、导出、模型加载等功能是否正常。</td>
+</tr>
+<tr>
+<td><code>ultralytics</code></td>
+<td>最核心的源码目录，YOLO 的模型、训练、推理、数据处理、配置、工具函数基本都在这里。</td>
+</tr>
+</tbody></table>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/yolo%E6%96%87%E4%BB%B6%E5%A4%B92.png" alt="yolo文件夹2"></p>
+<p><code>ultralytics</code> 里面比较重要的子文件夹：</p>
+<table>
+<thead>
+<tr>
+<th>文件夹</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>assets</code></td>
+<td>示例图片、资源文件，常用于测试预测效果。</td>
+</tr>
+<tr>
+<td><code>cfg</code></td>
+<td>配置文件，比如模型配置、默认训练参数、任务配置等。</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>数据集相关代码，比如数据加载、数据增强、数据集格式处理。</td>
+</tr>
+<tr>
+<td><code>engine</code></td>
+<td>训练、验证、预测、导出这些核心流程的基础引擎。</td>
+</tr>
+<tr>
+<td><code>hub</code></td>
+<td>Ultralytics HUB 云端平台相关功能。</td>
+</tr>
+<tr>
+<td><code>models</code></td>
+<td>各类模型入口，比如 YOLO、RT-DETR、SAM 等。</td>
+</tr>
+<tr>
+<td><code>nn</code></td>
+<td>神经网络结构代码，包括层、模块、模型解析等，改网络结构常看这里。</td>
+</tr>
+<tr>
+<td><code>optim</code></td>
+<td>优化相关代码，比如优化器或调参相关工具。</td>
+</tr>
+<tr>
+<td><code>solutions</code></td>
+<td>官方封装好的应用方案，比如计数、区域检测、跟踪类应用。</td>
+</tr>
+<tr>
+<td><code>trackers</code></td>
+<td>目标跟踪相关算法，比如 ByteTrack、BoT-SORT 等。</td>
+</tr>
+<tr>
+<td><code>utils</code></td>
+<td>通用工具函数，日志、绘图、文件处理、检查环境等都可能在这里。</td>
+</tr>
+</tbody></table>
+<h2 id="2-制作数据集"><a href="#2-制作数据集" class="headerlink" title="2.制作数据集"></a>2.制作数据集</h2><p>在YOLO文件夹根目录创建<code>data</code>文件夹，在data文件夹内创建train、val、test三个文件夹，分别放训练、验证、测试的图片</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260701184247737.png" alt="image-20260701184247737"></p>
+<p>图片需要标注，不同的任务的标注格式也不相同。下面以目标检测介绍。</p>
+<p>推荐X-AnyLabeling<a target="_blank" rel="noopener" href="https://github.com/CVHub520/X-AnyLabeling">CVHub520&#x2F;X-AnyLabeling: Effortless data labeling with AI support from Segment Anything and other awesome models.</a></p>
+<p>下载最新发布包后运行</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/labeling.png" alt="labeling"></p>
+<p>该软件左侧栏为工具栏，打开文件夹后可对图片进行标注，标注完后点击上方的导出，目标检测就选HBB，导出后可以获得YOLO训练需要的标注文件。</p>
+<p>将标注文件放入上方建好的data文件夹中的对应位置</p>
+<h2 id="3-创建数据集配置文件"><a href="#3-创建数据集配置文件" class="headerlink" title="3.创建数据集配置文件"></a>3.创建数据集配置文件</h2><p>在项目的<code>ultralytics /cfg/datasets</code>目录新建一个xxxx.yaml，内容如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">path:</span> <span class="hljs-string">D:/code/yolo/data/teach</span> <span class="hljs-comment"># 注意修改自己数据集的路径</span><br><span class="hljs-attr">train:</span> <span class="hljs-string">train</span>  <span class="hljs-comment"># train images</span><br><span class="hljs-attr">val:</span> <span class="hljs-string">val</span>  <span class="hljs-comment"># val images</span><br><span class="hljs-attr">test:</span> <span class="hljs-string">test</span>  <span class="hljs-comment"># test images</span><br><br><span class="hljs-comment"># Classes</span><br><br><span class="hljs-attr">names:</span><br>  <span class="hljs-attr">0:</span> <span class="hljs-string">yida</span><br>  <span class="hljs-attr">1:</span> <span class="hljs-string">keyboard</span><br><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="4-创建模型对象"><a href="#4-创建模型对象" class="headerlink" title="4.创建模型对象"></a>4.创建模型对象</h2><p>在项目的<code>ultralytics/cfg/models/11</code>目录下新建一个yolov11-neu-det.yaml，代码如下</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># Ultralytics YOLO 🚀, AGPL-3.0 license</span><br><span class="hljs-comment"># YOLO11 object detection model with P3-P5 outputs. For Usage examples see https://docs.ultralytics.com/tasks/detect</span><br> <br><span class="hljs-comment"># Parameters</span><br><span class="hljs-attr">nc:</span> <span class="hljs-number">6</span> <span class="hljs-comment"># number of classes</span><br><span class="hljs-attr">scales:</span> <span class="hljs-comment"># model compound scaling constants, i.e. &#x27;model=yolo11n.yaml&#x27; will call yolo11.yaml with scale &#x27;n&#x27;</span><br>  <span class="hljs-comment"># [depth, width, max_channels]</span><br>  <span class="hljs-attr">n:</span> [<span class="hljs-number">0.50</span>, <span class="hljs-number">0.25</span>, <span class="hljs-number">1024</span>] <span class="hljs-comment"># summary: 319 layers, 2624080 parameters, 2624064 gradients, 6.6 GFLOPs</span><br> <br><span class="hljs-comment"># YOLO11n backbone</span><br><span class="hljs-attr">backbone:</span><br>  <span class="hljs-comment"># [from, repeats, module, args]</span><br>  <span class="hljs-bullet">-</span> [<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>, <span class="hljs-string">Conv</span>, [<span class="hljs-number">64</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>]] <span class="hljs-comment"># 0-P1/2</span><br>  <span class="hljs-bullet">-</span> [<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>, <span class="hljs-string">Conv</span>, [<span class="hljs-number">128</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>]] <span class="hljs-comment"># 1-P2/4</span><br>  <span class="hljs-bullet">-</span> [<span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-string">C3k2</span>, [<span class="hljs-number">256</span>, <span class="hljs-literal">False</span>, <span class="hljs-number">0.25</span>]]<br>  <span class="hljs-bullet">-</span> [<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>, <span class="hljs-string">Conv</span>, [<span class="hljs-number">256</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>]] <span class="hljs-comment"># 3-P3/8</span><br>  <span class="hljs-bullet">-</span> [<span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-string">C3k2</span>, [<span class="hljs-number">512</span>, <span class="hljs-literal">False</span>, <span class="hljs-number">0.25</span>]]<br>  <span class="hljs-bullet">-</span> [<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>, <span class="hljs-string">Conv</span>, [<span class="hljs-number">512</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>]] <span class="hljs-comment"># 5-P4/16</span><br>  <span class="hljs-bullet">-</span> [<span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-string">C3k2</span>, [<span class="hljs-number">512</span>, <span class="hljs-literal">True</span>]]<br>  <span class="hljs-bullet">-</span> [<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>, <span class="hljs-string">Conv</span>, [<span class="hljs-number">1024</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>]] <span class="hljs-comment"># 7-P5/32</span><br>  <span class="hljs-bullet">-</span> [<span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-string">C3k2</span>, [<span class="hljs-number">1024</span>, <span class="hljs-literal">True</span>]]<br>  <span class="hljs-bullet">-</span> [<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>, <span class="hljs-string">SPPF</span>, [<span class="hljs-number">1024</span>, <span class="hljs-number">5</span>]] <span class="hljs-comment"># 9</span><br>  <span class="hljs-bullet">-</span> [<span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-string">C2PSA</span>, [<span class="hljs-number">1024</span>]] <span class="hljs-comment"># 10</span><br> <br><span class="hljs-comment"># YOLO11n head</span><br><span class="hljs-attr">head:</span><br>  <span class="hljs-bullet">-</span> [<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>, <span class="hljs-string">nn.Upsample</span>, [<span class="hljs-string">None</span>, <span class="hljs-number">2</span>, <span class="hljs-string">&quot;nearest&quot;</span>]]<br>  <span class="hljs-bullet">-</span> [[<span class="hljs-number">-1</span>, <span class="hljs-number">6</span>], <span class="hljs-number">1</span>, <span class="hljs-string">Concat</span>, [<span class="hljs-number">1</span>]] <span class="hljs-comment"># cat backbone P4</span><br>  <span class="hljs-bullet">-</span> [<span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-string">C3k2</span>, [<span class="hljs-number">512</span>, <span class="hljs-literal">False</span>]] <span class="hljs-comment"># 13</span><br> <br>  <span class="hljs-bullet">-</span> [<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>, <span class="hljs-string">nn.Upsample</span>, [<span class="hljs-string">None</span>, <span class="hljs-number">2</span>, <span class="hljs-string">&quot;nearest&quot;</span>]]<br>  <span class="hljs-bullet">-</span> [[<span class="hljs-number">-1</span>, <span class="hljs-number">4</span>], <span class="hljs-number">1</span>, <span class="hljs-string">Concat</span>, [<span class="hljs-number">1</span>]] <span class="hljs-comment"># cat backbone P3</span><br>  <span class="hljs-bullet">-</span> [<span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-string">C3k2</span>, [<span class="hljs-number">256</span>, <span class="hljs-literal">False</span>]] <span class="hljs-comment"># 16 (P3/8-small)</span><br> <br>  <span class="hljs-bullet">-</span> [<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>, <span class="hljs-string">Conv</span>, [<span class="hljs-number">256</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>]]<br>  <span class="hljs-bullet">-</span> [[<span class="hljs-number">-1</span>, <span class="hljs-number">13</span>], <span class="hljs-number">1</span>, <span class="hljs-string">Concat</span>, [<span class="hljs-number">1</span>]] <span class="hljs-comment"># cat head P4</span><br>  <span class="hljs-bullet">-</span> [<span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-string">C3k2</span>, [<span class="hljs-number">512</span>, <span class="hljs-literal">False</span>]] <span class="hljs-comment"># 19 (P4/16-medium)</span><br> <br>  <span class="hljs-bullet">-</span> [<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>, <span class="hljs-string">Conv</span>, [<span class="hljs-number">512</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>]]<br>  <span class="hljs-bullet">-</span> [[<span class="hljs-number">-1</span>, <span class="hljs-number">10</span>], <span class="hljs-number">1</span>, <span class="hljs-string">Concat</span>, [<span class="hljs-number">1</span>]] <span class="hljs-comment"># cat head P5</span><br>  <span class="hljs-bullet">-</span> [<span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-string">C3k2</span>, [<span class="hljs-number">1024</span>, <span class="hljs-literal">True</span>]] <span class="hljs-comment"># 22 (P5/32-large)</span><br> <br>  <span class="hljs-bullet">-</span> [[<span class="hljs-number">16</span>, <span class="hljs-number">19</span>, <span class="hljs-number">22</span>], <span class="hljs-number">1</span>, <span class="hljs-string">Detect</span>, [<span class="hljs-string">nc</span>]] <span class="hljs-comment"># Detect(P3, P4, P5)</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="5-创建train-py文件"><a href="#5-创建train-py文件" class="headerlink" title="5.创建train.py文件"></a>5.创建train.py文件</h2><p>在项目的根目录下创建train.py文件方便后续的训练，后面主需要运行train.py文件就可以再次进行训练了，不必每次都需要出入一次运行命令</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> warnings<br><br>warnings.filterwarnings(<span class="hljs-string">&#x27;ignore&#x27;</span>)<br><span class="hljs-keyword">from</span> ultralytics <span class="hljs-keyword">import</span> YOLO<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    model = YOLO(<span class="hljs-string">&#x27;ultralytics/cfg/models/11/yolo11_teach.yaml&#x27;</span>)  <span class="hljs-comment"># 指定YOLO模型对象，并加载指定配置文件中的模型配置</span><br>    model.load(<span class="hljs-string">&#x27;yolo11n.pt&#x27;</span>)      <span class="hljs-comment">#加载预训练的权重文件&#x27;yolov11s.pt&#x27;，加速训练并提升模型性能</span><br>    model.train(data=<span class="hljs-string">&#x27;ultralytics/cfg/datasets/teach.yaml&#x27;</span>,  <span class="hljs-comment"># 指定训练数据集的配置文件路径，这个.yaml文件包含了数据集的路径和类别信息</span><br>                cache=<span class="hljs-literal">False</span>,  <span class="hljs-comment"># 是否缓存数据集以加快后续训练速度，False表示不缓存</span><br>                imgsz=<span class="hljs-number">640</span>,  <span class="hljs-comment"># 指定训练时使用的图像尺寸，640表示将输入图像调整为640x640像素</span><br>                epochs=<span class="hljs-number">100</span>,  <span class="hljs-comment"># 设置训练的总轮数为200轮</span><br>                batch=<span class="hljs-number">2</span>,  <span class="hljs-comment"># 设置每个训练批次的大小为16，即每次更新模型时使用16张图片</span><br>                close_mosaic=<span class="hljs-number">10</span>,  <span class="hljs-comment"># 设置在训练结束前多少轮关闭 Mosaic 数据增强，10 表示在训练的最后 10 轮中关闭 Mosaic</span><br>                workers=<span class="hljs-number">2</span>,  <span class="hljs-comment"># 设置用于数据加载的线程数为8，更多线程可以加快数据加载速度</span><br>                patience=<span class="hljs-number">50</span>,  <span class="hljs-comment"># 在训练时，如果经过50轮性能没有提升，则停止训练（早停机制）</span><br>                device=<span class="hljs-string">&#x27;0&#x27;</span>,  <span class="hljs-comment"># 指定使用的设备，&#x27;0&#x27;表示使用第一块GPU进行训练</span><br>                optimizer=<span class="hljs-string">&#x27;SGD&#x27;</span>,  <span class="hljs-comment"># 设置优化器为SGD（随机梯度下降），用于模型参数更新</span><br>                )<br></code></pre></td></tr></table></figure>
+
+<p>配置好后运行train.py开始训练</p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/image-20260701233439876.png" alt="训练时"></p>
+<p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E8%AE%AD%E7%BB%83%E6%97%B6.png" alt="训练完"></p>
+<h2 id="pt转onnx"><a href="#pt转onnx" class="headerlink" title=".pt转onnx"></a>.pt转onnx</h2><p>简单版本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><br><span class="hljs-keyword">from</span> ultralytics <span class="hljs-keyword">import</span> YOLO<br><br><span class="hljs-comment"># 加载一个模型，路径为 YOLO 模型的 .pt 文件</span><br><span class="hljs-comment">#model = YOLO(&quot;runs/detect/train/weights/best.pt&quot;)</span><br>model = YOLO(<span class="hljs-string">&quot;yolo11n.pt&quot;</span>)<br><span class="hljs-comment"># 导出模型，格式为 ONNX</span><br>model.export(<span class="hljs-built_in">format</span>=<span class="hljs-string">&quot;onnx&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>复杂版本</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs py"> <br><span class="hljs-keyword">from</span> ultralytics <span class="hljs-keyword">import</span> YOLO<br> <br><span class="hljs-comment"># 加载一个模型，路径为 YOLO 模型的 .pt 文件</span><br>model = YOLO(<span class="hljs-string">r&quot;runs/detect/train3/weights/best.pt&quot;</span>)<br> <br><span class="hljs-comment"># 导出模型，设置多种参数</span><br>model.export(<br>    <span class="hljs-built_in">format</span>=<span class="hljs-string">&quot;onnx&quot;</span>,      <span class="hljs-comment"># 导出格式为 ONNX</span><br>    imgsz=(<span class="hljs-number">640</span>, <span class="hljs-number">640</span>),   <span class="hljs-comment"># 设置输入图像的尺寸</span><br>    keras=<span class="hljs-literal">False</span>,        <span class="hljs-comment"># 不导出为 Keras 格式</span><br>    optimize=<span class="hljs-literal">False</span>,     <span class="hljs-comment"># 不进行优化 False, 移动设备优化的参数，用于在导出为TorchScript 格式时进行模型优化</span><br>    half=<span class="hljs-literal">False</span>,         <span class="hljs-comment"># 不启用 FP16 量化</span><br>    int8=<span class="hljs-literal">False</span>,         <span class="hljs-comment"># 不启用 INT8 量化</span><br>    dynamic=<span class="hljs-literal">False</span>,      <span class="hljs-comment"># 不启用动态输入尺寸</span><br>    simplify=<span class="hljs-literal">True</span>,      <span class="hljs-comment"># 简化 ONNX 模型</span><br>    opset=<span class="hljs-literal">None</span>,         <span class="hljs-comment"># 使用最新的 opset 版本</span><br>    workspace=<span class="hljs-number">4.0</span>,      <span class="hljs-comment"># 为 TensorRT 优化设置最大工作区大小（GiB）</span><br>    nms=<span class="hljs-literal">False</span>,          <span class="hljs-comment"># 不添加 NMS（非极大值抑制）</span><br>    batch=<span class="hljs-number">1</span>,            <span class="hljs-comment"># 指定批处理大小</span><br>    device=<span class="hljs-string">&quot;cpu&quot;</span>        <span class="hljs-comment"># 指定导出设备为CPU或GPU，对应参数为&quot;cpu&quot; , &quot;0&quot;</span><br>)<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="QA"><a href="#QA" class="headerlink" title="QA"></a>QA</h2><h3 id="1-什么是CUDA"><a href="#1-什么是CUDA" class="headerlink" title="1.什么是CUDA"></a>1.什么是CUDA</h3><p><img src="https://picgo-chaoxiaohan.oss-cn-qingdao.aliyuncs.com/img/%E8%AE%AD%E7%BB%83%E5%AE%8C.png" alt="image-20260701233439876"></p>
+<h3 id="2-什么是CUDNN"><a href="#2-什么是CUDNN" class="headerlink" title="2.什么是CUDNN"></a>2.什么是CUDNN</h3><p>NVIDIA® CUDA® 深度神经网络库（cuDNN）是一款 GPU 加速的深度神经网络基础算子库。cuDNN 为标准操作（如前向和反向卷积、注意力、矩阵乘法（matmul）、池化和归一化）提供高度优化的实现。</p>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left "
+    
+      href="/2026/07/02/onnx_to_mud/"
+      title="将ONNX转换为MaixCam2可运行的文件"
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+      
+        将ONNX转换为MaixCam2可运行的文件
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2026/05/24/GD32F470_DateSheet/"
+      title="GD32F470常用图表"
+     >
+
+    <p class="title-text">
+      
+        GD32F470常用图表
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+
+  <div id="comment-card" class="comment-card">
+    <div class="main-title-bar">
+      <div class="main-title-dot"></div>
+      <div class="main-title">留言 </div>
+    </div>
+    <div id="giscus-container"></div>
+  </div>
+  <script src="https://giscus.app/client.js"
+    data-repo="chaoxiaohan/myblog"
+    data-repo-id="R_kgDOPe4zOQ"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOPe4zOc4CuRDG"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="noborder_light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async>
+  </script>
+  
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2026 超小韓<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+  <script src="/js/toc.js"></script>
+  
+  <script src="/js/search.js"></script>
+  <script src="/js/code-copy.js"></script>
+  <script src="/js/mobile-warning.js"></script>
+  <script src="/js/image-viewer.js"></script>
+  <script src="/js/context-menu.js"></script>
+</body>
+</html>
